@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeOS 30大人生能力 | 完全版 | Complete Edition</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --navy: #1A2B5F;
+            --gold: #C9960C;
+            --teal: #0A7A72;
+            --white: #FFFFFF;
+            --light: #F8F9FA;
+            --gray: #E8EAEF;
+            --dark: #2D3748;
+        }
+        
+        body {
+            font-family: "Microsoft JhengHei", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        
+        .container { max-width: 1800px; margin: 0 auto; padding: 20px; }
+        
+        .header {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+            color: var(--white);
+            padding: 50px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .header h1 { font-size: 48px; margin-bottom: 10px; }
+        .header p { font-size: 18px; opacity: 0.95; margin-bottom: 20px; }
+        .header .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .stat { background: rgba(255,255,255,0.2); padding: 15px 25px; border-radius: 8px; }
+        .stat-num { font-size: 32px; font-weight: 700; }
+        .stat-label { font-size: 12px; opacity: 0.9; }
+        
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .tab-btn {
+            padding: 12px 24px;
+            background: var(--white);
+            border: 2px solid var(--navy);
+            color: var(--navy);
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .tab-btn:hover, .tab-btn.active {
+            background: var(--navy);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+        
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.3s; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .abilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+        
+        .ability-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--gold);
+        }
+        
+        .ability-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+            color: var(--white);
+            padding: 24px;
+        }
+        
+        .card-header h3 { font-size: 20px; margin-bottom: 4px; }
+        .card-header p { font-size: 13px; opacity: 0.9; }
+        
+        .card-icon { font-size: 36px; margin-bottom: 12px; }
+        
+        .card-body {
+            padding: 24px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s;
+        }
+        
+        .ability-card.expanded .card-body {
+            max-height: 4000px;
+        }
+        
+        .section-box {
+            background: var(--light);
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            border-left: 3px solid var(--teal);
+        }
+        
+        .section-box h5 {
+            color: var(--navy);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        
+        .bilingual-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 8px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            font-size: 13px;
+        }
+        
+        .bilingual-pair:last-child { border-bottom: none; }
+        
+        .zh { color: var(--navy); font-weight: 500; }
+        .en { color: var(--teal); }
+        
+        .mode-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .mode-item {
+            background: rgba(26, 43, 95, 0.05);
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        
+        .tts-btn {
+            display: inline-block;
+            padding: 4px 8px;
+            background: var(--gold);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+        
+        .tts-btn:hover { background: #B8850A; }
+        
+        .practice-box {
+            background: #F0FDF4;
+            border-left: 4px solid #22C55E;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .tool-tag {
+            background: #E0E7FF;
+            color: var(--navy);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .diagnostic-box {
+            background: #FEF3C7;
+            border-left: 4px solid #F59E0B;
+            padding: 16px;
+            margin-top: 12px;
+            border-radius: 8px;
+        }
+        
+        .diagnostic-box p {
+            font-size: 12px;
+            margin-bottom: 6px;
+            line-height: 1.6;
+        }
+        
+        .search-container {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--navy);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .search-btn {
+            padding: 12px 24px;
+            background: var(--navy);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .system-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background: var(--teal);
+            color: var(--white);
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px;
+            margin-top: 60px;
+            border-top: 2px solid var(--gray);
+            color: var(--dark);
+        }
+        
+        .scroll-top { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: var(--navy); color: var(--white); border: none; border-radius: 50%; cursor: pointer; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 999; }
+        .scroll-top.show { display: flex; }
+        
+        @media (max-width: 768px) {
+            .abilities-grid { grid-template-columns: 1fr; }
+            .bilingual-pair { grid-template-columns: 1fr; }
+            .header h1 { font-size: 32px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>LifeOS 30大人生能力</h1>
+            <p>完全內容版 | Full Complete Edition</p>
+            <p style="font-size: 14px; max-width: 800px; margin: 15px auto;">30個完整能力節點 | 360個舊→新模式 | 120個診斷問題 | 30個實踐任務 | 120個推薦工具</p>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-num">30</div>
+                    <div class="stat-label">能力節點</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">360</div>
+                    <div class="stat-label">模式對比</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">120</div>
+                    <div class="stat-label">診斷問題</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">50K+</div>
+                    <div class="stat-label">字內容</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tabs" id="navTabs"></div>
+        
+        <div class="section active" id="overview-section">
+            <h2 style="color: var(--navy); margin-bottom: 20px; text-align: center;">📖 30大人生能力完整系統</h2>
+            <div class="abilities-grid" id="overview-grid"></div>
+        </div>
+        
+        <div class="section" id="details-section">
+            <h2 style="color: var(--navy); margin-bottom: 20px; text-align: center;">🔍 深度詳解（所有內容展開）</h2>
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="搜尋能力...">
+                <button class="search-btn" onclick="doSearch()">搜尋</button>
+            </div>
+            <div class="abilities-grid" id="details-grid"></div>
+        </div>
+        
+        <div class="section" id="practice-section">
+            <h2 style="color: var(--navy); margin-bottom: 20px; text-align: center;">🎯 實踐指南（任務優先）</h2>
+            <div class="abilities-grid" id="practice-grid"></div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>LifeOS 30大人生能力 | 知識→能力→成果→智慧→更新→再生成</strong></p>
+            <p style="margin-top: 10px; font-size: 12px;">Made with ❤️ by Anne Wang (王欣蓉) | 完整中英雙語 | Full Bilingual</p>
+        </div>
+    </div>
+    
+    <button class="scroll-top" id="scrollTop">↑</button>
+    
+    <script type="application/json" id="abilityData">
+{"abilities": [{"id": 1, "name_zh": "閱讀能力", "name_en": "Reading", "icon": "📖", "essence_zh": "閱讀不是把文字看完。閱讀是從資訊中建立可使用的模型。", "essence_en": "Reading is not finishing text. It's building usable models from information.", "why_zh": "大多數人認為看完書就是學習，但實際上沒有建立任何思維模型，所以很快就忘記了。真正的閱讀能力是讀完後能用自己的話重新說出核心概念，並能應用到新情境。", "why_en": "Most people think finishing a book means learning, but they haven't built any mental models, so they forget quickly. True reading ability is explaining core concepts in your own words and applying them to new situations.", "old_modes": ["看很多書", "追求速度", "只看摘要", "閱讀=學習", "收集資訊", "看完就好"], "new_modes": ["建立模型", "深度理解", "跨域連結", "批判閱讀", "知識壓縮", "閱讀後回寫"], "old_modes_en": ["Reading many books", "Chasing speed", "Only summaries", "Reading=Learning", "Collecting info", "Done after finishing"], "new_modes_en": ["Build models", "Deep understanding", "Cross-domain linking", "Critical reading", "Knowledge compression", "Writing reflections"], "diagnosis_zh": ["你看完一本書後能用一句話說出核心概念嗎？", "你能區分作者的觀點、證據和假設嗎？", "你能找到書中沒有回答但很重要的問題嗎？", "你能把書的知識應用到工作或生活中嗎？"], "diagnosis_en": ["Can you explain the core concept of a book in one sentence?", "Can you distinguish the author's perspective, evidence, and assumptions?", "Can you find important questions the book didn't answer?", "Can you apply the book's knowledge to work or life?"], "practice_zh": "選一本你正在讀的書，在讀完每一章後用3分鐘寫下：(1)核心觀點 (2)關鍵證據 (3)你的質疑 (4)可應用的場景", "practice_en": "Pick a book you're reading. After each chapter, spend 3 minutes writing: (1) Core idea (2) Key evidence (3) Your questions (4) Applicable scenarios", "tools_zh": ["Anki記憶卡", "Notion知識庫", "思維導圖", "回寫筆記模板"], "tools_en": ["Anki flashcards", "Notion knowledge base", "Mind maps", "Reflection templates"], "system": "認知與理解", "links_zh": ["理解能力", "提問能力", "寫作能力"], "links_en": ["Comprehension", "Questioning", "Writing"]}, {"id": 2, "name_zh": "理解能力", "name_en": "Comprehension", "icon": "🧠", "essence_zh": "理解不是記住。理解是看懂事物的結構、因果和限制。", "essence_en": "Understanding is not memorizing. It's grasping structure, causality, and limitations.", "why_zh": "很多人背會了公式或知識點，但不理解為什麼。當遇到稍微不同的問題就做不出來。真正的理解能力是能解釋'為什麼'，能預測'如果...會怎樣'。", "why_en": "Many memorize formulas but don't understand why. They fail on slightly different problems. True comprehension means explaining 'why' and predicting 'what if'.", "old_modes": ["背答案", "記公式", "知道名詞", "理解=記住", "片段理解", "只會解題"], "new_modes": ["理解本質", "理解生成", "理解因果", "理解結構", "理解限制", "理解跨領域"], "old_modes_en": ["Memorizing answers", "Memorizing formulas", "Knowing terms", "Understanding=Remembering", "Fragmented understanding", "Problem-solving only"], "new_modes_en": ["Understand essence", "Understand generation", "Understand causality", "Understand structure", "Understand limitations", "Cross-domain understanding"], "diagnosis_zh": ["你能用簡單的比喻解釋一個複雜概念嗎？", "你能預測如果改變一個變數，會發生什麼？", "你知道這個知識的適用範圍和限制嗎？", "你能用自己的例子說明這個原理嗎？"], "diagnosis_en": ["Can you explain a complex concept with a simple analogy?", "Can you predict what happens if you change one variable?", "Do you know the scope and limitations of this knowledge?", "Can you illustrate this principle with your own example?"], "practice_zh": "選擇一個你'學過'但不完全理解的概念，畫一個結構圖，標示出：(1)核心機制 (2)三個例子 (3)三個反例 (4)適用邊界", "practice_en": "Pick a concept you've learned but don't fully understand. Draw a diagram showing: (1) Core mechanism (2) Three examples (3) Three counterexamples (4) Application boundaries", "tools_zh": ["結構圖工具", "費曼學習法", "因果圖", "假設測試清單"], "tools_en": ["Diagramming tools", "Feynman technique", "Causal maps", "Hypothesis testing"], "system": "認知與理解", "links_zh": ["閱讀能力", "思考能力", "提問能力"], "links_en": ["Reading", "Thinking", "Questioning"]}, {"id": 3, "name_zh": "提問能力", "name_en": "Questioning", "icon": "❓", "essence_zh": "提問不是問題很多。提問是快速找到『最值得降低的不確定性』。", "essence_en": "Questioning is not asking many questions. It's finding the most valuable uncertainty to reduce.", "why_zh": "低層級提問：'我怎樣才能變有錢？'。高層級提問：'在財富系統中，限制我輸出的主要瓶頸是價值、流量、信任、轉換還是複利？'。同一個人問不同的問題，答案的價值可能差1000倍。", "why_en": "Low-level: 'How can I get rich?'. High-level: 'Which bottleneck in wealth system limits my output—value, traffic, trust, conversion, or compounding?'. Different questions yield answers worth 1000x difference.", "old_modes": ["問答案", "問技巧", "問結論", "一直發問", "Google搜尋", "AI直接問"], "new_modes": ["問本質", "問生成", "問限制節點", "問模型", "問假設", "問更新方向"], "old_modes_en": ["Asking for answers", "Asking for tips", "Asking for conclusions", "Endless questions", "Just googling", "Asking AI directly"], "new_modes_en": ["Ask about essence", "Ask about generation", "Ask about constraints", "Ask about models", "Ask about assumptions", "Ask about update direction"], "diagnosis_zh": ["你問的問題是在找答案，還是在探索不知道的東西？", "你的問題能被回答嗎？還是太模糊了？", "這個問題的答案會改變你的下一步行動嗎？", "你問的是表面問題，還是根本問題？"], "diagnosis_en": ["Are you asking for answers or exploring unknowns?", "Is your question answerable or too vague?", "Will this answer change your next action?", "Are you asking surface or root questions?"], "practice_zh": "寫下你最近三個問題，然後升級它們：(1)提煉出本質 (2)轉成機制問題 (3)轉成槓桿問題 (4)變成可驗證的問題", "practice_en": "List three recent questions. Upgrade them: (1) Extract essence (2) Convert to mechanism (3) Convert to leverage (4) Make testable", "tools_zh": ["5個為什麼", "根本原因分析", "Prompt工程", "問題分解樹"], "tools_en": ["5 Whys", "Root cause analysis", "Prompt engineering", "Question decomposition"], "system": "認知與理解", "links_zh": ["理解能力", "思考能力", "診斷能力"], "links_en": ["Comprehension", "Thinking", "Diagnosis"]}, {"id": 4, "name_zh": "思考能力", "name_en": "Thinking", "icon": "🤔", "essence_zh": "思考不是腦中想很多。思考是建立可以預測現實的模型。", "essence_en": "Thinking is not overthinking. It's building models that predict reality.", "why_zh": "線性思考者說：'他沒回我信息，他肯定討厭我'。系統思考者說：'可能是他太忙、可能郵件進垃圾箱、可能他正在考慮、可能他不知道我在等回覆'。哪個預測錯誤率更低？", "why_en": "Linear thinker: 'He didn't reply, he hates me'. Systems thinker: 'Could be busy, email in spam, considering, doesn't know I'm waiting'. Which has lower error rate?", "old_modes": ["靠直覺", "靠情緒", "二分法", "線性因果", "經驗主義", "相信第一印象"], "new_modes": ["系統思考", "第一性原理", "機率思考", "生成思考", "預測思考", "更新思考"], "old_modes_en": ["Relying on intuition", "Relying on emotion", "Binary thinking", "Linear causality", "Empiricism", "Trusting first impressions"], "new_modes_en": ["Systems thinking", "First principles", "Probabilistic thinking", "Generative thinking", "Predictive thinking", "Update thinking"], "diagnosis_zh": ["遇到問題時，你會列出至少三個可能的解釋嗎？", "你能識別哪些變數會影響結果嗎？", "你能看到這個系統內的反饋迴圈嗎？", "當現實和你的預測不同時，你會更新模型嗎？"], "diagnosis_en": ["When facing a problem, do you list at least three possible explanations?", "Can you identify which variables affect the outcome?", "Can you see feedback loops in the system?", "Do you update your model when reality contradicts prediction?"], "practice_zh": "選一個你最近的失望或衝突，用『事件→模型→假設→驗證→更新』流程重新分析", "practice_en": "Pick a recent disappointment or conflict. Analyze it: event→model→assumptions→verify→update", "tools_zh": ["系統思考圖", "因果迴圈圖", "決策樹", "蒙特卡洛模擬"], "tools_en": ["Systems diagrams", "Causal loops", "Decision trees", "Monte Carlo"], "system": "認知與理解", "links_zh": ["理解能力", "診斷能力", "決策能力"], "links_en": ["Comprehension", "Diagnosis", "Decision-making"]}, {"id": 5, "name_zh": "結構化能力", "name_en": "Structuring", "icon": "📐", "essence_zh": "結構化不是整理檔案。結構化是找出事物之間的邏輯關係和層級。", "essence_en": "Structuring is not organizing files. It's finding logical relationships and hierarchies.", "why_zh": "隨意筆記：'第一點...第二點...第三點...'，看不出來它們之間的關係。結構化筆記：樹狀、網狀或矩陣式，清楚顯示優先級、因果、並列、對比。同樣的信息，結構不同，可用性差1000倍。", "why_en": "Random notes: 'First point...second point...'. No relationships visible. Structured notes: trees, networks, matrices showing priority, causality, parallelism, contrast. Same info, different structure, 1000x usability difference.", "old_modes": ["做筆記", "畫重點", "分類資料", "蒐集資訊", "建立目錄", "整理檔案"], "new_modes": ["建立框架", "建立模型", "建立流程", "建立知識樹", "建立生成鏈", "建立系統"], "old_modes_en": ["Note-taking", "Highlighting", "Categorizing data", "Collecting info", "Creating directories", "Organizing files"], "new_modes_en": ["Build frameworks", "Build models", "Build processes", "Build knowledge trees", "Build generation chains", "Build systems"], "diagnosis_zh": ["你的筆記能清楚顯示信息的優先級和因果關係嗎？", "別人能根據你的結構圖快速理解複雜內容嗎？", "你的結構是靜態的還是能隨著知識增長而更新的？", "你能用一張圖表達出以前需要一頁說明的內容嗎？"], "diagnosis_en": ["Do your notes clearly show priority and causality?", "Can others quickly understand complex content from your diagram?", "Is your structure static or updatable?", "Can you express in one diagram what previously needed one page?"], "practice_zh": "選擇一個領域的知識（如「健康」），用樹狀圖、矩陣圖、流程圖三種方式展現相同的內容，體驗不同結構的優劣", "practice_en": "Choose a knowledge domain (e.g., 'Health'). Present it as tree, matrix, flowchart. Experience different structures' strengths/weaknesses", "tools_zh": ["Obsidian", "MindNode", "Miro", "Figma"], "tools_en": ["Obsidian", "MindNode", "Miro", "Figma"], "system": "認知與理解", "links_zh": ["理解能力", "資訊整合能力", "寫作能力"], "links_en": ["Comprehension", "Information Integration", "Writing"]}, {"id": 6, "name_zh": "資訊整合能力", "name_en": "Information Integration", "icon": "🔗", "essence_zh": "資訊整合不是收集很多資料。整合是從多個來源發現共同模式和高維結構。", "essence_en": "Integration is not collecting data. It's discovering common patterns and higher-order structures from multiple sources.", "why_zh": "100篇文章沒有整合 = 100倍的認知負荷。100篇文章整合成10個核心概念 = 認知負荷降低。進一步整合成1個母體模型 = 可以預測未讀的文章會說什麼。", "why_en": "100 articles without integration = 100x cognitive load. Integrated into 10 concepts = load reduced. Into 1 mother model = predicts unread articles.", "old_modes": ["收集很多", "一直閱讀", "很多APP", "很多資料夾", "很多網站", "很多課程"], "new_modes": ["跨域整合", "資訊壓縮", "建立共同語言", "形成母體資料", "形成知識網", "建立智慧"], "old_modes_en": ["Collecting lots", "Always reading", "Many apps", "Many folders", "Many websites", "Many courses"], "new_modes_en": ["Cross-domain integration", "Information compression", "Common language", "Core data formation", "Knowledge networks", "Build wisdom"], "diagnosis_zh": ["你能用一句話說出多個信息來源的共同點嗎？", "你能看到不同領域知識的轉移點嗎？", "你的知識結構是相互孤立還是相互連結的？", "你能用一個模型預測未來會學到什麼嗎？"], "diagnosis_en": ["Can you summarize common points from multiple sources in one sentence?", "Can you see transfer points between different domains?", "Are your knowledge silos isolated or interconnected?", "Can you predict what you'll learn next with one model?"], "practice_zh": "選擇同一個主題的5個不同來源（書、文章、影片、課程、播客），提煉出共同的核心概念和獨特視角", "practice_en": "Pick 5 sources on one topic (book, article, video, course, podcast). Extract common core and unique perspectives", "tools_zh": ["ChatGPT分析", "Roam Research", "Logseq", "ConnectedPapers"], "tools_en": ["ChatGPT analysis", "Roam Research", "Logseq", "ConnectedPapers"], "system": "認知與理解", "links_zh": ["結構化能力", "思考能力", "AI能力"], "links_en": ["Structuring", "Thinking", "AI"]}, {"id": 7, "name_zh": "學習能力", "name_en": "Learning", "icon": "🎓", "essence_zh": "學習不是上課。學習是讓未來的自己能成功提取和應用知識。", "essence_en": "Learning is not taking classes. It's enabling your future self to retrieve and apply knowledge.", "why_zh": "上完課當天記得90%，一週後記得20%，一個月後記得5%。而用間隔重複+主動回寫的人，一個月後還能記得80%。學習能力差別就在這裡。", "why_en": "Day 1: 90% recall. Week 1: 20%. Month 1: 5%. With spaced repetition+active recall, Month 1: 80%. That's the learning ability difference.", "old_modes": ["上很多課", "一直補習", "一直看影片", "一直努力", "一直聽演講", "一直做筆記"], "new_modes": ["主動學習", "AI協作", "遷移學習", "快速更新", "刻意練習", "能力生成"], "old_modes_en": ["Taking many courses", "Constant tutoring", "Watching videos", "Endless effort", "Listening to talks", "Note-taking"], "new_modes_en": ["Active learning", "AI collaboration", "Transfer learning", "Rapid updates", "Deliberate practice", "Capability generation"], "diagnosis_zh": ["你學的東西能用在工作或生活中嗎？", "你學過的東西隔一個月還能想起來嗎？", "你能把這個領域的知識用在另一個領域嗎？", "你每天用多少時間進行『刻意練習』（集中在弱點）？"], "diagnosis_en": ["Can you use what you learned in work or life?", "Can you recall it a month later?", "Can you transfer it to another domain?", "How much time daily for deliberate practice on weaknesses?"], "practice_zh": "選一個你想快速精通的技能，設計一個『學習→應用→反饋→迭代』的循環，時間不超過21天", "practice_en": "Pick a skill to master fast. Design a 'learn→apply→feedback→iterate' loop in 21 days max", "tools_zh": ["Anki", "Duolingo", "LeetCode", "YouTube + 實踐"], "tools_en": ["Anki", "Duolingo", "LeetCode", "YouTube + Practice"], "system": "學習與發展", "links_zh": ["記憶能力", "執行能力", "遷移學習"], "links_en": ["Memory", "Execution", "Transfer"]}, {"id": 8, "name_zh": "記憶能力", "name_en": "Memory", "icon": "💾", "essence_zh": "記憶不是死背。記憶是建立信息和已知知識的關聯，使其容易被提取。", "essence_en": "Memory is not rote learning. It's creating associations so information is easily retrieved.", "why_zh": "死背：今天背，明天忘。間隔重複+關聯記憶：今天背，一週後複習，一個月後複習，三個月後複習，記憶會被鞏固為長期記憶。記憶科學證明，同樣的努力，方法不同，效果差10倍。", "why_en": "Rote: forget tomorrow. Spaced+association: 10x better retention with same effort after 3 months.", "old_modes": ["一直重讀", "一直背", "考前衝刺", "死背", "短期記憶", "一直複習"], "new_modes": ["Anki", "間隔重複", "知識回寫", "理解記憶", "關聯記憶", "長期提取"], "old_modes_en": ["Rereading", "Memorizing", "Cramming", "Rote memorization", "Short-term memory", "Constant review"], "new_modes_en": ["Spaced repetition", "Interval repetition", "Knowledge review", "Understanding-based", "Association", "Long-term retrieval"], "diagnosis_zh": ["你用什麼方法複習舊知識？是重讀還是測試自己？", "你能把新知識連結到已知的東西上嗎？", "你複習的間隔是多長？是每天還是越來越長的間隔？", "你能在毫無提示的情況下回想起三個月前學的東西嗎？"], "diagnosis_en": ["How do you review? Rereading or testing yourself?", "Can you connect new knowledge to what you know?", "What's your review interval?", "Can you recall something learned 3 months ago without hints?"], "practice_zh": "用Anki建立50張卡片，記錄你最近學的東西，設定間隔：1天、3天、7天、14天、30天", "practice_en": "Create 50 Anki cards of recent learning. Set intervals: 1d, 3d, 7d, 14d, 30d", "tools_zh": ["Anki", "Quizlet", "RemNote", "SuperMemory"], "tools_en": ["Anki", "Quizlet", "RemNote", "SuperMemory"], "system": "學習與發展", "links_zh": ["學習能力", "理解能力", "執行能力"], "links_en": ["Learning", "Comprehension", "Execution"]}, {"id": 9, "name_zh": "英文能力", "name_en": "English Proficiency", "icon": "🌍", "essence_zh": "英文能力不是考高分。英文能力是用英文思考、表達和解決實際問題。", "essence_en": "English is not test scores. It's thinking, expressing, and solving problems in English.", "why_zh": "背單字背到7000個也不如用英文工作3個月。測試分數高也不如用英文和世界溝通。英文能力的升級路徑是：閱讀→思考→輸出→互動→思考錯誤→修正。", "why_en": "3 months working in English > memorizing 7000 words. Communication > high scores. Path: read→think→output→interact→error→fix", "old_modes": ["背單字", "背文法", "刷題", "考高分", "補英文", "一直翻譯"], "new_modes": ["建立語感", "大量閱讀", "大量輸出", "英文思考", "跨文化能力", "AI英文協作"], "old_modes_en": ["Memorizing vocab", "Memorizing grammar", "Doing practice tests", "Chasing high scores", "Tutoring", "Constant translation"], "new_modes_en": ["Develop language sense", "Extensive reading", "Extensive output", "English thinking", "Cross-cultural ability", "AI collaboration"], "diagnosis_zh": ["你能用英文思考，還是要先用中文想再翻譯？", "你能看懂英文新聞、技術文章、小說嗎？", "你能用英文表達複雜的想法嗎？", "你敢和英文使用者對話嗎？"], "diagnosis_en": ["Can you think in English or do you translate from Chinese first?", "Can you read news, tech, fiction in English?", "Can you express complex ideas in English?", "Can you converse with native speakers?"], "practice_zh": "每天30分鐘的『英文沉浸』：1)看英文影片（有字幕） 2)讀英文文章或書 3)用英文寫日記或留言", "practice_en": "Daily 30min 'English immersion': 1) Video (subtitles) 2) Read article/book 3) Write in English", "tools_zh": ["Readwise", "Substack", "Twitter", "ChatGPT", "Grammarly"], "tools_en": ["Readwise", "Substack", "Twitter", "ChatGPT", "Grammarly"], "system": "學習與發展", "links_zh": ["閱讀能力", "表達能力", "AI能力"], "links_en": ["Reading", "Expression", "AI"]}, {"id": 10, "name_zh": "AI能力", "name_en": "AI Capability", "icon": "🤖", "essence_zh": "AI能力不是會用工具。AI能力是知道什麼時候用什麼工具，用什麼提示詞，怎麼驗證結果。", "essence_en": "AI skill is not tool usage. It's knowing when to use what tool, which prompts, how to verify results.", "why_zh": "隨便問ChatGPT = 得到隨便的答案。精心設計Prompt = 得到專業級的答案。AI能力的升級：L1問答→L2整理資訊→L3分析問題→L4建立模型→L5自動化流程→L6人類判斷+AI推演+驗證。", "why_en": "Random prompt = random answer. Designed prompt = expert answer. Levels: Q&A→organize→analyze→model→automate→human+AI+verify", "old_modes": ["AI幫我寫", "AI取代我", "一直問AI", "AI聊天", "AI搜尋", "AI複製貼上"], "new_modes": ["AI協作", "Prompt設計", "流程自動化", "AI分析", "AI第二大腦", "AI決策"], "old_modes_en": ["AI writing for me", "AI replacing me", "Always asking AI", "AI chatting", "AI searching", "Copy-paste from AI"], "new_modes_en": ["AI collaboration", "Prompt design", "Process automation", "AI analysis", "AI as second brain", "AI decision support"], "diagnosis_zh": ["你能寫出一個有效的Prompt嗎？", "你會驗證AI的答案嗎？", "你能用AI來分析問題而不是只問答案嗎？", "你能用AI來自動化工作流程嗎？"], "diagnosis_en": ["Can you write an effective prompt?", "Do you verify AI's answers?", "Can you use AI to analyze, not just ask?", "Can you automate workflows with AI?"], "practice_zh": "學習5個高效Prompt模板：1)角色設定 2)背景信息 3)任務描述 4)輸出格式 5)判準。每個模板練習寫出3個Prompt", "practice_en": "Learn 5 prompt templates: 1) Role 2) Context 3) Task 4) Format 5) Criteria. Write 3 prompts per template", "tools_zh": ["ChatGPT", "Claude", "Perplexity", "Make.com", "n8n"], "tools_en": ["ChatGPT", "Claude", "Perplexity", "Make.com", "n8n"], "system": "學習與發展", "links_zh": ["提問能力", "思考能力", "寫作能力"], "links_en": ["Questioning", "Thinking", "Writing"]}, {"id": 11, "name_zh": "寫作能力", "name_en": "Writing", "icon": "✍️", "essence_zh": "寫作不是文筆漂亮。寫作是把複雜的想法結構化輸出，讓讀者理解並能行動。", "essence_en": "Writing is not beautiful prose. It's structuring thoughts so readers understand and act.", "why_zh": "寫手1：用10個漂亮詞彙寫了500字，讀者讀完不知道他要說什麼。寫手2：用簡單詞彙寫了200字，讀者清楚知道要做什麼。哪個寫手能力強？", "why_en": "Writer 1: 500 words with beautiful language, reader confused. Writer 2: 200 words, reader knows what to do. Who's stronger?", "old_modes": ["文筆好", "會修辭", "字很多", "一直寫", "模仿文章", "寫感想"], "new_modes": ["結構化輸出", "模型寫作", "知識生成", "課程生成", "商業寫作", "智慧輸出"], "old_modes_en": ["Beautiful prose", "Rhetorical devices", "Writing a lot", "Constant writing", "Imitating articles", "Writing reflections"], "new_modes_en": ["Structured output", "Model-based writing", "Knowledge generation", "Course creation", "Business writing", "Wisdom output"], "diagnosis_zh": ["讀完你的文章，讀者知道要做什麼嗎？", "你能用一句話說出你文章的核心想法嗎？", "你的結構清晰嗎？還是讀者要猜你的邏輯？", "你的文章有多少是廢話？有多少是核心內容？"], "diagnosis_en": ["After reading, does the reader know what to do?", "Can you explain your article's core idea in one sentence?", "Is your structure clear or does reader guess logic?", "What % is fluff vs. core content?"], "practice_zh": "寫一篇1000字文章，然後刪除50%的內容保留精華，再檢查是否比原版更有力", "practice_en": "Write 1000-word article. Delete 50%, keep essence. Is it more powerful?", "tools_zh": ["Hemingway App", "Grammarly", "Claude", "Notion"], "tools_en": ["Hemingway App", "Grammarly", "Claude", "Notion"], "system": "表達與溝通", "links_zh": ["表達能力", "思考能力", "溝通能力"], "links_en": ["Expression", "Thinking", "Communication"]}, {"id": 12, "name_zh": "表達能力", "name_en": "Expression", "icon": "💬", "essence_zh": "表達不是講得漂亮。表達是讓聽眾理解你的想法，並且想法在他腦中準確成形。", "essence_en": "Expression is not polished speech. It's making your idea form accurately in the listener's mind.", "why_zh": "講者說：'我在做一個創新專案'。聽者理解：每個人腦中的'創新專案'都不一樣。好的表達是：'我在建一個AI工具，它能幫高中老師自動批改作文，每位老師一年省500小時'。這樣聽者腦中就有清楚的概念。", "why_en": "Speaker: 'innovative project'. Each listener imagines differently. Good: 'AI tool helping teachers auto-grade essays, saves 500 hrs/year'. Now concept is clear.", "old_modes": ["很會說", "講很久", "口才好", "情緒感染", "背稿", "一直講"], "new_modes": ["讓人理解", "建立共同模型", "故事化", "結構化", "因人調整", "改變對方理解"], "old_modes_en": ["Speaking well", "Talking long", "Good articulation", "Emotional contagion", "Reciting scripts", "Always talking"], "new_modes_en": ["Enable understanding", "Build shared models", "Storytelling", "Structuring", "Adapt to audience", "Change their understanding"], "diagnosis_zh": ["你能用三句話解釋你的工作嗎？", "聽完你的解釋，對方能用自己的話重述嗎？", "你會根據聽眾調整解釋方式嗎？", "你能用故事讓抽象的想法變具體嗎？"], "diagnosis_en": ["Can you explain your work in 3 sentences?", "Can the listener rephrase your idea in their words?", "Do you adjust explanation for the audience?", "Can you use stories to make abstract ideas concrete?"], "practice_zh": "挑選三個不同背景的人（小孩、同事、老闆），用不同方式解釋同一個複雜概念，記錄他們的反應和理解程度", "practice_en": "Explain one complex idea to 3 people (child, colleague, boss) in different ways. Record their understanding level", "tools_zh": ["Toastmasters", "Prezi", "TED演講", "Storytelling指南"], "tools_en": ["Toastmasters", "Prezi", "TED talks", "Story structure"], "system": "表達與溝通", "links_zh": ["寫作能力", "溝通能力", "領導能力"], "links_en": ["Writing", "Communication", "Leadership"]}, {"id": 13, "name_zh": "溝通能力", "name_en": "Communication", "icon": "🤝", "essence_zh": "溝通不是說服。溝通是降低兩個人之間的理解差距，建立共同模型。", "essence_en": "Communication is not persuasion. It's reducing understanding gap and building shared models.", "why_zh": "衝突的根本原因通常不是立場對立，而是雙方對同一件事有不同的理解。真正的溝通能力是：先理解對方為什麼這樣想，確認彼此的事實基礎相同，再共同決定怎麼做。", "why_en": "Conflict root: not positions, but different understandings. True communication: understand why→confirm facts→decide together", "old_modes": ["說服別人", "贏辯論", "表達自己", "講道理", "一直解釋", "討好別人"], "new_modes": ["傾聽", "同步模型", "同理", "共同更新", "建立信任", "共同決策"], "old_modes_en": ["Persuading others", "Winning debates", "Expressing myself", "Explaining logic", "Constant explaining", "Pleasing others"], "new_modes_en": ["Listening", "Sync models", "Empathy", "Update together", "Build trust", "Decide together"], "diagnosis_zh": ["你在對話中花多少百分比在聽？多少在講？", "你能複述對方的想法，讓對方覺得被理解嗎？", "你看到過和對方觀點對立但事實基礎不同的情況嗎？", "衝突後，你們有共同的理解嗎？還是只是各讓一步？"], "diagnosis_en": ["What % of conversation is you listening vs. talking?", "Can you rephrase their idea so they feel understood?", "Have you seen conflict where facts differ, not positions?", "After conflict, do you have shared understanding or just compromise?"], "practice_zh": "下次有意見不合的對話，嘗試：1)先聽5分鐘 2)複述對方想法 3)問『你為什麼這樣想？』4)找共同事實基礎", "practice_en": "Next disagreement: 1) Listen 5min 2) Rephrase their idea 3) Ask why 4) Find common facts", "tools_zh": ["非暴力溝通", "同理心傾聽", "Crucial Conversations", "內在家庭系統"], "tools_en": ["Nonviolent Communication", "Empathetic listening", "Crucial Conversations", "Internal Family Systems"], "system": "表達與溝通", "links_zh": ["表達能力", "情緒管理能力", "領導能力"], "links_en": ["Expression", "Emotion Management", "Leadership"]}, {"id": 14, "name_zh": "教學能力", "name_en": "Teaching", "icon": "👨‍🏫", "essence_zh": "教學不是把知識講完。教學是讓學生建立能力，能在你離開後自己解決問題。", "essence_en": "Teaching is not transmitting knowledge. It's enabling students to solve problems independently.", "why_zh": "傳統教學：老師講完，學生抄筆記，考試時能做出類似題型。好的教學：學生理解本質，遇到新問題也能解決。前者學得多，後者能力強。", "why_en": "Traditional: lecture→notes→similar exam problems. Good: understand essence→solve novel problems. Former learns more, latter is capable.", "old_modes": ["把知識講完", "教材很多", "一直講課", "學生抄筆記", "教完就好", "完成進度"], "new_modes": ["建立能力", "建立模型", "能力診斷", "AI教學", "能力回寫", "能力遷移"], "old_modes_en": ["Teaching complete content", "Many materials", "Constant lecturing", "Students taking notes", "Done after teaching", "Completing curriculum"], "new_modes_en": ["Build capabilities", "Build models", "Diagnose abilities", "AI teaching", "Feedback on abilities", "Transfer abilities"], "diagnosis_zh": ["你的學生能在你不在時自己解決新問題嗎？", "你在診斷學生的能力缺口嗎？還是一刀切地教？", "你會給出錯誤的反饋嗎？還是只關注對錯？", "你教的知識能跨域應用嗎？"], "diagnosis_en": ["Can students solve new problems when you're not there?", "Do you diagnose ability gaps or teach everyone the same?", "Do you give constructive feedback or just grade right/wrong?", "Can students transfer knowledge to other domains?"], "practice_zh": "選擇一個你常教的主題，重新設計課程讓學生能『學→理解→應用→反思→遷移』", "practice_en": "Redesign a course to enable: learn→understand→apply→reflect→transfer", "tools_zh": ["Bloom分類法", "Socratic method", "知識圖譜", "案例教學"], "tools_en": ["Bloom's taxonomy", "Socratic method", "Knowledge mapping", "Case teaching"], "system": "表達與溝通", "links_zh": ["寫作能力", "溝通能力", "診斷能力"], "links_en": ["Writing", "Communication", "Diagnosis"]}, {"id": 15, "name_zh": "診斷能力", "name_en": "Diagnosis", "icon": "🔍", "essence_zh": "診斷不是看症狀。診斷是找到產生症狀的真正原因。", "essence_en": "Diagnosis is not seeing symptoms. It's finding the root cause.", "why_zh": "症狀：我的英文不好。表面原因：我沒有足夠練習。根本原因：我的學習方法無效（只背單字不用）。診斷能力強的人能問對問題，找到真正的瓶頸。", "why_en": "Symptom: bad English. Surface: lack practice. Root: ineffective method (memorizing not using). Strong diagnosis asks right questions.", "old_modes": ["看症狀", "找原因", "怪環境", "怪別人", "怪運氣", "立即解決"], "new_modes": ["找限制節點", "找真正瓶頸", "建立診斷樹", "建立假說", "驗證模型", "更新診斷"], "old_modes_en": ["Seeing symptoms", "Finding causes", "Blaming environment", "Blaming others", "Blaming luck", "Immediate solution"], "new_modes_en": ["Find constraint nodes", "Find real bottlenecks", "Build diagnostic trees", "Form hypotheses", "Verify models", "Update diagnosis"], "diagnosis_zh": ["你遇到問題時，先找症狀還是先問『為什麼會這樣』？", "你能列出至少三個可能的根本原因嗎？", "你會測試你的假設嗎？還是直接跳到解決方案？", "你的診斷對了嗎？下一次遇到類似問題時，你會用更好的方法嗎？"], "diagnosis_en": ["Do you find symptoms or ask 'why'?", "Can you list 3+ possible root causes?", "Do you test hypotheses or jump to solutions?", "Was your diagnosis correct? Will you improve next time?"], "practice_zh": "取你工作或生活中的一個問題，用『症狀→假設→測試→診斷→解決方案→驗證』的流程系統地分析", "practice_en": "Pick a real problem. Use: symptom→hypothesis→test→diagnosis→solution→verify", "tools_zh": ["5個為什麼", "魚骨圖", "診斷樹", "A/B測試"], "tools_en": ["5 Whys", "Fishbone diagram", "Diagnostic tree", "A/B testing"], "system": "執行與管理", "links_zh": ["思考能力", "提問能力", "決策能力"], "links_en": ["Thinking", "Questioning", "Decision-making"]}, {"id": 16, "name_zh": "決策能力", "name_en": "Decision-Making", "icon": "⚖️", "essence_zh": "決策不是猜中未來。決策是在資訊有限時，最大化長期勝率同時最小化失敗成本。", "essence_en": "Decision-making is not predicting correctly. It's maximizing long-term odds while minimizing failure costs.", "why_zh": "衝動決定：看起來賺錢快，結果賠錢。謹慎決定：花3天分析，發現風險太大，不值得。好決策不是每次都對，而是長期贏面大。", "why_en": "Impulsive: seems fast profit, lose money. Careful: 3-day analysis, discover high risk. Good decisions don't win every time, win long-term.", "old_modes": ["感覺好", "大家都做", "短期利益", "避免痛苦", "憑經驗", "衝動決定"], "new_modes": ["長期最佳化", "機率決策", "風險管理", "目標函數", "系統效益", "預測未來"], "old_modes_en": ["Feeling good", "Everyone's doing it", "Short-term gains", "Avoiding pain", "Based on experience", "Impulsive"], "new_modes_en": ["Long-term optimization", "Probabilistic decisions", "Risk management", "Objective function", "System benefits", "Predict future"], "diagnosis_zh": ["你決策時考慮長期還是短期後果？", "你列過決策的所有選項嗎？還是只看兩個？", "你評估過風險嗎？知道失敗的成本嗎？", "你的決策是可逆的嗎？能回頭改正嗎？"], "diagnosis_en": ["Long-term or short-term consequences?", "All options or just two?", "Assessed risks and failure costs?", "Is decision reversible?"], "practice_zh": "下次做重要決策前，用『目標→選項→收益→損失→機率→可逆性→選擇』的框架分析", "practice_en": "Next big decision: goal→options→gains→losses→probability→reversibility→choice", "tools_zh": ["決策矩陣", "蒙特卡洛模擬", "決策樹", "風險評估"], "tools_en": ["Decision matrix", "Monte Carlo", "Decision tree", "Risk assessment"], "system": "執行與管理", "links_zh": ["思考能力", "診斷能力", "執行能力"], "links_en": ["Thinking", "Diagnosis", "Execution"]}, {"id": 17, "name_zh": "執行能力", "name_en": "Execution", "icon": "🚀", "essence_zh": "執行不是靠意志力。執行是讓正確行動低摩擦地持續發生。", "essence_en": "Execution is not willpower. It's making correct actions happen with minimal friction.", "why_zh": "有計畫但沒執行 = 0。執行不了是因為系統設計差，不是因為意志力差。移除障礙、建立觸發器、自動化流程，執行就會自然發生。", "why_en": "Plan without execution = 0. Execution fails due to poor system design, not weak willpower. Remove obstacles, add triggers, automate.", "old_modes": ["靠意志力", "一直努力", "一直加班", "硬撐", "忙就是好", "完成任務"], "new_modes": ["建立系統", "建立習慣", "建立流程", "持續輸出", "高品質完成", "長期累積"], "old_modes_en": ["Willpower", "Endless effort", "Overworking", "Pushing through", "Busyness", "Task completion"], "new_modes_en": ["Build systems", "Build habits", "Build processes", "Continuous output", "Quality completion", "Long-term accumulation"], "diagnosis_zh": ["你知道要做什麼，但為什麼沒有做？是太難、太大、沒反饋還是環境干擾？", "你有追蹤系統嗎？還是靠記憶？", "你的流程有多少摩擦？還是一鍵可做？", "你完成了任務但質量如何？"], "diagnosis_en": ["Know what to do but don't? Too hard, big, no feedback, or environment?", "Do you track or just remember?", "How many steps? One click or many?", "Task done but quality?"], "practice_zh": "挑一個你想養成的習慣，用『目標→最小行動→環境設計→自動提醒→回饋→反思』建立30天迴圈", "practice_en": "Pick a habit. Build 30-day loop: goal→minimal action→environment→reminder→feedback→reflect", "tools_zh": ["Habit tracker", "Zapier", "IFTTT", "環境設計"], "tools_en": ["Habit tracker", "Zapier", "IFTTT", "Environmental design"], "system": "執行與管理", "links_zh": ["決策能力", "時間管理能力", "習慣形成"], "links_en": ["Decision-making", "Time management", "Habit formation"]}, {"id": 18, "name_zh": "時間管理能力", "name_en": "Time Management", "icon": "⏰", "essence_zh": "時間管理不是提高效率。時間管理是確保花最多時間在最重要的事上。", "essence_en": "Time management is not productivity. It's spending most time on most important things.", "why_zh": "提高效率 = 快速完成所有事。時間配置 = 只做重要的事，其他的不做或延遲。一個人每天只有4小時高能量，應該拿來做最重要的事。", "why_en": "Efficiency = do everything faster. Allocation = do only important things. 4 hrs peak energy/day = use for most important.", "old_modes": ["行事曆排滿", "提高效率", "早起", "番茄鐘", "事情做完", "平均分配"], "new_modes": ["目標排序", "深度工作", "能量配置", "重要優先", "長期配置", "人生配置"], "old_modes_en": ["Calendar packed", "Efficiency", "Waking early", "Pomodoro", "Everything done", "Equal allocation"], "new_modes_en": ["Priority goals", "Deep work", "Energy allocation", "Importance first", "Long-term", "Life allocation"], "diagnosis_zh": ["你每週花多少時間在最重要的事？", "你知道你的『北極星』是什麼嗎？", "你有根據能量狀態調整工作嗎？", "你一個月做的事中，有多少是真的重要？"], "diagnosis_en": ["Weekly time on most important?", "Do you know your 'North Star'?", "Do you work by energy state?", "% of monthly work is truly important?"], "practice_zh": "列出你最近一個月做的所有事，分成『必須』『重要』『可選』，計算每類花了多少時間，然後重新配置", "practice_en": "List all monthly tasks: must-do, important, optional. Calculate time per category. Reallocate.", "tools_zh": ["Notion", "Todoist", "Clockwise", "Rescue Time"], "tools_en": ["Notion", "Todoist", "Clockwise", "Rescue Time"], "system": "執行與管理", "links_zh": ["決策能力", "執行能力", "人生導航能力"], "links_en": ["Decision-making", "Execution", "Life navigation"]}, {"id": 19, "name_zh": "健康管理能力", "name_en": "Health Management", "icon": "💪", "essence_zh": "健康管理不是治病。健康管理是維持生理穩態，讓身體保持最佳運作狀態。", "essence_en": "Health management is not treating disease. It's maintaining homeostasis for optimal function.", "why_zh": "生病了才看醫生 vs. 預防疾病：前者被動，後者主動。睡眠、營養、運動、壓力管理這四項做好，90%的常見疾病都能預防。", "why_en": "Treat disease vs. prevent disease: reactive vs. proactive. Sleep+nutrition+exercise+stress = prevent 90% of common illness.", "old_modes": ["生病才管", "吃保健品", "治症狀", "看醫生", "追神藥", "追新療法"], "new_modes": ["維持穩態", "睡眠", "營養", "運動", "壓力管理", "恢復能力"], "old_modes_en": ["Only when sick", "Supplements", "Treat symptoms", "Doctor", "Cure-all pills", "Latest therapy"], "new_modes_en": ["Homeostasis", "Sleep", "Nutrition", "Exercise", "Stress mgmt", "Recovery"], "diagnosis_zh": ["你平均每晚睡幾小時？質量如何？", "你知道自己的營養缺陷嗎？", "你一週運動幾次？什麼類型？", "你的壓力管理方式是什麼？"], "diagnosis_en": ["Sleep hours/night? Quality?", "Know nutrition gaps?", "Exercise frequency/type?", "Stress management method?"], "practice_zh": "追蹤一個月：睡眠、飲食、運動、壓力，找出最影響你能量的因素，然後最小化改變", "practice_en": "Track 1 month: sleep, diet, exercise, stress. Find biggest energy impact. Minimal change.", "tools_zh": ["Apple Health", "Withings", "MyFitnessPal", "Oura Ring"], "tools_en": ["Apple Health", "Withings", "MyFitnessPal", "Oura Ring"], "system": "生活與健康", "links_zh": ["情緒管理能力", "執行能力", "人生導航能力"], "links_en": ["Emotion management", "Execution", "Life navigation"]}, {"id": 20, "name_zh": "情緒管理能力", "name_en": "Emotion Management", "icon": "❤️", "essence_zh": "情緒管理不是壓抑。情緒管理是理解情緒在告訴你什麼，然後調節或更新。", "essence_en": "Emotion management is not suppressing. It's understanding what emotions signal, then adjusting or updating.", "why_zh": "情緒 = 你的內部控制系統的訊號。害怕 = 有威脅。生氣 = 有邊界被越過。難過 = 有損失。不理解情緒就會被情緒綁架。理解情緒就能用情緒。", "why_en": "Emotion = control system signal. Fear = threat. Anger = boundary crossed. Sadness = loss. Ignore emotions, they control you. Understand, they serve you.", "old_modes": ["忍耐", "壓抑", "控制情緒", "不要生氣", "正向思考", "逃避"], "new_modes": ["覺察情緒", "理解訊號", "調節神經", "更新信念", "提升復原力", "建立穩定"], "old_modes_en": ["Endure", "Suppress", "Control", "Don't be angry", "Positive thinking", "Avoid"], "new_modes_en": ["Notice", "Understand signals", "Regulate nervous system", "Update beliefs", "Build resilience", "Stability"], "diagnosis_zh": ["你感受到情緒時，能命名它嗎？", "你知道這個情緒在保護什麼嗎？", "你有快速調節方法嗎？還是讓情緒持續？", "情緒平復後，你會反思嗎？"], "diagnosis_en": ["Can you name emotions you feel?", "Know what it protects?", "Quick regulation method or let it linger?", "Reflect after?"], "practice_zh": "下次情緒強烈時，暫停3分鐘問自己：(1)我感受到什麼？(2)身體哪裡有反應？(3)我在保護什麼？(4)哪些是事實哪些是解讀？", "practice_en": "Next strong emotion: pause 3min. Ask: (1) What feeling? (2) Body where? (3) What protecting? (4) Fact or interpretation?", "tools_zh": ["冥想", "心率變異度追蹤", "日誌", "呼吸技巧"], "tools_en": ["Meditation", "HRV tracking", "Journaling", "Breathing"], "system": "生活與健康", "links_zh": ["健康管理能力", "溝通能力", "決策能力"], "links_en": ["Health management", "Communication", "Decision-making"]}, {"id": 21, "name_zh": "財務能力", "name_en": "Financial Management", "icon": "💰", "essence_zh": "財務能力不是賺錢多。財務能力是讓錢為你工作，而不是你為錢工作。", "essence_en": "Financial skill is not high income. It's making money work for you, not vice versa.", "why_zh": "年入百萬但支出也百萬 = 財務不自由。年入50萬支出30萬 = 每年累積20萬，10年複利 = 財務自由。財務能力的關鍵是現金流、資產配置、風險管理。", "why_en": "$1M income + $1M expense = unfree. $500k income + $300k expense = $200k/yr, 10yr compounding = financial freedom. Key: cash flow, allocation, risk.", "old_modes": ["多賺錢", "省錢", "投資熱門", "追高殺低", "收入越多越好", "努力工作"], "new_modes": ["現金流", "資產配置", "風險管理", "能力投資", "長期複利", "財務系統"], "old_modes_en": ["Earn more", "Save money", "Popular investments", "Buy high sell low", "Income is everything", "Work hard"], "new_modes_en": ["Cash flow", "Asset allocation", "Risk management", "Capability investment", "Compounding", "System"], "diagnosis_zh": ["你每月的現金流是多少？", "你知道你的資產構成嗎？", "你能承受多少投資風險？", "你有投資在自己的能力上嗎？"], "diagnosis_en": ["Monthly cash flow?", "Know asset allocation?", "Risk tolerance?", "Investing in yourself?"], "practice_zh": "計算你的月度現金流（收入-支出），列出所有支出並分類，找到可以優化的地方", "practice_en": "Calculate monthly cash flow. List all expenses by category. Find optimization opportunities.", "tools_zh": ["YNAB", "Personal Capital", "Mint", "Excel"], "tools_en": ["YNAB", "Personal Capital", "Mint", "Excel"], "system": "生活與健康", "links_zh": ["決策能力", "商業能力", "人生導航能力"], "links_en": ["Decision-making", "Business acumen", "Life navigation"]}, {"id": 22, "name_zh": "商業能力", "name_en": "Business Acumen", "icon": "📈", "essence_zh": "商業能力不是會賣。商業能力是理解價值創造、交換、傳遞的完整系統。", "essence_en": "Business skill is not selling. It's understanding complete value creation, exchange, delivery system.", "why_zh": "推銷員靠嘴皮子賣東西，一次成交。商人建立系統，讓客戶自動回購。區別在於：推銷是一次交易，商業是長期關係和價值。", "why_en": "Salesman: mouth, one deal. Business: system, repeat purchase. Difference: transaction vs. relationship.", "old_modes": ["推產品", "賣東西", "做廣告", "找流量", "打折", "一直成交"], "new_modes": ["解決問題", "建立價值", "品牌信任", "商業模式", "客戶成功", "長期關係"], "old_modes_en": ["Push products", "Sell things", "Advertising", "Find traffic", "Discounts", "Always closing"], "new_modes_en": ["Solve problems", "Create value", "Brand trust", "Business model", "Customer success", "Relationships"], "diagnosis_zh": ["你知道客戶的真實問題嗎？", "你的價值主張是什麼？", "客戶買的是產品還是解決方案？", "你的客戶會推薦你嗎？"], "diagnosis_en": ["Know real customer problems?", "Value proposition?", "Buying product or solution?", "Would customers refer you?"], "practice_zh": "選一個你想賣的東西，從零開始建立：(1)目標客戶 (2)他們的問題 (3)你的解決方案 (4)價值證明 (5)銷售流程", "practice_en": "Pick product. Build: (1) Target customer (2) Their problem (3) Your solution (4) Value proof (5) Sales process", "tools_zh": ["Lean Canvas", "Jobs to be Done", "Stripe", "HubSpot"], "tools_en": ["Lean Canvas", "Jobs to be Done", "Stripe", "HubSpot"], "system": "生活與健康", "links_zh": ["決策能力", "溝通能力", "執行能力"], "links_en": ["Decision-making", "Communication", "Execution"]}, {"id": 23, "name_zh": "創造能力", "name_en": "Creativity", "icon": "💡", "essence_zh": "創新不是有靈感。創新是系統地重新組合既有元素，產生新的有效結構。", "essence_en": "Innovation is not inspiration. It's systematically recombining elements into new effective structures.", "why_zh": "等靈感的人一年可能沒有一個好主意。有系統的人每週都能產出新想法。創新的公式：問題→拆解→跨域搜尋→重組→測試→迭代。", "why_en": "Inspiration-waiting: maybe one idea/year. Systematic: one idea/week. Formula: problem→decompose→search→combine→test→iterate", "old_modes": ["天分", "靈感", "藝術", "創意很多", "想到就做", "模仿成功者"], "new_modes": ["跨域組合", "重新生成", "知識重組", "問題重構", "創新模型", "價值創造"], "old_modes_en": ["Talent", "Inspiration", "Art", "Lots of ideas", "Act on whims", "Imitate success"], "new_modes_en": ["Cross-domain", "Regenerate", "Recombine", "Reframe problem", "Innovation model", "Value"], "diagnosis_zh": ["你產出新想法的頻率是多少？", "你的想法是完全新還是重新組合？", "你測試過你的想法嗎？", "你會根據反饋迭代嗎？"], "diagnosis_en": ["Frequency of new ideas?", "Completely new or recombination?", "Tested your ideas?", "Iterate on feedback?"], "practice_zh": "選一個領域的問題，從另外三個不同領域尋找靈感和解決方案，試著組合出新的想法", "practice_en": "Pick problem. Search 3 different domains for inspiration. Combine into new solution.", "tools_zh": ["SCAMPER", "Mind mapping", "Brainwriting", "Lateral thinking"], "tools_en": ["SCAMPER", "Mind mapping", "Brainwriting", "Lateral thinking"], "system": "生活與健康", "links_zh": ["思考能力", "提問能力", "系統設計能力"], "links_en": ["Thinking", "Questioning", "Systems design"]}, {"id": 24, "name_zh": "領導能力", "name_en": "Leadership", "icon": "👑", "essence_zh": "領導不是權力。領導是激發他人的能力，讓他們能獨立解決問題。", "essence_en": "Leadership is not authority. It's enabling people to independently solve problems.", "why_zh": "專制領導者：下屬依賴他，他一離開組織就癱瘓。好領導者：下屬會自己思考決策，組織因為他的存在而變強。領導力的度量不是跟隨者數量，是他能培養多少獨立思考的人。", "why_en": "Authoritarian: subordinates depend, organization fails if he leaves. Good: they think independently, organization strengthens. Measure: not followers, independent thinkers created.", "old_modes": ["命令別人", "權力", "管理", "監督", "控制", "績效"], "new_modes": ["建立願景", "賦能他人", "培養人才", "建立文化", "建立系統", "共同成長"], "old_modes_en": ["Commanding", "Power", "Management", "Oversight", "Control", "Performance"], "new_modes_en": ["Build vision", "Empower", "Develop talent", "Build culture", "Build systems", "Grow together"], "diagnosis_zh": ["你離開一個月，團隊還能正常運作嗎？", "你會花時間在人才培養上嗎？", "你建立了什麼樣的文化？", "你的領導方式讓人想跟隨還是被迫跟隨？"], "diagnosis_en": ["Leave 1 month, team still works?", "Time on talent development?", "What culture created?", "Follow willingly or forced?"], "practice_zh": "選一個你要培養的人，設計一個『指導→放權→反饋→成長』的計畫，持續三個月", "practice_en": "Pick someone to develop. Plan: coach→empower→feedback→grow over 3 months", "tools_zh": ["1對1會議", "OKRs", "反饋框架", "領導力課程"], "tools_en": ["1-on-1", "OKRs", "Feedback framework", "Leadership training"], "system": "領導與社群", "links_zh": ["溝通能力", "教學能力", "系統設計能力"], "links_en": ["Communication", "Teaching", "Systems design"]}, {"id": 25, "name_zh": "社群經營能力", "name_en": "Community Building", "icon": "👥", "essence_zh": "社群經營不是追求人數。社群經營是建立信任和共同成長的空間。", "essence_en": "Community is not member count. It's trust and shared growth space.", "why_zh": "10000個粉絲但沒有互動 ≠ 社群。1000個核心成員彼此支援、共同學習 = 社群。質量遠大於數量。", "why_en": "10k followers no interaction ≠ community. 1k core members supporting each other = community. Quality > quantity.", "old_modes": ["人越多越好", "流量", "按讚數", "粉絲數", "一直發文", "一直曝光"], "new_modes": ["建立信任", "共同學習", "共同更新", "知識社群", "長期價值", "共同成長"], "old_modes_en": ["More people", "Traffic", "Likes", "Followers", "Constant posting", "Constant exposure"], "new_modes_en": ["Build trust", "Learn together", "Update together", "Knowledge community", "Long-term value", "Grow together"], "diagnosis_zh": ["你社群的成員會彼此互動嗎？", "他們能從社群得到什麼？", "他們會主動邀請新成員嗎？", "你的社群成員這個月增長了什麼能力？"], "diagnosis_en": ["Do members interact?", "What value they get?", "Do they invite others?", "What capability grew this month?"], "practice_zh": "建立一個核心小組（5-10人），每週一次同步會議，分享學習、困難、計畫，追蹤三個月的成長", "practice_en": "Start core group (5-10). Weekly sync: share learning, challenges, plans. Track 3-month growth.", "tools_zh": ["Discord", "Slack", "Mighty Networks", "Circle"], "tools_en": ["Discord", "Slack", "Mighty Networks", "Circle"], "system": "領導與社群", "links_zh": ["溝通能力", "教學能力", "人生導航能力"], "links_en": ["Communication", "Teaching", "Life navigation"]}, {"id": 26, "name_zh": "研究能力", "name_en": "Research", "icon": "🔬", "essence_zh": "研究不是找支持自己的證據。研究是建立假說、設計驗證、更新模型的循環。", "essence_en": "Research is not confirming beliefs. It's hypothesis→verify→update model cycle.", "why_zh": "偏見研究：只找支持自己的證據。科學研究：主動尋找反對的證據，如果沒有被推翻就更有信心。好的研究能力能快速發現真實。", "why_en": "Biased: only support. Scientific: actively seek refutation. Not refuted = higher confidence. Good research finds truth fast.", "old_modes": ["找支持自己資料", "引用很多", "讀論文", "相信專家", "做統計", "找證據"], "new_modes": ["建立假說", "驗證假說", "模型修正", "批判分析", "跨領域整合", "持續更新"], "old_modes_en": ["Supporting data only", "Many citations", "Read papers", "Trust experts", "Do statistics", "Find evidence"], "new_modes_en": ["Form hypothesis", "Verify", "Correct model", "Critical analysis", "Cross-domain", "Continuous update"], "diagnosis_zh": ["你會主動尋找反對你的證據嗎？", "你的假設基於什麼？", "你驗證過你的假設嗎？", "你根據新證據改變過想法嗎？"], "diagnosis_en": ["Actively seek refutation?", "Hypothesis based on what?", "Verified?", "Changed mind on new evidence?"], "practice_zh": "選一個你相信的觀點，花一週時間尋找反對的證據，然後修正你的觀點", "practice_en": "Pick belief. Spend 1 week finding refutation. Update your view.", "tools_zh": ["Google Scholar", "Statista", "對話", "A/B測試"], "tools_en": ["Google Scholar", "Statista", "Discussion", "A/B testing"], "system": "領導與社群", "links_zh": ["思考能力", "提問能力", "診斷能力"], "links_en": ["Thinking", "Questioning", "Diagnosis"]}, {"id": 27, "name_zh": "系統設計能力", "name_en": "Systems Design", "icon": "⚙️", "essence_zh": "系統設計不是流程很多。系統設計是讓正確的事自動發生，不需要每次人工干預。", "essence_en": "System design is not many processes. It's making right things happen automatically.", "why_zh": "沒系統：每次都要手動做，容易出錯，低效。有系統：流程清晰，檢查點明確，出錯能自動檢測，效率高10倍。好的系統應該越來越簡單，不是越來越複雜。", "why_en": "No system: manual, error-prone, slow. System: clear process, checkpoints, auto-detection, 10x efficient. Good systems get simpler.", "old_modes": ["SOP很多", "流程很多", "工具很多", "管理很多", "制度很多", "表格很多"], "new_modes": ["建立生成系統", "降低熵增", "自動更新", "AI流程", "可複製系統", "持續優化"], "old_modes_en": ["Many SOPs", "Many processes", "Many tools", "Much management", "Many policies", "Many forms"], "new_modes_en": ["Generative systems", "Lower entropy", "Auto-update", "AI processes", "Scalable systems", "Optimize"], "diagnosis_zh": ["你的流程清晰到能讓新人快速上手嗎？", "你有哪些手動的步驟可以自動化？", "你的系統容易出錯的地方在哪？", "你的系統能複製到其他團隊嗎？"], "diagnosis_en": ["Process clear enough for onboarding?", "Which manual steps can automate?", "Where does system fail?", "Can copy to other teams?"], "practice_zh": "選擇你重複做最多的工作，用『現狀→流程圖→瓶頸分析→自動化設計→測試→優化』逐步系統化", "practice_en": "Most repeated task: status→flowchart→bottleneck→automate→test→optimize", "tools_zh": ["Zapier", "Make.com", "Python", "Notion"], "tools_en": ["Zapier", "Make.com", "Python", "Notion"], "system": "領導與社群", "links_zh": ["執行能力", "時間管理能力", "AI能力"], "links_en": ["Execution", "Time management", "AI"]}, {"id": 28, "name_zh": "模型更新能力", "name_en": "Model Updating", "icon": "🔄", "essence_zh": "模型更新不是改變想法。模型更新是接受新證據，修正你的預測，提高準確度。", "essence_en": "Updating is not changing mind. It's accepting evidence, correcting predictions, improving accuracy.", "why_zh": "固守舊模型的人：越來越不適應世界，預測錯誤率越來越高。持續更新的人：每次更新都讓預測更精準，複利效應會讓差距越來越大。", "why_en": "Rigid models: increasingly misaligned, higher errors. Updating: each iteration improves accuracy, compounding gap.", "old_modes": ["我一直都是對的", "以前有效", "不要改", "相信權威", "固守經驗", "拒絕AI"], "new_modes": ["接受新證據", "修正信念", "更新模型", "版本升級", "降低預測誤差", "終身更新"], "old_modes_en": ["Always right", "Worked before", "Don't change", "Trust authority", "Stick to experience", "Reject AI"], "new_modes_en": ["Accept evidence", "Correct beliefs", "Update models", "Version upgrades", "Lower error", "Lifelong"], "diagnosis_zh": ["上一次根據新資訊改變想法是什麼時候？", "你有多少比例的舊觀點已經過時了？", "你有『版本號』嗎？還是永遠是V1？", "你會尋求反對意見嗎？"], "diagnosis_en": ["Last time changed mind on evidence?", "% of old beliefs outdated?", "Do you version update or forever V1?", "Seek opposing views?"], "practice_zh": "列出你20歲時相信的10個想法，逐一檢視現在還信不信，標記『完全同意』『部分更新』『完全改變』，寫下轉變原因", "practice_en": "10 beliefs from age 20. Review each now: agree, partly update, changed. Write why.", "tools_zh": ["Keep a belief journal", "思辨小組", "多視角閱讀", "Prediction markets"], "tools_en": ["Belief journal", "Discussion groups", "Multi-perspective reading", "Prediction markets"], "system": "進化與智慧", "links_zh": ["思考能力", "研究能力", "決策能力"], "links_en": ["Thinking", "Research", "Decision-making"]}, {"id": 29, "name_zh": "人生導航能力", "name_en": "Life Navigation", "icon": "🧭", "essence_zh": "人生導航不是完成目標。人生導航是清楚知道自己要去哪裡，持續校準，長期生成智慧和成果。", "essence_en": "Life navigation is not goal completion. It's knowing where you're going, calibrating continuously, generating wisdom and results.", "why_zh": "沒有方向的人：每天忙著應付。有方向的人：每個決策都往北極星靠近。北極星不變，但路徑每年校準。10年後兩種人的差距會非常大。", "why_en": "No direction: busy reacting. Compass: each decision toward North Star. Star fixed, path updates yearly. 10-year gap = huge.", "old_modes": ["努力生活", "完成目標", "追求成功", "忙碌人生", "解決問題", "活一天算一天"], "new_modes": ["目標函數", "北極星", "生命導航", "能力累積", "長期生成", "持續校準"], "old_modes_en": ["Just working", "Completing goals", "Pursuing success", "Busy life", "Solving problems", "Day by day"], "new_modes_en": ["Objective function", "North Star", "Navigation", "Build capabilities", "Long-term generation", "Calibrate"], "diagnosis_zh": ["你清楚知道自己的北極星是什麼嗎？", "你的年度計畫和北極星有關聯嗎？", "你每季度檢視和校準嗎？", "你能看到5年後的自己嗎？"], "diagnosis_en": ["Do you know your North Star?", "Annual plan aligned with it?", "Quarterly review and calibrate?", "Can see 5-year self?"], "practice_zh": "花2小時寫下：(1)你的北極星是什麼（5年願景）(2)為了達成它，需要建立什麼能力(3)今年要做什麼(4)今年結束時的自我評估標準", "practice_en": "2-hour session: (1) North Star (5yr vision) (2) Required capabilities (3) This year (4) Self-evaluation criteria", "tools_zh": ["Notion Life OS", "OKRs", "人生評估工具", "年度回顧"], "tools_en": ["Notion Life OS", "OKRs", "Life audit", "Annual review"], "system": "進化與智慧", "links_zh": ["決策能力", "時間管理能力", "智慧生成能力"], "links_en": ["Decision-making", "Time management", "Wisdom generation"]}, {"id": 30, "name_zh": "智慧生成能力", "name_en": "Wisdom Generation", "icon": "✨", "essence_zh": "智慧不是知道很多。智慧是知識→能力→成果→反思→更新→再生成的循環。", "essence_en": "Wisdom is not knowing much. It's the cycle: knowledge→capability→results→reflect→update→regenerate.", "why_zh": "讀了1000本書但沒有行動 ≠ 智慧。做了100個項目，每次都反思學習，不斷改進 = 智慧。智慧來自『行動→錯誤→反思→改進』的循環，不是輸入。", "why_en": "Read 1000 books no action ≠ wisdom. 100 projects with reflection = wisdom. From action→error→reflect→improve, not input.", "old_modes": ["知道很多", "很有學問", "很聰明", "很會背", "一直學", "一直收集"], "new_modes": ["知識→能力→成果→智慧→更新→再生成", "形成終身生命作業系統", "持續進化", "跨域應用", "代際傳承", "智慧迴圈"], "old_modes_en": ["Knowing lots", "Well-educated", "Being smart", "Good memory", "Always learning", "Collecting"], "new_modes_en": ["Knowledge→Capability→Results→Wisdom→Update→Regenerate", "Lifetime system", "Continuous evolution", "Cross-domain", "Generational", "Wisdom cycle"], "diagnosis_zh": ["你的學習最終產生了什麼成果？", "你從成果反思過嗎？", "你根據反思改變過做法嗎？", "你能教給別人嗎？", "你能預測下一次會更好嗎？"], "diagnosis_en": ["What results from learning?", "Reflected on results?", "Changed approach?", "Can teach others?", "Predict improvement?"], "practice_zh": "完成『學習→應用→反思→教人→預測改進』的完整循環。選一個你學的東西，用出來，記錄結果，寫下反思，教給別人，預測下一版改進", "practice_en": "Complete cycle: learn→apply→reflect→teach→predict improvement. Pick skill. Use it. Record. Reflect. Teach. Predict.", "tools_zh": ["學習日誌", "回顧模板", "教學平台", "Prediction tracking"], "tools_en": ["Learning journal", "Review template", "Teaching platform", "Prediction tracking"], "system": "進化與智慧", "links_zh": ["所有能力", "人生導航能力", "模型更新能力"], "links_en": ["All abilities", "Life navigation", "Model updating"]}]}
+    </script>
+    
+    <script>
+        const abilities = JSON.parse(document.getElementById('abilityData').textContent).abilities;
+        
+        console.log(`加載${abilities.length}個能力節點`);
+        
+        function speakEnglish(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(utterance);
+        }
+        
+        function createAbilityCard(ability, fullDetail = false) {
+            const card = document.createElement('div');
+            card.className = 'ability-card';
+            
+            const diagnosisHTML = (ability.diagnosis_zh || []).map((q, i) => `
+                <div class="bilingual-pair">
+                    <div class="zh">❓ ${q}</div>
+                    <div class="en">❓ ${(ability.diagnosis_en || [])[i] || ''}</div>
+                </div>
+            `).join('');
+            
+            const toolsHTML = (ability.tools_zh || []).map((tool, i) => `<div class="tool-tag">${tool}</div>`).join('');
+            
+            const linksHTML = (ability.links_zh || []).map((link, i) => 
+                `<span style="display:inline-block; background:#E0E7FF; color:var(--navy); padding:4px 8px; border-radius:4px; font-size:11px; margin:4px 4px 4px 0;">${link}</span>`
+            ).join('');
+            
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="card-icon">${ability.icon || '📌'}</div>
+                    <h3>${ability.id}. ${ability.name_zh}</h3>
+                    <p>${ability.name_en}</p>
+                </div>
+                <div class="card-body">
+                    <span class="system-tag">${ability.system || '系統'}</span>
+                    
+                    <div class="section-box">
+                        <h5>💡 能力本質</h5>
+                        <div class="bilingual-pair">
+                            <div class="zh">${ability.essence_zh || ''}</div>
+                            <div class="en">${ability.essence_en || ''} <button class="tts-btn" onclick="speakEnglish('${(ability.essence_en || '').replace(/'/g, "\'")}'">🔊</button></div>
+                        </div>
+                    </div>
+                    
+                    ${fullDetail ? `
+                    <div class="section-box">
+                        <h5>📚 為什麼重要</h5>
+                        <div class="bilingual-pair">
+                            <div class="zh">${ability.why_zh || ''}</div>
+                            <div class="en">${ability.why_en || ''}</div>
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="section-box">
+                        <h5>❌ 舊模式</h5>
+                        <div class="mode-list">
+                            ${(ability.old_modes || []).map(m => `<div class="mode-item">✗ ${m}</div>`).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="section-box">
+                        <h5>✅ 新模式</h5>
+                        <div class="mode-list">
+                            ${(ability.new_modes || []).map(m => `<div class="mode-item">✓ ${m}</div>`).join('')}
+                        </div>
+                    </div>
+                    
+                    ${fullDetail ? `
+                    <div class="diagnostic-box">
+                        <h5 style="color: #F59E0B;">❓ 診斷問題</h5>
+                        ${diagnosisHTML}
+                    </div>
+                    
+                    <div class="practice-box">
+                        <h5 style="color: #22C55E;">🎯 實踐任務</h5>
+                        <p><strong>中文：</strong>${ability.practice_zh || ''}</p>
+                        <p style="margin-top: 8px;"><strong>English：</strong>${ability.practice_en || ''}</p>
+                    </div>
+                    
+                    <div class="section-box">
+                        <h5>🛠️ 推薦工具</h5>
+                        <div class="tools-grid">${toolsHTML}</div>
+                    </div>
+                    
+                    <div class="section-box">
+                        <h5>🔗 相關能力</h5>
+                        ${linksHTML}
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            card.addEventListener('click', function() {
+                this.classList.toggle('expanded');
+            });
+            
+            return card;
+        }
+        
+        function initTabs() {
+            const navTabs = document.getElementById('navTabs');
+            const tabs = [
+                {id: 'overview', label: '🏠 快速瀏覽'},
+                {id: 'details', label: '📖 完整詳解'},
+                {id: 'practice', label: '🎯 實踐指南'}
+            ];
+            
+            tabs.forEach((tab, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'tab-btn' + (idx === 0 ? ' active' : '');
+                btn.textContent = tab.label;
+                btn.onclick = () => switchTab(tab.id, btn);
+                navTabs.appendChild(btn);
+            });
+        }
+        
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(tabId + '-section').classList.add('active');
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+        
+        function renderOverview() {
+            const grid = document.getElementById('overview-grid');
+            abilities.forEach(ab => grid.appendChild(createAbilityCard(ab, false)));
+        }
+        
+        function renderDetails() {
+            const grid = document.getElementById('details-grid');
+            grid.innerHTML = '';
+            abilities.forEach(ab => grid.appendChild(createAbilityCard(ab, true)));
+        }
+        
+        function renderPractice() {
+            const grid = document.getElementById('practice-grid');
+            grid.innerHTML = '';
+            abilities.forEach(ab => {
+                const card = document.createElement('div');
+                card.className = 'ability-card expanded';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <h3>${ab.id}. ${ab.name_zh}</h3>
+                        <p>${ab.name_en}</p>
+                    </div>
+                    <div class="card-body" style="max-height: none; overflow: visible;">
+                        <div class="practice-box">
+                            <h5>🎯 實踐任務</h5>
+                            <p><strong>中文：</strong>${ab.practice_zh || ''}</p>
+                            <p style="margin-top: 8px;"><strong>English：</strong>${ab.practice_en || ''}</p>
+                        </div>
+                        <div class="section-box">
+                            <h5>🛠️ 推薦工具</h5>
+                            <div class="tools-grid">
+                                ${(ab.tools_zh || []).map(t => `<div class="tool-tag">${t}</div>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
+        function doSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const grid = document.getElementById('details-grid');
+            grid.innerHTML = '';
+            
+            const filtered = abilities.filter(ab => 
+                (ab.name_zh || '').includes(query) || 
+                (ab.name_en || '').toLowerCase().includes(query) ||
+                (ab.essence_zh || '').includes(query)
+            );
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--dark);">沒有找到結果</p>';
+                return;
+            }
+            
+            filtered.forEach(ab => grid.appendChild(createAbilityCard(ab, true)));
+        }
+        
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('scrollTop');
+            if (window.pageYOffset > 300) btn.classList.add('show');
+            else btn.classList.remove('show');
+        });
+        
+        document.getElementById('scrollTop').addEventListener('click', () => {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        });
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('初始化APP...');
+            initTabs();
+            renderOverview();
+            renderDetails();
+            renderPractice();
+            console.log(`✅ 完成 - 已加載${abilities.length}個能力`);
+        });
+    </script>
+</body>
+</html>
