@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prediction Error 完整系統</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "Microsoft JhengHei", sans-serif;
+  background: #f5f5f5;
+  color: #1A2B5F;
+  line-height: 1.8;
+  font-size: 16px;
+}
+.container { max-width: 1600px; margin: 0 auto; padding: 20px; }
+.header {
+  background: linear-gradient(135deg, #1A2B5F, #0A7A72);
+  color: white;
+  padding: 40px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+.header h1 { font-size: 36px; margin-bottom: 15px; }
+.header p { font-size: 16px; margin: 8px 0; }
+.section {
+  background: white;
+  padding: 0;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+.section-header {
+  background: #0A7A72;
+  color: white;
+  padding: 15px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  transition: all 0.2s;
+}
+.section-header:hover { background: #086660; }
+.toggle { display: inline-block; transition: transform 0.3s; }
+.section.closed .toggle { transform: rotate(-90deg); }
+.section-content {
+  max-height: 3000px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding: 25px;
+}
+.section.closed .section-content { max-height: 0; padding: 0 25px; }
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+.col-cn {
+  border-left: 3px solid #0A7A72;
+  padding-left: 15px;
+}
+.col-en {
+  border-left: 3px solid #C9960C;
+  padding-left: 15px;
+}
+.label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: bold;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+.label-cn { background: #0A7A72; }
+.label-en { background: #C9960C; }
+.content {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #333;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.grid-item-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.item {
+  padding: 12px;
+  background: #f9f9f9;
+  border-left: 3px solid #C9960C;
+  border-radius: 4px;
+  font-size: 13px;
+}
+.item-cn { border-left-color: #0A7A72; }
+.btn-tts {
+  padding: 6px 12px;
+  background: #C9960C;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: all 0.2s;
+}
+.btn-tts:hover { background: #1A2B5F; }
+.footer {
+  text-align: center;
+  padding: 25px;
+  margin-top: 40px;
+  border-top: 2px solid #ddd;
+  color: #666;
+  font-size: 13px;
+}
+@media (max-width: 1000px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .grid-item-list { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>🎯 Prediction Error 完整系統</h1>
+  <p>從「出錯」到「智慧生成」 | 最大化完整版</p>
+  <p style="margin-top: 15px; font-size: 14px;">40種能力 × 30種智慧 × 12種誤差 × 100個語言升級 × 完整整合</p>
+</div>
+
+<!-- 核心循環 -->
+<div class="section closed">
+<div class="section-header">
+  <span>核心概念 - Prediction Error循環系統</span>
+  <span class="toggle">▶</span>
+</div>
+<div class="section-content">
+<div class="grid-2">
+<div class="col-cn">
+<div class="label label-cn">中文流程</div>
+<div class="content">① Reality → 真實世界發生事件
+② Data → 事件產生資料
+③ Pattern → 資料顯現模式
+④ Model → 大腦建立預測模型
+⑤ Prediction → 模型產出預測
+⑥ Decision → 基於預測做決策
+⑦ Action → 執行行動
+⑧ Output → 產生結果
+⑨ Feedback → 取得回饋
+⑩ Prediction Error → 發現預測與現實的落差
+
+【核心分水嶺】
+
+⑪ Signal/Noise → 判斷是否值得更新
+⑫ Error Diagnosis → 診斷錯誤來源
+⑬ Variable Isolation → 拆解影響因素
+⑭ Mechanism Understanding → 理解生成機制
+⑮ Constraint/Bottleneck → 找出瓶頸限制
+⑯ Priority Node → 定位關鍵節點
+⑰ Leverage Point → 找出槓桿位置
+⑱ Hypothesis Formation → 形成新假設
+⑲ Minimum Experiment → 設計最小測試
+⑳ Update Size → 決定更新幅度
+㉑ Model Update → 修正預測模型
+㉒ Strategy Update → 調整行動策略
+㉓ Retest → 重新測試驗證
+㉔ Accuracy Improvement → 預測準確度提升
+㉕ Capability Generation → 能力逐漸形成
+㉖ Cross-transfer → 能力跨情境遷移
+㉗ Wisdom Emergence → 智慧逐漸湧現
+㉘ Meta-learning → 反思自己如何學習
+㉙ System Redesign → 必要時重新構築系統
+㉚ High Agency → 保持在困難中尋找可控變數</div>
+</div>
+<div class="col-en">
+<div class="label label-en">English Flow</div>
+<div class="content">Reality → Data → Pattern → Model → Prediction → Decision → Action → Output → Feedback → Prediction Error
+
+↓ DIAGNOSTIC PHASE ↓
+
+Signal/Noise → Diagnosis → Variables → Mechanism → Constraint → Priority Node → Leverage → Hypothesis → Experiment
+
+↓ UPDATE PHASE ↓
+
+Update Size → Model Update → Strategy Update → Retest → Accuracy ↑ → Capability → Transfer → Wisdom → Meta-learning → System Redesign → High Agency
+
+KEY: Error is not failure—it's information. Prediction Error is the entry point to capability generation and wisdom emergence.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 40種能力 -->
+<div class="section closed">
+<div class="section-header">
+  <span>40種基礎能力 - 完整清單與案例</span>
+  <span class="toggle">▶</span>
+</div>
+<div class="section-content">
+<div class="grid-item-list">
+<div class="item item-cn"><strong>觀察診斷組(1-10)</strong>
+01.事實辨識 - 區分事實vs解讀vs情緒反應
+02.觀察能力 - 看見大多數人忽略的細節訊號
+03.資料能力 - 知道哪些資料值得收集，哪些是噪音
+04.訊號辨識 - 在雜訊中識別真正的信號
+05.問題定義 - 不急著解決，先確認是什麼問題
+06.變數拆解 - 把複雜情況拆成獨立變數分析
+07.模式辨識 - 看見重複的規律和循環
+08.關係辨識 - 看見要素之間的相互影響
+09.因果推理 - 檢查真正的因果關係，不是單純相關
+10.多因果思考 - 停止「一切都是這個原因」的解釋</div>
+<div class="item"><strong>Analysis Group(1-10)</strong>
+01. Fact Identification - Separate facts, interpretations, emotions
+02. Observation - Notice details others miss
+03. Data Literacy - Know valuable vs noisy data
+04. Signal Recognition - Find true signals in noise
+05. Problem Framing - Define before solving
+06. Variable Decomposition - Break complexity into parts
+07. Pattern Recognition - See recurring regularities
+08. Relational Thinking - Understand mutual influence
+09. Causal Reasoning - Verify true causation
+10. Complexity Thinking - Reject single-cause explanations</div>
+
+<div class="item item-cn"><strong>系統思考組(11-20)</strong>
+11.機制思考 - 從「發生什麼」進入「如何被生成」
+12.系統思考 - 看見上下游節點和整體結構
+13.瓶頸辨識 - 知道不是每個節點同樣重要
+14.限制辨識 - 找到限制整體輸出的Constraint
+15.Priority Node - 找到最值得優先處理的關鍵節點
+16.槓桿辨識 - 尋找小改變帶來大影響的位置
+17.假設形成 - 把「我覺得」變成「我目前假設」
+18.預測能力 - 要求模型提出可被檢驗的Prediction
+19.機率思考 - 把「一定」改成「目前機率多少」
+20.不確定性管理 - 知道哪些事情還不知道</div>
+<div class="item"><strong>Systems Group(11-20)</strong>
+11. Mechanistic Thinking - Understand generation, not just outcomes
+12. Systems Thinking - See upstream/downstream and structure
+13. Bottleneck Detection - Identify limiting factors
+14. Constraint Thinking - Find what limits overall output
+15. Priority Thinking - Identify critical nodes
+16. Leverage Thinking - Find high-impact points
+17. Hypothesis Thinking - Convert intuitions to testable hypotheses
+18. Predictive Thinking - Make explicit predictions
+19. Probabilistic Thinking - Think in probability distributions
+20. Uncertainty Management - Know what's unknown</div>
+
+<div class="item item-cn"><strong>決策行動組(21-30)</strong>
+21.實驗設計 - 設計低成本方法測試假設
+22.最小行動 - 停止等待完美資訊，先行動
+23.可逆決策 - 先做容易撤回的小測試
+24.風險辨識 - 知道錯了會損失什麼
+25.風險控制 - 讓失敗成本保持可承受
+26.回饋讀取 - 從結果取得新資訊和訊號
+27.誤差偵測 - 發現Prediction與Reality的距離
+28.誤差診斷 - 知道錯在哪一層（資料、模型、策略等）
+29.模型更新 - 讓證據真正改變原本理解
+30.策略切換 - 舊方法失效後可以換方法</div>
+<div class="item"><strong>Decision Group(21-30)</strong>
+21. Experimentation - Design low-cost hypothesis tests
+22. Minimum Viable Action - Stop waiting, act now
+23. Reversible Decision Making - Make undoable decisions first
+24. Risk Awareness - Know failure costs
+25. Risk Management - Keep losses manageable
+26. Feedback Literacy - Extract information from results
+27. Error Detection - Notice prediction gaps
+28. Error Diagnosis - Identify error source level
+29. Model Updating - Let evidence change understanding
+30. Strategy Switching - Change methods when needed</div>
+
+<div class="item item-cn"><strong>優化改進組(31-40)</strong>
+31.參數調整 - 模型沒有錯時不必整套推翻
+32.流程改善 - 把一次成功變成可重複流程
+33.環境設計 - 知道何時不要只靠意志力
+34.資源配置 - 把時間、金錢、注意力放在Priority Node
+35.注意力配置 - 知道什麼值得看、什麼可以忽略
+36.再測試 - 修改後不急著宣布成功
+37.比較能力 - 比較Model v1與Model v2誰更準
+38.遷移能力 - 把一次學到的規律用到其他情境
+39.抽象化 - 從案例提取通用原則
+40.元學習 - 知道自己如何學得更快</div>
+<div class="item"><strong>Optimization Group(31-40)</strong>
+31. Parameter Tuning - Adjust without complete overhaul
+32. Process Optimization - Make success repeatable
+33. Environment Design - Reduce willpower dependency
+34. Resource Allocation - Direct to Priority Nodes
+35. Attention Allocation - Know what matters
+36. Retesting - Verify after changes
+37. Model Comparison - Compare hypothesis versions
+38. Transfer - Apply learning across contexts
+39. Abstraction - Extract universal principles
+40. Meta-learning - Know how to learn faster</div>
+</div>
+<button class="btn-tts" onclick="speak('Forty capabilities span from accurate observation through system thinking to decision-making and optimization. Each builds on the previous. Together they form the infrastructure for turning errors into wisdom.')">🔊 English</button>
+</div>
+</div>
+
+<!-- 30種智慧 -->
+<div class="section closed">
+<div class="section-header">
+  <span>30種智慧 - 完整清單與應用</span>
+  <span class="toggle">▶</span>
+</div>
+<div class="section-content">
+<div class="grid-item-list">
+<div class="item item-cn"><strong>認知智慧(1-5)</strong>
+01.事實智慧 - 先確認Reality再建立故事（案例：病症不是性格缺陷）
+02.不確定智慧 - 資料不足不急著製造確定（案例：投資決策中的保持開放）
+03.機率智慧 - 世界大量事件是機率不是二元（案例：從「一定失敗」到「目前機率70%」）
+04.證據智慧 - 相信程度跟著證據強度改變（案例：一份證據vs十份證據的信心差異）
+05.反證智慧 - 最值得看的資料有時是反證（案例：成功者的失敗案例最有啟發）</div>
+<div class="item"><strong>Epistemic Wisdom(1-5)</strong>
+01. Fact Wisdom - Confirm reality before narrative
+02. Uncertainty Wisdom - Accept incompleteness
+03. Probability Wisdom - Think in distributions
+04. Evidence Wisdom - Adjust confidence with evidence strength
+05. Contradiction Wisdom - Value disconfirming evidence most</div>
+
+<div class="item item-cn"><strong>系統智慧(6-10)</strong>
+06.模型智慧 - 模型是地圖不是土地（案例：認知模式限制了解決方案的範圍）
+07.邊界智慧 - 任何模型都有適用範圍（案例：成功的策略在新環境完全失效）
+08.多模型智慧 - 複雜問題需要多個視角（案例：同一問題用經濟、心理、系統角度看）
+09.因果智慧 - 一起發生不等於彼此造成（案例：相關性高但因果關係是假的）
+10.系統智慧 - 結果來自網路不是單一節點（案例：改變一個人無法改變組織文化）</div>
+<div class="item"><strong>Systems Wisdom(6-10)</strong>
+06. Model Wisdom - Map is not territory
+07. Boundary Wisdom - Every model has limits
+08. Multi-model Wisdom - Complex problems need multiple views
+09. Causal Wisdom - Correlation ≠ causation
+10. System Wisdom - Results from networks not nodes</div>
+
+<div class="item item-cn"><strong>效率智慧(11-15)</strong>
+11.瓶頸智慧 - 努力是否進入Constraint（案例：健身不是跑步快，而是恢復充分）
+12.槓桿智慧 - 高手減少平均用力（案例：集中在核心客戶vs平均服務所有人）
+13.時間智慧 - 短期最佳解不一定是長期（案例：快速燃燒團隊vs可持續增長）
+14.資源智慧 - 真正稀缺的是時間、注意力、能量（案例：錢可以買，但注意力買不了）
+15.風險智慧 - 重要的不只是成功率也包括失敗後能否存活（案例：90%成功但失敗導致破產）</div>
+<div class="item"><strong>Efficiency Wisdom(11-15)</strong>
+11. Bottleneck Wisdom - Effort only matters at constraints
+12. Leverage Wisdom - Minimize average effort
+13. Time Wisdom - Short-term optima aren't long-term
+14. Resource Wisdom - Real scarcity: time, attention, energy
+15. Risk Wisdom - Survivability matters as much as success</div>
+
+<div class="item item-cn"><strong>策略智慧(16-20)</strong>
+16.可逆智慧 - 不確定時優先保留修改權（案例：租房vs買房的決策）
+17.選項智慧 - 好策略增加未來可選路徑（案例：技能組合 vs 專精單一）
+18.冗餘智慧 - 重要系統不把全部押在單一路徑（案例：多客戶來源vs單一大客戶）
+19.韌性智慧 - 穩定是偏離後能恢復的能力（案例：金融危機中仍有正現金流的公司）
+20.反脆弱智慧 - 部分系統從誤差中改善（案例：每次失敗變成下次更強的根據）</div>
+<div class="item"><strong>Strategic Wisdom(16-20)</strong>
+16. Reversibility Wisdom - Preserve optionality when uncertain
+17. Option Wisdom - Good strategies expand options
+18. Redundancy Wisdom - Avoid single-point failures
+19. Resilience Wisdom - Stability = recovery ability
+20. Antifragility Wisdom - Some systems improve from stress</div>
+
+<div class="item item-cn"><strong>生活智慧(21-25)</strong>
+21.關係智慧 - 衝突是兩個模型交換信息的入口（案例：爭論中理解彼此預期差異）
+22.健康智慧 - 症狀是需要判讀的訊號（案例：疲勞不是懶惰是恢復不足）
+23.學習智慧 - 錯題是能力地圖上的定位資料（案例：錯誤顯示了具體要強化的位置）
+24.財富智慧 - 收入問題先找價值鏈瓶頸（案例：不是工作努力而是位置選擇）
+25.幸福智慧 - 提高整體生命系統可持續性（案例：不是單一指標高而是各方面平衡）</div>
+<div class="item"><strong>Life Wisdom(21-25)</strong>
+21. Relationship Wisdom - Conflict reveals model differences
+22. Health Wisdom - Symptoms are information
+23. Learning Wisdom - Mistakes map capability gaps
+24. Wealth Wisdom - Look upstream in value chain
+25. Wellbeing Wisdom - Optimize system sustainability</div>
+
+<div class="item item-cn"><strong>人生智慧(26-30)</strong>
+26.決策智慧 - 建立錯了仍可修正的結構（案例：定期review而不是永遠錯下去）
+27.成長智慧 - 成長是預測精度持續提升（案例：對自己、他人、世界的理解越來越準）
+28.成熟智慧 - 不需要透過「永遠正確」維持自我價值（案例：可以承認錯誤而不崩潰）
+29.自由智慧 - 真正自由是Constraint中仍具有選擇能力（案例：在有限條件下找到最優路徑）
+30.生命智慧 - 人生不是找終極答案而是建立導航系統（案例：持續改進而不是達到完美終點）</div>
+<div class="item"><strong>Life Philosophy(26-30)</strong>
+26. Decision Wisdom - Design reversible decision systems
+27. Growth Wisdom - Growth = prediction accuracy
+28. Maturity Wisdom - Self-worth independent of correctness
+29. Freedom Wisdom - Agency persists within constraints
+30. Life Wisdom - Life is navigation, not destination</div>
+</div>
+<button class="btn-tts" onclick="speak('Thirty wisdoms progress from epistemology through strategy to philosophy. They guide not just thinking but how to live.')">🔊 English</button>
+</div>
+</div>
+
+<!-- 12種誤差 -->
+<div class="section closed">
+<div class="section-header">
+  <span>12種誤差分類系統 - 完整診斷流程</span>
+  <span class="toggle">▶</span>
+</div>
+<div class="section-content">
+<div class="grid-item-list">
+<div class="item item-cn"><strong>A | Data Error - 資料本身錯了</strong>
+案例：溫度計壞了，測出的數據全是假的
+診斷：結果異常，首先檢查測量工具
+對策：改善測量品質、校準工具、增加測量次數</div>
+<div class="item"><strong>A | Data Error</strong>
+Example: Broken thermometer gives wrong readings
+Diagnosis: Check if measurement tool is faulty
+Action: Improve measurement, calibrate, verify</div>
+
+<div class="item item-cn"><strong>B | Sampling Error - 樣本太少</strong>
+案例：只問三個人就說「大家都喜歡」
+診斷：結論基於太少觀察
+對策：增加觀察數量，確保樣本代表性</div>
+<div class="item"><strong>B | Sampling Error</strong>
+Example: Three opinions don't represent millions
+Diagnosis: Conclusion from too few observations
+Action: Add observations, ensure representativeness</div>
+
+<div class="item item-cn"><strong>C | Noise - 只是隨機波動</strong>
+案例：昨天特別開心只是天氣好，不是長期趨勢
+診斷：單次異常不代表系統改變
+對策：先不要過度更新，等待更多證據</div>
+<div class="item"><strong>C | Noise</strong>
+Example: One good day from weather, not system change
+Diagnosis: Single outlier doesn't mean trend change
+Action: Don't over-update, wait for confirmation</div>
+
+<div class="item item-cn"><strong>D | Parameter Error - 方向對，數值錯</strong>
+案例：知道要早起，但起床時間設錯了
+診斷：策略方向正確，但具體數值需調整
+對策：調整參數（時間、強度、頻率等），不改方向</div>
+<div class="item"><strong>D | Parameter Error</strong>
+Example: Wake early is right, time is wrong
+Diagnosis: Direction correct, values need adjustment
+Action: Tune parameters (time, intensity, frequency)</div>
+
+<div class="item item-cn"><strong>E | Strategy Error - 目標對，方法錯</strong>
+案例：想健康是對的，但跑步對膝蓋傷害大
+診斷：目標方向對，但執行策略傷害自己
+對策：換策略（游泳、力量訓練等），保留目標</div>
+<div class="item"><strong>E | Strategy Error</strong>
+Example: Health goal right, running hurts knees
+Diagnosis: Goal correct, method causes damage
+Action: Switch strategy (swimming, strength), keep goal</div>
+
+<div class="item item-cn"><strong>F | Process Error - 方法對，執行錯</strong>
+案例：配方正確，但火候沒掌握好
+診斷：方法本身沒問題，執行細節有差
+對策：改流程、加checkpoint、標準化執行步驟</div>
+<div class="item"><strong>F | Process Error</strong>
+Example: Recipe right, cooking heat wrong
+Diagnosis: Method fine, execution details off
+Action: Fix process, add checkpoints, standardize</div>
+
+<div class="item item-cn"><strong>G | Capability Error - 知道方法但能力不足</strong>
+案例：知道怎麼做銷售，但談判能力不夠
+診斷：知識有，但執行力不足
+對策：訓練能力（溝通、技術、心理等）</div>
+<div class="item"><strong>G | Capability Error</strong>
+Example: Know sales method, negotiation ability lacking
+Diagnosis: Knowledge present, execution ability missing
+Action: Train capability (communication, technique)</div>
+
+<div class="item item-cn"><strong>H | Resource Error - 策略可行但資源不足</strong>
+案例：想開公司是對的，但沒有起始資金
+診斷：策略本身可行，但缺乏必要資源
+對策：重新配置資源、融資、或調整規模</div>
+<div class="item"><strong>H | Resource Error</strong>
+Example: Business idea viable, no startup capital
+Diagnosis: Strategy viable, resources insufficient
+Action: Reallocate, fundraise, or adjust scale</div>
+
+<div class="item item-cn"><strong>I | Environment Error - 外部條件改變</strong>
+案例：去年有效的銷售策略，今年市場改變了
+診斷：策略本身沒錯，但環境變了
+對策：重新適配環境、改變戰術，保留核心原則</div>
+<div class="item"><strong>I | Environment Error</strong>
+Example: Last year's sales strategy doesn't work now
+Diagnosis: Strategy not wrong, environment changed
+Action: Adapt to new environment, keep principles</div>
+
+<div class="item item-cn"><strong>J | Model Error - 對世界的理解錯</strong>
+案例：以為所有人都追求金錢，結果理解錯了他人動機
+診斷：內部預測模型與現實不符
+對策：更新模型、修改對世界的基本假設</div>
+<div class="item"><strong>J | Model Error</strong>
+Example: Thought everyone pursues money, misread motivation
+Diagnosis: Internal model doesn't match reality
+Action: Update model, revise core assumptions</div>
+
+<div class="item item-cn"><strong>K | Goal Error - 連最佳化的目標都選錯</strong>
+案例：拼命賺錢才發現金錢不是真正想要的
+診斷：在錯誤的目標上不斷優化
+對策：重新定義目標、改變優化對象</div>
+<div class="item"><strong>K | Goal Error</strong>
+Example: Pursued money hard, discovered it's not what you want
+Diagnosis: Optimizing wrong target
+Action: Redefine goal, change optimization target</div>
+
+<div class="item item-cn"><strong>L | System Error - 節點間的關係失效</strong>
+案例：個人能力強，但組織結構導致無法發揮
+診斷：節點本身可能都還好，但彼此連結失效
+對策：重構系統、改變組織結構、重新設計流程</div>
+<div class="item"><strong>L | System Error</strong>
+Example: Strong individuals but organizational structure blocks them
+Diagnosis: Nodes fine, connections broken
+Action: Restructure system, redesign organization</div>
+</div>
+<button class="btn-tts" onclick="speak('Twelve error types progress from data quality through system design. Correct diagnosis determines effective remedy.')">🔊 English</button>
+</div>
+</div>
+
+<!-- 更新幅度 -->
+<div class="section closed">
+<div class="section-header">
+  <span>更新幅度控制 - 7層級別與選擇標準</span>
+  <span class="toggle">▶</span>
+</div>
+<div class="section-content">
+<div class="grid-item-list">
+<div class="item item-cn"><strong>Lv1 | Parameter Update - 微調</strong>
+使用情況：誤差小，方向對，只需要數值調整
+案例：運動時間從6點改到6:30 | 咖啡濃度調整
+變化幅度：不改變框架，只改數值
+風險：最低</div>
+<div class="item"><strong>Lv1 | Parameter Update</strong>
+When: Small error, direction right, adjust values
+Example: Exercise time 6→6:30 | Coffee strength
+Scope: Keep framework, tune values
+Risk: Minimal</div>
+
+<div class="item item-cn"><strong>Lv2 | Strategy Update - 換方法</strong>
+使用情況：誤差中等，目標沒錯但方法失效
+案例：從跑步改游泳 | 從郵件改電話溝通
+變化幅度：改變行動方式，保留目標
+風險：低</div>
+<div class="item"><strong>Lv2 | Strategy Update</strong>
+When: Medium error, goal right, method fails
+Example: Running → swimming | Email → call
+Scope: Change method, keep goal
+Risk: Low</div>
+
+<div class="item item-cn"><strong>Lv3 | Mechanism Update - 改流程</strong>
+使用情況：誤差持續，需要改變底層執行機制
+案例：從手工改系統化 | 從隨意改有checkpoint
+變化幅度：改變執行流程，保留策略
+風險：中等</div>
+<div class="item"><strong>Lv3 | Mechanism Update</strong>
+When: Persistent error, need process overhaul
+Example: Manual → systematic | Ad-hoc → checkpoints
+Scope: Change process, keep strategy
+Risk: Medium</div>
+
+<div class="item item-cn"><strong>Lv4 | Model Update - 改世界觀</strong>
+使用情況：結構性誤差，對世界的理解錯了
+案例：從「人都自私」改成「人有多樣動機」
+變化幅度：改變基本假設和預測模型
+風險：中高</div>
+<div class="item"><strong>Lv4 | Model Update</strong>
+When: Structural error, worldview was wrong
+Example: "People selfish" → "People have diverse motives"
+Scope: Change core assumptions
+Risk: Medium-high</div>
+
+<div class="item item-cn"><strong>Lv5 | Goal Update - 改目標</strong>
+使用情況：目標本身選錯了，一直在最佳化錯誤目標
+案例：從「最大化收入」改成「最大化時間自由」
+變化幅度：改變優化對象
+風險：高（需要重新決定人生方向）</div>
+<div class="item"><strong>Lv5 | Goal Update</strong>
+When: Goal itself was wrong, optimized wrong target
+Example: "Maximize income" → "Maximize time freedom"
+Scope: Change optimization target
+Risk: High (life direction change)</div>
+
+<div class="item item-cn"><strong>Lv6 | System Redesign - 重構系統</strong>
+使用情況：系統本身不再適應，需要重新架構
+案例：從創業公司改成大組織 | 從個體戶改合夥
+變化幅度：改變組織結構、角色分工、規則
+風險：非常高</div>
+<div class="item"><strong>Lv6 | System Redesign</strong>
+When: System no longer fits, needs rebuild
+Example: Startup → big org | Solo → partnership
+Scope: Change structure, roles, rules
+Risk: Very high</div>
+
+<div class="item item-cn"><strong>Lv7 | Meta-Update - 改學習方式本身</strong>
+使用情況：改變自己「如何學習」的機制
+案例：從「失敗後才檢討」改成「週週檢視」
+變化幅度：改變更新迴路本身
+風險：極高（但長期收益最大）</div>
+<div class="item"><strong>Lv7 | Meta-Update</strong>
+When: Change "how you learn" itself
+Example: "Review after fail" → "Weekly review"
+Scope: Change learning loop itself
+Risk: Extreme (but highest long-term payoff)</div>
+</div>
+<button class="btn-tts" onclick="speak('Seven update levels escalate from parameter tuning to redesigning how you learn. Choose the level matching your error type, not your preference.')">🔊 English</button>
+</div>
+</div>
+
+<!-- 學習速度 -->
+<div class="section closed">
+<div class="section-header">
+  <span>學習速度平衡 - 避免兩個極端</span>
+  <span class="toggle">▶</span>
+</div>
+<div class="section-content">
+<div class="grid-2">
+<div class="col-cn">
+<div class="label label-cn">中文版</div>
+<div class="content">❌ 更新太慢 (Underfitting)
+現象: 現實已改變，模型停留過去
+結果: 僵化、落伍、失去競爭力
+例子：
+- 2010年的行銷策略還在用，現在2024
+- 一直用傳統教法，學生已經改變
+- 舊客戶群體需求改變，還用老產品
+
+✓ 最佳狀態 (Optimal Learning)
+重要Signal出現 → 適量更新
+Noise出現 → 保持穩定
+特徵: 區分Signal與Noise的能力
+
+❌ 更新太快 (Overfitting)
+現象: 一次失敗就全面推翻自己
+結果: 被雜訊牽著走、過度擬合、反覆無常
+例子：
+- 一次被拒就認為「沒人愛自己」
+- 一次虧損就改變整套投資策略
+- 一道題目錯就認為「自己沒天分」
+- 一個月KPI沒達就全面推翻半年計畫
+
+🎯 金科玉律:
+智慧 = 更新能力 × 幅度控制 × 速度控制
+
+簡言: 
+「不是學得越快越好」
+「而是學得恰到好處」</div>
+</div>
+<div class="col-en">
+<div class="label label-en">English</div>
+<div class="content">❌ Too Slow (Underfitting)
+Phenomenon: Reality changes but model stays behind
+Result: Rigidity, obsolescence, lost relevance
+Examples:
+- 2010 marketing strategy still using in 2024
+- Traditional teaching when students changed
+- Old customer needs, same old products
+
+✓ Optimal Learning (Sweet Spot)
+Important Signal → Appropriate update
+Noise appears → Stay stable
+Feature: Ability to distinguish Signal from Noise
+
+❌ Too Fast (Overfitting)
+Phenomenon: One failure overturns entire self
+Result: Whipped by noise, unstable, reactive
+Examples:
+- One rejection = nobody loves you
+- One loss = change entire strategy
+- One mistake = no talent
+- One bad month = abandon half-year plan
+
+🎯 Golden Rule:
+Wisdom = Update ability × Size × Speed
+
+Simply: 
+"Not learn as fast as possible"
+"But learn at exactly right pace"</div>
+</div>
+</div>
+<button class="btn-tts" onclick="speak('Learning rate calibration balances rigidity and reactivity. Too slow causes obsolescence. Too fast causes being whipped by noise. The optimal state updates when signals appear but stays stable when noise appears.')">🔊 English</button>
+</div>
+</div>
+
+<!-- 探索利用 -->
+<div class="section closed">
+<div class="section-header">
+  <span>探索與利用 - Exploration vs Exploitation</span>
+  <span class="toggle">▶</span>
+</div>
+<div class="section-content">
+<div class="grid-2">
+<div class="col-cn">
+<div class="label label-cn">中文版</div>
+<div class="content">❌ 只利用 (Pure Exploitation)
+永遠使用已知有效方法
+優點: 穩定、高效、複利
+缺點: 環境改變後被淘汰
+風險: 黑天鵝事件來臨時完全無準備
+例子: 
+- 只用一種銷售方式
+- 只依賴單一客戶
+- 固守已成功的商業模式
+
+❌ 只探索 (Pure Exploration)
+永遠換新方法試驗
+優點: 適應快、資訊豐富
+缺點: 無法形成複利、永遠都是菜鳥
+風險: 花光資源卻永遠沒有收穫
+例子:
+- 每月換一個副業
+- 不斷學新技能卻都半途而廢
+- 到處試驗方法卻沒有一個精通
+
+✓ 動態平衡 (Adaptive Strategy)
+模型穩定時 → 多利用（80%利用 20%探索）
+Prediction Error增加時 → 增加探索（60%利用 40%探索）
+找到更佳模型後 → 重新利用
+
+關鍵指標:
+• Prediction Error下降 → 繼續利用
+• Prediction Error停滯 → 開始探索
+• Prediction Error上升 → 加快探索速度
+
+時間框架:
+• Year 1-2: 多探索（找到有效方法）
+• Year 3-10: 多利用（複利最有效方法）
+• Year 11-12: 定期探索（檢查是否過時）</div>
+</div>
+<div class="col-en">
+<div class="label label-en">English</div>
+<div class="content">❌ Pure Exploitation
+Always use known methods
+Pro: Stable, efficient, compound
+Con: Obsolete when world changes
+Risk: Blind when black swan hits
+Examples:
+- Only one sales method
+- Single customer dependency
+- Stuck in outdated business model
+
+❌ Pure Exploration
+Always try new methods
+Pro: Adaptive, information-rich
+Con: No compounding, forever learning
+Risk: Exhaust resources without returns
+Examples:
+- Change side business monthly
+- Learn skills but never master
+- Experiment everywhere, master nowhere
+
+✓ Adaptive Equilibrium
+When stable → Exploit more (80-20)
+When errors rising → Explore more (60-40)
+When better found → Re-exploit
+
+Key Signals:
+• Error down → Keep exploiting
+• Error flat → Start exploring
+• Error up → Accelerate exploration
+
+Time framework:
+• Year 1-2: Explore more (find effective method)
+• Year 3-10: Exploit more (compound success)
+• Year 11-12: Regular exploration (stay current)</div>
+</div>
+</div>
+<button class="btn-tts" onclick="speak('Optimal strategy balances exploration and exploitation. Pure exploitation leads to obsolescence. Pure exploration never compounds. Dynamic approach exploits when predictions accurate, explores when accuracy declines, rapidly transitions when better methods emerge.')">🔊 English</button>
+</div>
+</div>
+
+<!-- 高階能力 -->
+<div class="section closed">
+<div class="section-header">
+  <span>高階能力 - Stop Rule 與 Meta-Update</span>
+  <span class="toggle">▶</span>
+</div>
+<div class="section-content">
+<div class="grid-2">
+<div class="col-cn">
+<div class="label label-cn">中文版</div>
+<div class="content">許多人最大的問題不是「不努力」
+而是「不知道何時停止」
+
+【常見的「無限努力」陷阱】
+❌ 策略已失效3個月 → 還繼續投入
+❌ 關係已反覆證明不可運作 → 還使用同一模式
+❌ 產品沒有需求訊號 → 還一直增加廣告
+❌ 讀書方法已確認沒效 → 還增加時數
+❌ 員工一直表現不佳 → 還給更多機會
+
+✓ Stop Rule 應該包含:
+①什麼結果出現時要重新評估？
+  例：3個月沒有成長 | 客戶保留率下降10% | 週期性失眠
+
+②持續多久代表真正有問題？
+  例：1次失敗=偶然 | 3次失敗=需要檢查 | 6次失敗=確實有問題
+
+③達到什麼門檻時必須改變？
+  例：虧損超過預算30% | 員工流失率超過20% | 客戶滿意度低於70%
+
+④何時應該完全停止這個嘗試？
+  例：資本金燒完50% | 時間投入超過原定計畫2倍 | 三個重要指標同時惡化
+
+【Meta-Update 7層級別】
+Lv1: 改行動（明天改時間）
+Lv2: 改方法（換一個策略）
+Lv3: 改策略（整個方向調整）
+Lv4: 改模型（對X的理解錯了）
+Lv5: 改目標（想要的東西改了）
+Lv6: 改系統（整個架構重組）
+Lv7: 改「自己的更新機制」← 最高階
+
+【Meta-Update改變學習方式 - 具體例子】
+以前：只有失敗才檢討
+現在：每週固定檢視Dashboard → 問題早期發現
+
+以前：問題很大才處理健康
+現在：定期追蹤重要指標 → 預防優於治療
+
+以前：關係爆炸才溝通
+現在：定期建立Feedback Loop → 問題浮出後立即處理
+
+以前：虧損後才找原因
+現在：週週review財務數據 → 異常立即預警</div>
+</div>
+<div class="col-en">
+<div class="label label-en">English</div>
+<div class="content">Many fail not by insufficient effort
+But by not knowing when to stop
+
+【Common "infinite effort" traps】
+❌ Failed strategy for 3 months → Keep investing
+❌ Relationship repeatedly doesn't work → Keep using pattern
+❌ Product shows no demand → Keep advertising
+❌ Study method proven ineffective → Study more hours
+❌ Employee underperforming → Give more chances
+
+✓ Stop Rule Should Include:
+① What signal triggers reassessment?
+  Example: 3-month no growth | Retention drops 10% | Weekly insomnia
+
+② How long until pattern proves real?
+  Example: 1 fail = chance | 3 fails = check | 6 fails = confirmed
+
+③ What threshold demands change?
+  Example: Loss > 30% budget | Turnover > 20% | Satisfaction < 70%
+
+④ When to completely abandon?
+  Example: Burn 50% capital | 2x original time invested | Three key metrics worsen
+
+【Meta-Update 7 Levels】
+Lv1: Update action (change time tomorrow)
+Lv2: Update method (try different strategy)
+Lv3: Update strategy (whole direction shift)
+Lv4: Update model (understanding was wrong)
+Lv5: Update goal (want changed)
+Lv6: Update system (restructure organization)
+Lv7: Update "my update mechanism" ← Highest
+
+【Meta-Update: Changing how you learn】
+Before: Review only after failure
+Now: Weekly dashboard review → Early problem detection
+
+Before: Address health only when critical
+Now: Regular key metric tracking → Prevention > cure
+
+Before: Communicate only during crisis
+Now: Regular feedback loops → Address before escalation
+
+Before: Find cause after losing money
+Now: Weekly financial review → Early warning system</div>
+</div>
+</div>
+<button class="btn-tts" onclick="speak('Knowing when to stop is wisdom. Set stop rules beforehand: what signal triggers reassessment, how long until a pattern proves real, what threshold demands change. Meta-update means improving how you update. More important than any single update.')">🔊 English</button>
+</div>
+</div>
+
+<!-- 結構診斷 -->
+<div class="section closed">
+<div class="section-header">
+  <span>結構診斷完整框架 - 8問法 + 案例</span>
+  <span class="toggle">▶</span>
+</div>
+<div class="section-content">
+<div class="grid-2">
+<div class="col-cn">
+<div class="label label-cn">案例：為什麼銷售業績下滑</div>
+<div class="content">① 本質｜到底發生什麼？
+   客觀：銷售額從100萬/月跌到60萬/月
+   客觀：成交率從30%跌到15%
+   避免：「業務能力下降」「市場不好」（都是判決）
+
+② 結構｜這個結果由哪些部分共同生成？
+   列出：業務人員(能力、動機、士氣)
+       客戶(基數、需求、滿意度)
+       產品(品質、競爭力、定價)
+       市場(競爭、季節、政策)
+       流程(銷售漏斗、跟進、轉化)
+
+③ 機制｜這些部分如何互相作用？
+   客戶減少 ← 競爭對手搶客 ← 我們產品降價 ← 利潤下降 ← 無法投資 ← 更新緩慢
+
+④ 限制｜哪裡正在卡住整體結果？
+   Constraint不是「業務努力不夠」
+   而是「獲客成本升高但轉化率未改」
+   改善非Constraint的地方（加班）大多無效
+
+⑤ 節點｜哪個節點最重要？
+   Priority Node：轉化率下跌（影響收入）
+   不是：獲客基數多少（那是symptom）
+
+⑥ 槓桿｜改哪裡成本最低、影響最大？
+   選項A：業務加班 (成本高，影響小)
+   選項B：改進銷售話術 (成本中等，影響中等)
+   選項C：重新梳理客戶需求 (成本低，影響最大)
+   → 選C
+
+⑦ 回饋｜改完之後結果告訴我什麼？
+   測量：轉化率是否恢復
+   測量：客戶滿意度是否提升
+   持續蒐集：反覆驗證
+
+⑧ 更新｜哪些模型、流程或能力需要修改？
+   模型更新：客戶需求變了，舊理解不適用
+   流程更新：銷售流程需要加checkpoint
+   能力更新：業務需要新技能培訓</div>
+</div>
+<div class="col-en">
+<div class="label label-en">Case: Why sales declined</div>
+<div class="content">① Essence｜What really happened?
+   Objective: Revenue 1M→600K/month
+   Objective: Conversion 30%→15%
+   Avoid: "Sales ability dropped" (judgment, not fact)
+
+② Structure｜Which parts co-generate?
+   List: Sales staff (skill, motivation, morale)
+       Customers (base, needs, satisfaction)
+       Product (quality, competitiveness, price)
+       Market (competition, seasonality, policy)
+       Process (funnel, follow-up, conversion)
+
+③ Mechanism｜How do they interact?
+   Customer drop ← Competitors steal ← Our price cut ← Lower profit ← Can't invest ← Slower updates
+
+④ Constraint｜What blocks overall output?
+   Not: "Sales effort insufficient"
+   But: "Acquisition cost up, conversion flat"
+   Changing non-constraints (overtime) ineffective
+
+⑤ Node｜Which is most critical?
+   Priority: Conversion rate down (impacts revenue)
+   Not: Acquisition volume (symptom, not cause)
+
+⑥ Leverage｜Highest impact, lowest cost?
+   Option A: Sales overtime (high cost, low impact)
+   Option B: Improve sales pitch (medium, medium)
+   Option C: Remap customer needs (low cost, high impact)
+   → Choose C
+
+⑦ Feedback｜What does result tell us?
+   Measure: Conversion rate recovery
+   Measure: Customer satisfaction rise
+   Keep gathering: Verify repeatedly
+
+⑧ Update｜What needs changing?
+   Model: Customer needs changed, old understanding outdated
+   Process: Add checkpoints to sales flow
+   Capability: Train new sales techniques</div>
+</div>
+</div>
+<button class="btn-tts" onclick="speak('Structural diagnosis transforms blame into actionable diagnosis. Eight questions progress from essence through feedback to concrete updates. Each answer is verifiable and specific.')">🔊 English</button>
+</div>
+</div>
+
+<!-- 語言升級 -->
+<div class="section closed">
+<div class="section-header">
+  <span>語言升級 - 60個範例 | 把判決轉成訊號</span>
+  <span class="toggle">▶</span>
+</div>
+<div class="section-content">
+<div class="grid-item-list">
+<div class="item item-cn"><strong>1-10 | 能力診斷類</strong>
+❌「我英文很爛」→ ✅「這類題目一直錯，能力地圖有缺口」
+❌「記憶力不好」→ ✅「當前提取率太低，需要改方法」
+❌「沒自制力」→ ✅「啟動成本是不是太高」
+❌「沒天分」→ ✅「缺少安全暴露經驗」
+❌「總倒楣」→ ✅「重複結果代表模型沒更新」
+❌「又失敗」→ ✅「這次誤差可以生成什麼能力」
+❌「我做不到」→ ✅「目前條件或系統有缺口」
+❌「沒辦法」→ ✅「現在還有哪些變數可控」
+❌「人生完了」→ ✅「舊模型需要升級」
+❌「永遠改不了」→ ✅「更新機制還沒建立」</div>
+<div class="item"><strong>1-10 | Capability Diagnosis</strong>
+❌ "Bad at English" → ✅ "Specific capability gaps"
+❌ "Poor memory" → ✅ "Retrieval rate too low"
+❌ "No willpower" → ✅ "Activation cost too high"
+❌ "No talent" → ✅ "Lacking safe practice exposure"
+❌ "Always unlucky" → ✅ "Model hasn't updated"
+❌ "Failed again" → ✅ "What capability emerges"
+❌ "I can't" → ✅ "System has gaps"
+❌ "Impossible" → ✅ "What's controllable now"
+❌ "Life ruined" → ✅ "Old model needs upgrade"
+❌ "Can't change" → ✅ "Update mechanism not built"</div>
+
+<div class="item item-cn"><strong>11-20 | 系統診斷類</strong>
+❌「又出問題」→ ✅「系統再次暴露可優化的節點」
+❌「怎麼這麼倒楣」→ ✅「這個模式重複代表生成它的結構未更新」
+❌「別人比我強」→ ✅「他的系統有哪些值得拆解的能力節點」
+❌「同樣錯誤重複」→ ✅「更新迴路尚未真正建立」
+❌「我不會」→ ✅「當前系統缺少這個能力」
+❌「簡直不可能」→ ✅「目前約束限制了可能性」
+❌「為什麼都不行」→ ✅「是否把Priority搞反了」
+❌「他們都不懂我」→ ✅「共享模型還未建立」
+❌「一定會失敗」→ ✅「目前機率預測是什麼」
+❌「永遠解決不了」→ ✅「還有哪個角度沒試過」</div>
+<div class="item"><strong>11-20 | System Diagnosis</strong>
+❌ "Problem again" → ✅ "System exposed another optimization node"
+❌ "So unlucky" → ✅ "Pattern repeats because structure unchanged"
+❌ "Others stronger" → ✅ "Which of their capability nodes to decompose"
+❌ "Same mistake" → ✅ "Feedback loop not actually built"
+❌ "I can't" → ✅ "System currently lacks this capability"
+❌ "Impossible" → ✅ "Constraints limit current possibilities"
+❌ "Nothing works" → ✅ "Is priority backwards"
+❌ "Nobody gets me" → ✅ "Shared model not established"
+❌ "Will definitely fail" → ✅ "What's current probability estimate"
+❌ "Can't solve" → ✅ "What angle is untried"</div>
+
+<div class="item item-cn"><strong>21-30 | 環境導航類</strong>
+❌「沒有希望」→ ✅「搜尋空間還沒完全探索」
+❌「命運就是這樣」→ ✅「這個模式的生成機制是什麼」
+❌「誰都救不了我」→ ✅「目前可以控制的變數是什麼」
+❌「天生就是這樣」→ ✅「目前形成了這個模式」
+❌「為什麼偏偏是我」→ ✅「重複結果意味著生成結構還活躍」
+❌「太晚了」→ ✅「重新計算剩餘時間與可行路徑」
+❌「不可能改變」→ ✅「改變機制本身需要重新設計」
+❌「我就是這樣」→ ✅「這是目前的版本，v2可以不同」
+❌「永遠不會好」→ ✅「現在系統狀態，下一階段可以重新導航」
+❌「絕對會重複」→ ✅「除非生成機制改變，否則會重複」</div>
+<div class="item"><strong>21-30 | Navigation & Agency</strong>
+❌ "No hope" → ✅ "Search space still unexplored"
+❌ "That's fate" → ✅ "What generates this pattern"
+❌ "Nobody helps" → ✅ "What variables are controllable"
+❌ "Born this way" → ✅ "This is the current pattern"
+❌ "Why me" → ✅ "Repeating results mean structure active"
+❌ "Too late" → ✅ "Recalculate remaining time and options"
+❌ "Can't change" → ✅ "Mechanism itself needs redesign"
+❌ "This is me" → ✅ "Version 2 could be different"
+❌ "Never improve" → ✅ "Current state, next phase reorient"
+❌ "Will repeat" → ✅ "Unless mechanism changes, yes"</div>
+
+<div class="item item-cn"><strong>31-40 | 優先級診斷類</strong>
+❌「問題太多」→ ✅「哪三個Priority Node造成最多下游影響」
+❌「我沒價值」→ ✅「一次配對失敗≠整體評價」
+❌「這次一定爆」→ ✅「當前預測基於什麼證據」
+❌「怎麼又犯」→ ✅「同類誤差是否有共同根源」
+❌「完全崩潰」→ ✅「哪些系統仍在運作」
+❌「無法接受」→ ✅「這個結果要求我重新評估什麼」
+❌「不想面對」→ ✅「這個訊號最不想看，可能最有價值」
+❌「白費工夫」→ ✅「投入是否進入了Constraint」
+❌「沒用」→ ✅「相對於什麼指標沒用」
+❌「太難了」→ ✅「難度是在能力邊界嗎」</div>
+<div class="item"><strong>31-40 | Priority & Leverage</strong>
+❌ "Too many problems" → ✅ "Which three priority nodes matter most"
+❌ "I'm worthless" → ✅ "One pairing failure ≠ total assessment"
+❌ "Definitely crash" → ✅ "Prediction based on what evidence"
+❌ "Made same error" → ✅ "Common root cause to similar errors"
+❌ "Complete collapse" → ✅ "Which systems still functioning"
+❌ "Can't accept" → ✅ "What requires reassessment"
+❌ "Won't face it" → ✅ "Most painful data often most valuable"
+❌ "Wasted effort" → ✅ "Did investment hit the constraint"
+❌ "Useless" → ✅ "Useless relative to which metric"
+❌ "Too hard" → ✅ "Is it at capability boundary"</div>
+
+<div class="item item-cn"><strong>41-50 | 決策與責任類</strong>
+❌「放棄了」→ ✅「是時候Stop Rule發動了」
+❌「都是我的錯」→ ✅「哪些是個人控制，哪些是系統」
+❌「都是別人的錯」→ ✅「我的可控變數是什麼」
+❌「不公平」→ ✅「約束是什麼，如何重新導航」
+❌「為什麼不聽我的」→ ✅「我的模型預測是什麼」
+❌「他們都不信我」→ ✅「信任建立是哪些因素」
+❌「永遠一個人」→ ✅「連結機制現在怎樣運作」
+❌「沒人愛我」→ ✅「愛與依賴是不同變數」
+❌「感覺很差」→ ✅「情緒在提醒什麼」
+❌「焦慮死了」→ ✅「大腦現在預測什麼威脅」</div>
+<div class="item"><strong>41-50 | Decision & Responsibility</strong>
+❌ "Giving up" → ✅ "Time for stop rule"
+❌ "All my fault" → ✅ "Personal vs system variables"
+❌ "All their fault" → ✅ "What can I control"
+❌ "Unfair" → ✅ "What constraint, how reorient"
+❌ "Why won't listen" → ✅ "What does my model predict"
+❌ "Nobody trusts" → ✅ "What builds trust"
+❌ "Always alone" → ✅ "How connection mechanism works"
+❌ "Nobody loves" → ✅ "Love and dependency differ"
+❌ "Feel awful" → ✅ "What emotion is signaling"
+❌ "Anxious always" → ✅ "What threat predicted"</div>
+
+<div class="item item-cn"><strong>51-60 | 實踐執行類</strong>
+❌「怎麼又做不到」→ ✅「條件、能力、流程或環境有哪個缺」
+❌「總是差一點」→ ✅「最後一呎是什麼」
+❌「一次次失敗」→ ✅「累積樣本現在能說什麼」
+❌「運氣真差」→ ✅「真正Constraint在哪」
+❌「他比較聰明」→ ✅「他的學習迴路怎樣運作」
+❌「沒有選擇」→ ✅「還有哪些策略空間未探索」
+❌「事情全毀了」→ ✅「從這個狀態可以怎樣重新導航」
+❌「無法開始」→ ✅「啟動成本是什麼」
+❌「卡住了」→ ✅「哪個假設需要重新檢驗」
+❌「不知道怎麼做」→ ✅「最小可以測什麼」</div>
+<div class="item"><strong>51-60 | Implementation & Execution</strong>
+❌ "Can't do it again" → ✅ "Condition, capability, process, or environment"
+❌ "Always close" → ✅ "What's the last mile"
+❌ "Keep failing" → ✅ "What does accumulated sample show"
+❌ "Bad luck" → ✅ "Where's the real constraint"
+❌ "He's smarter" → ✅ "How his learning loop works"
+❌ "No choice" → ✅ "What strategy space unexplored"
+❌ "Everything broken" → ✅ "Reorient from here"
+❌ "Can't start" → ✅ "What is activation cost"
+❌ "Stuck" → ✅ "Which assumption retest"
+❌ "Don't know how" → ✅ "What's minimum testable"</div>
+</div>
+<button class="btn-tts" onclick="speak('Language upgrade transforms fixed judgments into updateable diagnostics. Sixty examples across capability, systems, agency, decision, and execution categories. Each shift opens the door to change.')">🔊 English</button>
+</div>
+</div>
+
+<!-- 5大公式 -->
+<div class="section closed">
+<div class="section-header">
+  <span>5大核心公式 - 完整數學化表達 + 推論</span>
+  <span class="toggle">▶</span>
+</div>
+<div class="section-content">
+<div class="grid-2">
+<div class="col-cn">
+<div class="label label-cn">中文版</div>
+<div class="content">【公式1】能力生成公式
+能力 ≈ 行動質量 × 回饋質量 × 誤差辨識率 × 診斷準確率 × 修正速度 × 重複次數 × 跨情境遷移率
+
+推論：任何一項接近0，整體能力都會大幅下降
+例：只有行動沒Feedback = 無意義重複
+   只有Feedback沒Diagnosis = 挫折感 = 放棄
+   診斷對但修正太慢 = 下次又重複
+
+應用：找到最低項，集中火力
+
+【公式2】智慧生成公式
+智慧 ≈ 知識質量 × 模型質量 × 預測精度 × 誤差敏感度 × 更新能力 × 情境辨識 × 遷移能力 × 風險控制 × 反證容納度
+
+推論：智慧是多維乘積，任何維度為0都失效
+真正智慧 = 不只聰明 + 謙虛 + 敏感 + 風險意識
+
+應用：區分聰明人（知識多）vs智慧人（維度均衡）
+
+【公式3】人生品質公式
+人生品質 ≈ 目標清晰度 × 模型準確度 × 行動能力 × 回饋品質 × 更新速度 × 恢復能力
+
+推論：改善策略 = 找最低乘數，集中火力
+例：如果「恢復能力」最低 → 先從建立韌性開始
+
+應用：診斷人生困境，找到leverage點
+
+【公式4】學習速度公式
+最佳學習速度 ≈ 信號強度 / (雜訊容納度 × 模型穩定性)
+
+推論：
+- 雜訊大的環境需要更強的信號才能觸發更新
+- 穩定模型應該更新慢一點
+- 快速環境應該降低更新門檻
+
+應用：設計學習策略要考慮環境特性
+
+【公式5】系統健康度公式
+系統健康度 ≈ √(反應速度² + 恢復速度² + 適應能力² + 學習率² + 選項數²)
+
+推論：
+不是單一指標好就行，需要各維度均衡
+一個維度崩潰會拖累整體
+最弱環節決定系統強度
+
+應用：評估組織/個人/系統時要看全貌</div>
+</div>
+<div class="col-en">
+<div class="label label-en">English</div>
+<div class="content">【Formula 1】Capability Generation
+Capability ≈ Action Quality × Feedback Quality × Error Detection × Diagnosis Accuracy × Correction Speed × Repetition × Transfer Rate
+
+Implication: Any factor near zero collapses capability
+Example: Action without feedback = meaningless repetition
+        Feedback without diagnosis = frustration = quit
+        Right diagnosis but slow correction = repeat error next time
+
+Application: Find lowest factor, concentrate effort
+
+【Formula 2】Wisdom Generation
+Wisdom ≈ Knowledge Quality × Model Quality × Prediction Accuracy × Error Sensitivity × Update Ability × Context Recognition × Transfer Ability × Risk Control × Contradiction Tolerance
+
+Implication: Wisdom is multidimensional product, any zero breaks it
+True wisdom = Intelligence + Humility + Sensitivity + Risk awareness
+
+Application: Distinguish smart (knowledge-rich) from wise (balanced)
+
+【Formula 3】Life Quality
+Life Quality ≈ Goal Clarity × Model Accuracy × Action Ability × Feedback Quality × Update Speed × Recovery Ability
+
+Implication: Improvement strategy = Find lowest factor, concentrate
+Example: If recovery lowest → Build resilience first
+
+Application: Diagnose life struggles, find leverage point
+
+【Formula 4】Learning Rate
+Optimal Learning Rate ≈ Signal Strength / (Noise Tolerance × Model Stability)
+
+Implication:
+- Noisy environments need stronger signals to trigger update
+- Stable models should update slower
+- Fast-changing environments lower thresholds
+
+Application: Design learning strategy by environment
+
+【Formula 5】System Health
+System Health ≈ √(Response Speed² + Recovery Speed² + Adaptation² + Learning Rate² + Options²)
+
+Implication:
+Single excellence insufficient, need balance
+One failing dimension drags down system
+Weakest link determines strength
+
+Application: Assess organization/person/system holistically</div>
+</div>
+</div>
+<button class="btn-tts" onclick="speak('Five core formulas mathematize the Prediction Error system. Each formula guides both understanding and action. Use them to diagnose and improve any system.')">🔊 English</button>
+</div>
+</div>
+
+<div class="footer">
+<p>✅ Prediction Error 對應全系統 - 最大化完整版</p>
+<p>包含：40種能力 | 30種智慧 | 12種誤差 | 7層更新 | 探索利用 | 8問診斷 | 60個語言升級 | 5個公式 | 完整整合呈現</p>
+<p>所有資料已完整嵌入 | 完全離線使用 | 按英文按鈕可發聲</p>
+<p style="margin-top: 15px; font-size: 12px;">作者：王欣蓉 (Anne Wang) | 資料最大化 完整整合</p>
+</div>
+
+</div>
+
+<script>
+document.querySelectorAll('.section-header').forEach(header => {
+    header.addEventListener('click', () => {
+        header.closest('.section').classList.toggle('closed');
+    });
+});
+
+function speak(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US";
+    utterance.rate = 0.9;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+}
+</script>
+</body>
+</html>
