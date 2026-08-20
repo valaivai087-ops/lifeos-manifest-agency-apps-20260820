@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Error 對應全系統</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            font-family: 'Microsoft JhengHei', 'Segoe UI', sans-serif;
+            color: #2c3e50;
+            line-height: 1.8;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 30px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        header h1 { font-size: 32px; margin-bottom: 10px; font-weight: 700; }
+        header p { font-size: 18px; opacity: 0.95; }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .nav-tabs button {
+            padding: 12px 24px;
+            border: 2px solid #667eea;
+            background-color: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        .nav-tabs button:hover {
+            background-color: #f0f4ff;
+        }
+        .nav-tabs button.active {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        .content-section {
+            display: none;
+        }
+        .content-section.active { display: block; animation: fadeIn 0.3s; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        
+        .card-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .card-header p {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+        
+        .card-header .arrow {
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .card.open .card-header .arrow {
+            transform: rotate(180deg);
+        }
+        
+        .card-body {
+            display: none;
+            padding: 28px;
+            background-color: #fafbfc;
+            max-height: 800px;
+            overflow-y: auto;
+        }
+        
+        .card.open .card-body {
+            display: block;
+        }
+        
+        .bilingual-item {
+            background: white;
+            margin-bottom: 16px;
+            padding: 16px;
+            border-left: 4px solid #667eea;
+            border-radius: 6px;
+        }
+        
+        .zh-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .en-title {
+            font-size: 16px;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .content-text {
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+        
+        .zh-content {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .en-content {
+            color: #555;
+            font-style: italic;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        
+        .en-text-part {
+            flex: 1;
+        }
+        
+        .tts-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            white-space: nowrap;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        
+        .tts-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        
+        .item-box {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border: 2px solid #e0e6f6;
+            transition: all 0.3s;
+        }
+        
+        .item-box:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f5f7ff 0%, #f0f4ff 100%);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+        
+        .item-box .number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .item-box .zh {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        
+        .item-box .en {
+            font-size: 14px;
+            color: #667eea;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7f8c8d;
+            border-top: 2px solid #e0e0e0;
+            margin-top: 60px;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 { font-size: 24px; }
+            .items-grid { grid-template-columns: 1fr; }
+            .nav-tabs { flex-direction: column; }
+            .nav-tabs button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⭐ Prediction Error 對應全系統</h1>
+            <p>From「Error」to「Wisdom Generation」| 從「出錯」到「智慧生成」</p>
+            <p style="font-size: 16px; margin-top: 15px;">By 王欣蓉 Anne Wang</p>
+        </header>
+        
+        <div class="nav-tabs">
+            <button class="nav-btn active" data-tab="overview">📖 概要</button>
+            <button class="nav-btn" data-tab="capabilities">💪 40種能力</button>
+            <button class="nav-btn" data-tab="wisdom">✨ 30種智慧</button>
+            <button class="nav-btn" data-tab="structure">🔧 結構診斷</button>
+            <button class="nav-btn" data-tab="update">🌱 語言升級</button>
+            <button class="nav-btn" data-tab="examples">🏠 生活例子</button>
+        </div>
+        
+        <!-- 概要 -->
+        <div id="overview" class="content-section active">
+            <div class="card open">
+                <div class="card-header">
+                    <div>
+                        <h3>一句話先懂</h3>
+                        <p>Understanding at a Glance</p>
+                    </div>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="bilingual-item">
+                        <div class="zh-content">Prediction Error真正珍貴的地方，不只是告訴你「哪裡錯了」。而是它提供了一個能力生成入口。</div>
+                        <div class="en-content">
+                            <div class="en-text-part">The real value of Prediction Error is not just telling you what went wrong. It provides an entry point for capability generation.</div>
+                            <button class="tts-btn" data-speak="The real value of Prediction Error is not just telling you what went wrong. It provides an entry point for capability generation.">🔊 Speak</button>
+                        </div>
+                    </div>
+                    
+                    <div class="bilingual-item">
+                        <div class="zh-title">完整閉環</div>
+                        <div class="zh-content">Prediction Error → 發現模型與現實不一致 → 定位誤差來源 → 修正模型 → 改變策略 → 重新測試 → 取得新回饋 → 形成可重複能力 → 跨情境遷移 → 形成智慧</div>
+                        <div class="en-content">
+                            <div class="en-text-part">Prediction Error → Finding model-reality mismatch → Locating error source → Correcting model → Changing strategy → Retesting → Obtaining feedback → Forming repeatable capability → Cross-context transfer → Generating wisdom</div>
+                            <button class="tts-btn" data-speak="Prediction Error, Finding model reality mismatch, Locating error source, Correcting model, Changing strategy, Retesting, Obtaining feedback, Forming repeatable capability, Cross-context transfer, Generating wisdom">🔊 Speak</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h3>核心公式</h3>
+                        <p>Life Wisdom Formula</p>
+                    </div>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="bilingual-item">
+                        <div class="zh-title">人生智慧公式</div>
+                        <div class="zh-content">人生智慧 = 現實敏感度 × 預測品質 × 誤差偵測 × 誤差診斷 × 優先級選擇 × 更新校準 × 再測試 × 遷移 × 元學習</div>
+                        <div class="en-content">
+                            <div class="en-text-part">Life Wisdom = Reality Sensitivity × Prediction Quality × Error Detection × Error Diagnosis × Priority Selection × Update Calibration × Retesting × Transfer × Meta-learning</div>
+                            <button class="tts-btn" data-speak="Life Wisdom equals Reality Sensitivity times Prediction Quality times Error Detection times Error Diagnosis times Priority Selection times Update Calibration times Retesting times Transfer times Meta-learning">🔊 Speak</button>
+                        </div>
+                    </div>
+                    <div class="bilingual-item">
+                        <div class="zh-title">能力生成公式</div>
+                        <div class="zh-content">能力 ≈ 高品質行動 × 高品質Feedback × Prediction Error辨識率 × Error Diagnosis準確率 × 修正速度 × 重複次數 × 跨情境遷移率</div>
+                        <div class="en-content">
+                            <div class="en-text-part">Capability = High-quality Action × High-quality Feedback × Error Detection Rate × Diagnosis Accuracy × Correction Speed × Repetition × Transfer Rate</div>
+                            <button class="tts-btn" data-speak="Capability equals High quality Action times High quality Feedback times Error Detection Rate times Diagnosis Accuracy times Correction Speed times Repetition times Transfer Rate">🔊 Speak</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 40種能力 -->
+        <div id="capabilities" class="content-section">
+            <div class="card open">
+                <div class="card-header">
+                    <div>
+                        <h3>Prediction Error可以生成的40種基礎能力</h3>
+                        <p>40 Basic Capabilities Generated by Prediction Error</p>
+                    </div>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="items-grid" id="capabilitiesList"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 30種智慧 -->
+        <div id="wisdom" class="content-section">
+            <div class="card open">
+                <div class="card-header">
+                    <div>
+                        <h3>Prediction Error生成的30種智慧</h3>
+                        <p>30 Types of Wisdom Generated by Prediction Error</p>
+                    </div>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="items-grid" id="wisdomList"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 結構診斷 -->
+        <div id="structure" class="content-section">
+            <div class="card open">
+                <div class="card-header">
+                    <div>
+                        <h3>結構診斷八問</h3>
+                        <p>Structure Diagnosis Eight Questions</p>
+                    </div>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="bilingual-item">
+                        <div class="zh-title">遇到任何問題，依序問：</div>
+                        <div class="zh-content">
+                            ①本質｜到底發生什麼？<br>
+                            ②結構｜這個結果由哪些部分共同生成？<br>
+                            ③機制｜這些部分如何互相作用？<br>
+                            ④限制｜哪裡正在卡住整體結果？<br>
+                            ⑤節點｜哪個節點最重要？<br>
+                            ⑥槓桿｜改哪裡成本最低、影響最大？<br>
+                            ⑦回饋｜改完之後，結果告訴我什麼？<br>
+                            ⑧更新｜哪些模型、流程或能力需要修改？
+                        </div>
+                        <div class="en-content">
+                            <div class="en-text-part">
+                                ①Essence｜What really happened?<br>
+                                ②Structure｜What parts collectively generate this result?<br>
+                                ③Mechanism｜How do these parts interact?<br>
+                                ④Constraints｜What is blocking the overall result?<br>
+                                ⑤Node｜Which node matters most?<br>
+                                ⑥Leverage｜What changes with lowest cost and highest impact?<br>
+                                ⑦Feedback｜What does the result tell me after change?<br>
+                                ⑧Update｜What models, processes or capabilities need revision?
+                            </div>
+                            <button class="tts-btn" data-speak="Eight questions: Essence - what really happened. Structure - what parts generate this result. Mechanism - how do parts interact. Constraints - what blocks the result. Node - which matters most. Leverage - what changes with lowest cost. Feedback - what does result tell me. Update - what needs revision.">🔊 Speak</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 語言升級 -->
+        <div id="update" class="content-section">
+            <div class="card open">
+                <div class="card-header">
+                    <div>
+                        <h3>把100種「負面判決」改寫成「可更新訊號」</h3>
+                        <p>Rewrite 100 Negative Verdicts into Updatable Signals</p>
+                    </div>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="card-body">
+                    <div id="updateExamples"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 生活例子 -->
+        <div id="examples" class="content-section">
+            <div class="card open">
+                <div class="card-header">
+                    <div>
+                        <h3>30個生活例子</h3>
+                        <p>30 Life Examples and Applications</p>
+                    </div>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="card-body">
+                    <div id="lifeExamples"></div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p style="font-size: 16px; font-weight: bold; margin-bottom: 10px;">Prediction Error 對應全系統</p>
+            <p>A system for transforming errors into wisdom and capability</p>
+            <p style="margin-top: 15px; font-size: 13px;">Author: 王欣蓉 Anne Wang | 點擊 🔊 可發聲英文 | Click 🔊 to speak English</p>
+        </footer>
+    </div>
+    
+    <script>
+        const capabilities = [
+            {cn: "01｜事實辨識能力", en: "Fact Recognition Ability"},
+            {cn: "02｜觀察能力", en: "Observation Ability"},
+            {cn: "03｜資料能力", en: "Data Literacy"},
+            {cn: "04｜訊號辨識能力", en: "Signal Recognition"},
+            {cn: "05｜問題定義能力", en: "Problem Framing"},
+            {cn: "06｜變數拆解能力", en: "Variable Decomposition"},
+            {cn: "07｜模式辨識能力", en: "Pattern Recognition"},
+            {cn: "08｜關係辨識能力", en: "Relationship Recognition"},
+            {cn: "09｜因果推理能力", en: "Causal Reasoning"},
+            {cn: "10｜多因果思考能力", en: "Multi-Causal Thinking"},
+            {cn: "11｜機制思考能力", en: "Mechanistic Thinking"},
+            {cn: "12｜系統思考能力", en: "Systems Thinking"},
+            {cn: "13｜瓶頸辨識能力", en: "Bottleneck Detection"},
+            {cn: "14｜限制辨識能力", en: "Constraint Recognition"},
+            {cn: "15｜Priority Node能力", en: "Priority Node Ability"},
+            {cn: "16｜槓桿辨識能力", en: "Leverage Identification"},
+            {cn: "17｜假設形成能力", en: "Hypothesis Formation"},
+            {cn: "18｜預測能力", en: "Predictive Ability"},
+            {cn: "19｜機率思考能力", en: "Probabilistic Thinking"},
+            {cn: "20｜不確定性管理能力", en: "Uncertainty Management"},
+            {cn: "21｜實驗設計能力", en: "Experimentation Design"},
+            {cn: "22｜最小行動能力", en: "Minimum Viable Action"},
+            {cn: "23｜可逆決策能力", en: "Reversible Decision Making"},
+            {cn: "24｜風險辨識能力", en: "Risk Awareness"},
+            {cn: "25｜風險控制能力", en: "Risk Management"},
+            {cn: "26｜回饋讀取能力", en: "Feedback Literacy"},
+            {cn: "27｜誤差偵測能力", en: "Error Detection"},
+            {cn: "28｜誤差診斷能力", en: "Error Diagnosis"},
+            {cn: "29｜模型更新能力", en: "Model Updating"},
+            {cn: "30｜策略切換能力", en: "Strategy Switching"},
+            {cn: "31｜參數調整能力", en: "Parameter Tuning"},
+            {cn: "32｜流程改善能力", en: "Process Optimization"},
+            {cn: "33｜環境設計能力", en: "Environment Design"},
+            {cn: "34｜資源配置能力", en: "Resource Allocation"},
+            {cn: "35｜注意力配置能力", en: "Attention Allocation"},
+            {cn: "36｜再測試能力", en: "Retesting"},
+            {cn: "37｜比較能力", en: "Comparison Ability"},
+            {cn: "38｜遷移能力", en: "Transfer"},
+            {cn: "39｜抽象化能力", en: "Abstraction"},
+            {cn: "40｜元學習能力", en: "Meta-learning"}
+        ];
+        
+        const wisdom = [
+            {cn: "01｜事實智慧", en: "Fact Wisdom"},
+            {cn: "02｜不確定智慧", en: "Uncertainty Wisdom"},
+            {cn: "03｜機率智慧", en: "Probability Wisdom"},
+            {cn: "04｜證據智慧", en: "Evidence Wisdom"},
+            {cn: "05｜反證智慧", en: "Disconfirmation Wisdom"},
+            {cn: "06｜模型智慧", en: "Model Wisdom"},
+            {cn: "07｜邊界智慧", en: "Boundary Wisdom"},
+            {cn: "08｜多模型智慧", en: "Multi-Model Wisdom"},
+            {cn: "09｜因果智慧", en: "Causal Wisdom"},
+            {cn: "10｜系統智慧", en: "Systems Wisdom"},
+            {cn: "11｜瓶頸智慧", en: "Bottleneck Wisdom"},
+            {cn: "12｜槓桿智慧", en: "Leverage Wisdom"},
+            {cn: "13｜時間智慧", en: "Time Wisdom"},
+            {cn: "14｜資源智慧", en: "Resource Wisdom"},
+            {cn: "15｜風險智慧", en: "Risk Wisdom"},
+            {cn: "16｜可逆智慧", en: "Reversibility Wisdom"},
+            {cn: "17｜選項智慧", en: "Optionality Wisdom"},
+            {cn: "18｜冗餘智慧", en: "Redundancy Wisdom"},
+            {cn: "19｜韌性智慧", en: "Resilience Wisdom"},
+            {cn: "20｜反脆弱智慧", en: "Anti-Fragility Wisdom"},
+            {cn: "21｜關係智慧", en: "Relationship Wisdom"},
+            {cn: "22｜健康智慧", en: "Health Wisdom"},
+            {cn: "23｜學習智慧", en: "Learning Wisdom"},
+            {cn: "24｜財富智慧", en: "Wealth Wisdom"},
+            {cn: "25｜幸福智慧", en: "Happiness Wisdom"},
+            {cn: "26｜決策智慧", en: "Decision Wisdom"},
+            {cn: "27｜成長智慧", en: "Growth Wisdom"},
+            {cn: "28｜成熟智慧", en: "Maturity Wisdom"},
+            {cn: "29｜自由智慧", en: "Freedom Wisdom"},
+            {cn: "30｜生命智慧", en: "Life Wisdom"}
+        ];
+        
+        const updates = [
+            {old_cn: "錯誤", old_en: "Error", new_cn: "→不再等於羞恥，而是模型需要校準", new_en: "→no longer equals shame, instead model needs calibration"},
+            {old_cn: "反證", old_en: "Disconfirming evidence", new_cn: "→不再等於攻擊，而是現實提供的新資料", new_en: "→no longer equals attack, instead new data from reality"},
+            {old_cn: "失敗", old_en: "Failure", new_cn: "→不再等於人格，而是策略與現實沒有對準", new_en: "→no longer equals personality, instead strategy misaligned with reality"},
+            {old_cn: "不知道", old_en: "Not knowing", new_cn: "→不再等於無能，而是知識地圖還有空白", new_en: "→no longer equals incompetence, instead knowledge map has gaps"},
+            {old_cn: "考差", old_en: "Poor test results", new_cn: "→不再等於笨，而是能力節點被暴露", new_en: "→no longer equals stupidity, instead capability nodes are revealed"},
+            {old_cn: "做不到", old_en: "Cannot do it", new_cn: "→不再等於沒能力，而是目前還有條件缺口", new_en: "→no longer equals no capability, instead conditions are lacking"},
+            {old_cn: "卡住", old_en: "Stuck", new_cn: "→不再等於退步，而是系統遇到瓶頸", new_en: "→no longer equals regression, instead system hit bottleneck"},
+            {old_cn: "困惑", old_en: "Confusion", new_cn: "→不再等於愚笨，而是舊模型無法解釋新資訊", new_en: "→no longer equals stupidity, instead old model cannot explain new information"},
+            {old_cn: "被糾正", old_en: "Being corrected", new_cn: "→不再等於被否定，而是獲得免費校準", new_en: "→no longer equals rejection, instead getting free calibration"},
+            {old_cn: "被拒絕", old_en: "Being rejected", new_cn: "→不再等於沒有價值，而是需求條件或匹配沒成立", new_en: "→no longer equals no value, instead needs or match not met"}
+        ];
+        
+        const examples = [
+            {situation: "考試考差", zh: "舊語言：我英文就是很爛。更新語言：我原本以為自己會，結果這類題目一直錯，代表能力地圖有缺口。", en: "Old: My English is terrible. Updated: I thought I knew, but these questions consistently fail, meaning capability map has gaps."},
+            {situation: "單字背不起來", zh: "舊語言：我記憶力不好。更新語言：目前這種記憶方法的提取率太低。", en: "Old: My memory is bad. Updated: Current memory method has low retrieval rate."},
+            {situation: "閱讀速度很慢", zh: "舊語言：我英文沒救了。更新語言：到底是哪個節點拖慢速度？需要診斷。", en: "Old: My English is hopeless. Updated: Which node is slowing speed? Need diagnosis."},
+            {situation: "作文分數很低", zh: "舊語言：我沒有寫作天分。更新語言：評分結果和我的預期有落差，先找差距。", en: "Old: I have no writing talent. Updated: Score differs from expectation, find the gap first."},
+            {situation: "努力讀書卻沒進步", zh: "舊語言：我不夠努力。更新語言：投入增加，但Output沒增加，代表系統某處存在Constraint。", en: "Old: I don't work hard enough. Updated: Input increased but output didn't, system has constraint."},
+            {situation: "模擬考突然退步", zh: "舊語言：我退步了。更新語言：先判斷這是Signal還是Noise。", en: "Old: I regressed. Updated: Determine if this is signal or noise first."},
+            {situation: "減肥失敗", zh: "舊語言：我就是沒有毅力。更新語言：原本策略沒有產生預期結果，需要重新設計。", en: "Old: I have no willpower. Updated: Original strategy didn't produce expected result, redesign needed."},
+            {situation: "體重突然增加", zh: "舊語言：我胖回來了。更新語言：一天體重只是水分波動，要看趨勢。", en: "Old: I've gained weight back. Updated: Daily weight is just water fluctuation, watch trends."},
+            {situation: "被伴侶批評", zh: "舊語言：他根本不在乎我。更新語言：這件事讓我感受到需求沒被接住，我們需要談期待。", en: "Old: He doesn't care about me. Updated: I feel my needs weren't met, we need to discuss expectations."},
+            {situation: "夫妻吵架", zh: "舊語言：我要證明我是對的。更新語言：我們兩個的模型在哪裡不同？需要對話。", en: "Old: I need to prove I'm right. Updated: Where do our models differ? Need dialogue."},
+            {situation: "收入一直上不去", zh: "舊語言：我沒有財運。更新語言：哪個環節是真正瓶頸？流量、信任、還是轉換？", en: "Old: I have bad money luck. Updated: Which is real bottleneck? Traffic, trust, or conversion?"},
+            {situation: "產品賣不好", zh: "舊語言：市場不識貨。更新語言：哪一個市場假設沒有成立？需要測試。", en: "Old: Market doesn't understand. Updated: Which market assumption failed? Need testing."},
+            {situation: "廣告花錢沒效果", zh: "舊語言：再加預算。更新語言：先確認單位經濟模型是否正確。", en: "Old: Add more budget. Updated: Confirm unit economics first."},
+            {situation: "每天很忙卻沒成果", zh: "舊語言：我需要更努力。更新語言：我的注意力是不是流向低槓桿任務？", en: "Old: I need to work harder. Updated: Am I focusing on low-leverage tasks?"},
+            {situation: "待辦事項永遠做不完", zh: "舊語言：我的時間管理很差。更新語言：輸入速度是否長期大於處理速度？", en: "Old: My time management is bad. Updated: Does input exceed processing capacity?"},
+            {situation: "買課程卻沒改變", zh: "舊語言：我還缺更多知識。更新語言：知識沒有進入行動回饋迴圈。", en: "Old: I need more knowledge. Updated: Knowledge didn't enter action-feedback loop."},
+            {situation: "計畫常常失敗", zh: "舊語言：我沒有執行力。更新語言：計畫是否忽略現實限制和容量？", en: "Old: I have no execution. Updated: Did plan ignore reality constraints?"},
+            {situation: "早起計畫三天失敗", zh: "舊語言：我意志力太弱。更新語言：睡眠時間沒有同步往前移，系統自然反彈。", en: "Old: My willpower is weak. Updated: Sleep time didn't shift forward, system rebounded."},
+            {situation: "戒手機失敗", zh: "舊語言：我自制力差。更新語言：手機一直提供高頻獎賞，要改環境而非意志力。", en: "Old: I have no self-control. Updated: Phone offers high rewards, change environment not willpower."},
+            {situation: "養成習慣中斷", zh: "舊語言：我又失敗了。更新語言：真正重要的是Recovery Time有多快。", en: "Old: I failed again. Updated: What matters is how fast recovery is."},
+            {situation: "很焦慮", zh: "舊語言：一定會發生壞事。更新語言：我的預測系統現在提高了威脅權重。", en: "Old: Bad things will happen. Updated: My prediction system increased threat weight."},
+            {situation: "害怕上台", zh: "舊語言：我不適合公開說話。更新語言：我的系統缺少安全的暴露經驗。", en: "Old: I'm not meant to speak publicly. Updated: System lacks safe exposure experience."},
+            {situation: "第一次做某事很糟", zh: "舊語言：我沒天分。更新語言：第一次就是Baseline，後面有改進空間。", en: "Old: I have no talent. Updated: First time is baseline, improvement space ahead."},
+            {situation: "別人比我厲害", zh: "舊語言：我不如他。更新語言：他的系統裡有哪些能力節點值得拆解？", en: "Old: He's better than me. Updated: Which capability nodes can I decompose from his system?"},
+            {situation: "做錯決定", zh: "舊語言：早知道就不要選。更新語言：當時資訊條件下，我的決策流程哪裡能改善？", en: "Old: Wish I didn't choose. Updated: Given information then, how can decision process improve?"},
+            {situation: "人生計畫被打亂", zh: "舊語言：全部毀了。更新語言：原時間線失效，需要重新導航。", en: "Old: Everything is ruined. Updated: Original timeline invalid, need to renavigated."},
+            {situation: "遇到意外變化", zh: "舊語言：為什麼偏偏是我？更新語言：新的Constraint出現，我還有哪些Option？", en: "Old: Why me? Updated: New constraints appeared, what options remain?"},
+            {situation: "環境變化很快", zh: "舊語言：以前都這樣做。更新語言：以前有效的模型是否已過期？", en: "Old: That's how we always did it. Updated: Is old model outdated?"},
+            {situation: "一個方法失效了", zh: "舊語言：再更努力做一次。更新語言：環境參數可能已改變，要重新測試。", en: "Old: Try harder. Updated: Environment changed, need retesting."},
+            {situation: "別人方法對自己沒用", zh: "舊語言：一定是我有問題。更新語言：模型可能有適用邊界條件。", en: "Old: Something's wrong with me. Updated: Model may have boundary conditions."}
+        ];
+        
+        function renderCapabilities() {
+            const html = capabilities.map((item, idx) => `
+                <div class="item-box">
+                    <div class="number">${String(idx+1).padStart(2,'0')}</div>
+                    <div class="zh">${item.cn}</div>
+                    <div class="en">${item.en} <button class="tts-btn" data-speak="${item.en}">🔊</button></div>
+                </div>
+            `).join('');
+            document.getElementById('capabilitiesList').innerHTML = html;
+        }
+        
+        function renderWisdom() {
+            const html = wisdom.map((item, idx) => `
+                <div class="item-box">
+                    <div class="number">${String(idx+1).padStart(2,'0')}</div>
+                    <div class="zh">${item.cn}</div>
+                    <div class="en">${item.en} <button class="tts-btn" data-speak="${item.en}">🔊</button></div>
+                </div>
+            `).join('');
+            document.getElementById('wisdomList').innerHTML = html;
+        }
+        
+        function renderUpdates() {
+            const html = updates.map(item => `
+                <div class="bilingual-item">
+                    <div class="zh-content"><strong>${item.old_cn} ${item.new_cn}</strong></div>
+                    <div class="en-content">
+                        <div class="en-text-part"><strong>${item.old_en} ${item.new_en}</strong></div>
+                        <button class="tts-btn" data-speak="${item.old_en} ${item.new_en}">🔊</button>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('updateExamples').innerHTML = html;
+        }
+        
+        function renderExamples() {
+            const html = examples.map(item => `
+                <div class="bilingual-item">
+                    <div class="zh-title">📌 ${item.situation}</div>
+                    <div class="zh-content">${item.zh}</div>
+                    <div class="en-content">
+                        <div class="en-text-part">${item.en}</div>
+                        <button class="tts-btn" data-speak="${item.en}">🔊</button>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('lifeExamples').innerHTML = html;
+        }
+        
+        // TTS
+        const synth = window.speechSynthesis;
+        
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('tts-btn')) {
+                e.preventDefault();
+                const text = e.target.getAttribute('data-speak');
+                if (synth.speaking) synth.cancel();
+                const u = new SpeechSynthesisUtterance(text);
+                u.lang = 'en-US';
+                u.rate = 0.9;
+                synth.speak(u);
+            }
+        });
+        
+        // Tabs
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+            });
+        });
+        
+        // Card toggle
+        document.addEventListener('click', (e) => {
+            const header = e.target.closest('.card-header');
+            if (header) {
+                const card = header.closest('.card');
+                card.classList.toggle('open');
+            }
+        });
+        
+        // Init
+        renderCapabilities();
+        renderWisdom();
+        renderUpdates();
+        renderExamples();
+    </script>
+</body>
+</html>
