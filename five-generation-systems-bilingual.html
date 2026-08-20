@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五大生成系統｜Five Generation Systems</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.7;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1A2B5F 0%, #0A7A72 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 15px;
+        }
+        
+        .system-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .system-btn {
+            padding: 15px;
+            border: 2px solid #C9960C;
+            background-color: white;
+            color: #1A2B5F;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-family: "Microsoft JhengHei", sans-serif;
+        }
+        
+        .system-btn:hover {
+            background-color: #C9960C;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .system-btn.active {
+            background-color: #1A2B5F;
+            color: #C9960C;
+            box-shadow: 0 4px 12px rgba(26,43,95,0.3);
+        }
+        
+        .content-area {
+            background: white;
+            border-left: 4px solid #0A7A72;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .content-area h2 {
+            color: #1A2B5F;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .content-area h2::before {
+            content: '';
+            width: 4px;
+            height: 30px;
+            background-color: #C9960C;
+            border-radius: 2px;
+        }
+        
+        .sections-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .section-card {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .section-card:hover {
+            box-shadow: 0 4px 12px rgba(10,122,114,0.15);
+            border-color: #0A7A72;
+        }
+        
+        .section-header {
+            background: linear-gradient(90deg, #1A2B5F 0%, #0A7A72 100%);
+            color: white;
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.05em;
+        }
+        
+        .section-header:hover {
+            background: linear-gradient(90deg, #0D1B3E 0%, #005D5F 100%);
+        }
+        
+        .toggle-icon {
+            font-size: 1.3em;
+            transition: transform 0.3s ease;
+        }
+        
+        .section-card.expanded .toggle-icon {
+            transform: rotate(180deg);
+        }
+        
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 15px;
+        }
+        
+        .section-card.expanded .section-content {
+            max-height: 1000px;
+            padding: 15px;
+        }
+        
+        .bilingual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 10px 0;
+        }
+        
+        .chinese, .english {
+            padding: 12px;
+            background: white;
+            border-radius: 4px;
+            border-left: 3px solid #C9960C;
+            font-size: 0.95em;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .english {
+            border-left-color: #0A7A72;
+        }
+        
+        .english-label {
+            font-size: 0.8em;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .tts-btn {
+            background-color: #0A7A72;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-family: "Microsoft JhengHei", sans-serif;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+            font-weight: bold;
+        }
+        
+        .tts-btn:hover {
+            background-color: #005D5F;
+            transform: scale(1.05);
+        }
+        
+        .tts-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 900px) {
+            .sections-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .bilingual {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+        
+        .system-name {
+            color: #C9960C;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>五大生成系統</h1>
+        <h1>Five Generation Systems</h1>
+        <p>愛 · 健康 · 幸福 · 快樂 · 財富 | Love · Health · Happiness · Joy · Wealth</p>
+    </div>
+    
+    <div class="container">
+        <div class="system-selector" id="systemSelector"></div>
+        <div class="content-area" id="contentArea"></div>
+        <div class="footer">
+            <p>© 由王欣蓉 Anne Wang 編制 | Compiled by Anne Wang</p>
+            <p>💡 點擊英文旁的🔊按鈕可發音 | Click 🔊 to hear English</p>
+        </div>
+    </div>
+    
+    <script>
+        // 內嵌系統數據
+        const data = {"愛": [{"title": "《愛的生成系統｜The Love Generation System》", "content": "愛 Love\n≠只有感覺\n≠just a feeling\n↓\n愛更像一套\nLove is more like\n【兩個人共同生成、維持、修復與更新關係的系統】\n【a system through which two people co-create, maintain, repair, and update a relationship】\n↓\n感覺讓兩個人靠近\nFeelings bring two people closer.\n能力決定兩個人能不能走得長久\nCapability determines whether they can stay together.\n智慧決定關係遇到變化後能不能更新\nWisdom determines whether the relationship can evolve when life changes.\n━━━━━━━━━━━━━━"}, {"title": "《1｜Ontology: What Is Love?》", "content": "心動 Attraction\n↓\n讓關係開始\nstarts the relationship\n↓\n但長期關係一定會遇到\nBut long-term relationships inevitably face\n需求不同 different needs\n＋個性不同 different personalities\n＋家庭背景不同 different family backgrounds\n＋金錢觀不同 different views on money\n＋生活習慣不同 different lifestyles\n＋人生目標不同 different life goals\n＋壓力不同 different pressures\n↓\n所以真正的愛\nSo mature love is\n感情 Affection\n＋理解 Understanding\n＋能力 Capability\n＋責任 Responsibility\n＋更新 Updating\n↓\n【喜歡一個人靠感覺，長久愛一個人靠能力。】\n【Feelings help you fall in love; capability helps you stay in love.】\n━━━━━━━━━━━━━━"}, {"title": "《2｜Understanding Human Nature》", "content": "很多人以為\nMany people believe\n「如果他真的愛我，他就應該知道我要什麼。」\n“If they truly love me, they should know what I need.”\n↓\n但人不是讀心機器\nBut people cannot read minds.\n↓\n你累了不說\nYou are tired but say nothing.\n↓\n對方不知道\nYour partner does not know.\n↓\n你開始失望\nYou become disappointed.\n↓\n「他根本不關心我。」\n“They don't care about me.”\n↓\n衝突 Conflict\n真正需要更新的是\nThe model that needs updating is\n「愛我＝自動懂我」\n“Loving me = automatically understanding me.”\n↓\n改成\nUpdate it to\n「愛我＋有效溝通＝更有機會理解我」\n“Love + effective communication = a greater chance of understanding.”\n生活例子 Life Example\n舊語言 Old Language\n「你根本都不在乎我。」\n“You don't care about me at all.”\n新語言 New Language\n「我今天很累，我希望你可以陪我聊十分鐘。」\n“I'm really tired today. I'd like you to spend ten minutes talking with me.”\n↓\n前者要求對方猜\nThe first asks your partner to guess.\n後者提供有效資訊\nThe second provides useful information.\n━━━━━━━━━━━━━━"}, {"title": "《3｜Understanding Needs》", "content": "很多關係衝突\nMany relationship conflicts\n表面是在吵事件\nappear to be about events\n↓\n底層其實是需求碰撞\nbut underneath, they are often clashes of needs.\n生活例子 Life Example\n「你為什麼一直滑手機？」\n“Why are you always on your phone?”\n↓\n表面問題 Surface Problem\n手機 Phone\n↓\n底層問題 Deeper Needs\n一方需要\nOne person needs\n陪伴／被重視／連結\ncompanionship / attention / connection\n另一方需要\nThe other needs\n休息／安靜／自主空間\nrest / quiet / personal space\n↓\n真正問題不是\nThe real question is not\n「誰對？」\n“Who is right?”\n↓\n而是\nbut\n【兩個人的需求如何同時被看見？】\n【How can both people's needs be recognized?】\n━━━━━━━━━━━━━━"}, {"title": "《4｜Boundaries》", "content": "愛一個人\nLoving someone\n≠什麼都答應\n≠saying yes to everything\n↓\n成熟的愛是\nMature love means\n我可以愛你\nI can love you\n＋\n同時說不\nand still say no.\n我可以理解你的情緒\nI can understand your emotions\n＋\n但不接受你的攻擊\nwithout accepting your attacks.\n生活例子 Life Example\n對方生氣時辱罵你\nYour partner insults you when angry.\n↓\n舊模型 Old Model\n「我愛他，所以忍耐。」\n“I love them, so I should endure it.”\n↓\n新模型 New Model\n「我願意談，但如果互相辱罵，我們先停止，冷靜後再談。」\n“I'm willing to talk, but if we start insulting each other, let's stop and continue after we calm down.”\n↓\n【界線不是把愛切斷，而是避免愛被耗盡。】\n【Boundaries do not destroy love; they prevent love from being exhausted.】\n━━━━━━━━━━━━━━"}, {"title": "《5｜Attachment》", "content": "有時候我們以為\nSometimes we think\n「我太愛他了。」\n“I love them so much.”\n↓\n底層其實可能是\nBut underneath it may be\n「我太害怕失去他。」\n“I'm terrified of losing them.”\n↓\n害怕失去 Fear of loss\n→確認 Reassurance seeking\n→查勤 Checking\n→控制 Control\n→對方逃離 Withdrawal\n→更加害怕 More fear\n→更多控制 More control\n↓\n形成正回饋迴路\nA reinforcing feedback loop emerges\n不安全感↑\nInsecurity ↑\n→控制↑\nControl ↑\n→對方距離↑\nPartner's distance ↑\n→不安全感再↑\nInsecurity ↑ again\n↓\n【依賴有時會穿著愛的衣服出現。】\n【Dependency can sometimes appear dressed as love.】\n成熟的愛是\nMature love says\n「我需要你，但我不是沒有你就不存在。」\n“I need you, but I do not cease to exist without you.”\n━━━━━━━━━━━━━━"}, {"title": "《6｜Commitment》", "content": "感覺每天都可能改變\nFeelings can change every day.\n↓\n今天很愛\nLove today.\n明天很累\nExhausted tomorrow.\n後天生氣\nAngry the next day.\n↓\n如果完全跟著感覺走\nIf the relationship follows feelings alone\n感覺好 → 靠近\nFeel good → move closer\n感覺差 → 逃走\nFeel bad → run away\n↓\n系統就會非常不穩定\nThe system becomes unstable.\n↓\n所以長期關係需要承諾\nLong-term relationships therefore need commitment.\n承諾不是\nCommitment does not mean\n「無論發生什麼都不能離開。」\n“You must never leave no matter what happens.”\n而是\nIt means\n【問題出現時，願意先面對與處理，而不是立刻逃跑。】\n【When problems arise, we are willing to face and address them rather than immediately escape.】\n━━━━━━━━━━━━━━"}, {"title": "《7｜Communication》", "content": "溝通\nCommunication\n≠把自己的話全部講完\n≠simply saying everything you want to say\n↓\n真正的溝通\nReal communication\n＝降低資訊失真\n＝reducing information distortion\n↓\n事件 Event\n→解讀 Interpretation\n→情緒 Emotion\n→需求 Need\n→請求 Request\n生活例子 Life Example\n舊語言 Old Language\n「你每次都只顧自己。」\n“You only care about yourself.”\n新語言 New Language\n「昨天吃飯時，我說話時你一直看手機，我感覺沒有被聽見；下次吃飯可以先把手機放旁邊20分鐘嗎？」\n“Yesterday at dinner, you kept looking at your phone while I was talking. I felt unheard. Could we put our phones aside for twenty minutes next time?”\n↓\n事件清楚\nClear event\n＋感受清楚\nclear feeling\n＋需求清楚\nclear need\n＋請求清楚\nclear request\n↓\n關係摩擦下降\nRelationship friction decreases.\n━━━━━━━━━━━━━━"}, {"title": "《8｜Conflict》", "content": "成熟的愛\nMature love\n≠沒有衝突\n≠the absence of conflict\n↓\n兩個不同的人\nTwo different people\n↓\n一定會產生\nwill inevitably produce\nPrediction Error 預測誤差\n↓\n我以為你會這樣\nI thought you would act this way.\n↓\n結果你沒有\nBut you didn't.\n舊模型 Old Model\nPrediction Error\n↓\n「你變了。」\n“You've changed.”\n↓\n人格攻擊 Personal attack\n↓\n防衛 Defense\n↓\n反擊 Counterattack\n新模型 New Model\nPrediction Error\n↓\n「原來我的模型不完整。」\n“My model of you was incomplete.”\n↓\n交換資訊 Exchange information\n↓\n重新理解 Re-understand\n↓\n重新協商 Renegotiate\n↓\n模型更新 Model Update\n↓\n【衝突不一定代表關係失敗，衝突也可能是關係更新的入口。】\n【Conflict does not necessarily mean relationship failure; it can become an entry point for relationship updating.】\n━━━━━━━━━━━━━━"}, {"title": "《9｜Real Relationships Are Stress Tests》", "content": "戀愛初期\nEarly romance\n↓\n吃飯／聊天／旅行／約會\ndining / talking / traveling / dating\n↓\n很多能力還沒有真正被測試\nMany relationship capabilities remain untested.\n真正的壓力測試可能來自\nReal stress tests may come from\n沒錢 financial difficulty\n／生病 illness\n／工作壓力 work stress\n／照顧父母 caring for parents\n／養孩子 raising children\n／失敗 failure\n／意見不同 disagreement\n／重大人生變化 major life changes\n↓\n壓力真正測出的不是\nStress does not merely test\n「你們甜不甜蜜」\n“how romantic you are”\n↓\n而是\nbut\n能不能溝通？\nCan you communicate?\n能不能承擔？\nCan you take responsibility?\n能不能尊重界線？\nCan you respect boundaries?\n能不能合作？\nCan you cooperate?\n能不能修復？\nCan you repair?\n↓\n【平順時的甜蜜測感情，壓力下的行為測能力。】\n【Sweet moments reveal affection; stressful moments reveal capability.】\n━━━━━━━━━━━━━━"}, {"title": "《10｜How Does Love Become Dependency?》", "content": "我愛你\nI love you.\n↓\n我需要你證明我的價值\nI need you to prove my worth.\n↓\n你沒有回訊息\nYou don't reply.\n↓\n我恐慌\nI panic.\n↓\n我開始控制\nI begin controlling.\n↓\n愛\nLove\n→自我價值外包\n→outsourced self-worth\n→依賴\n→dependency\n↓\n成熟模型\nMature Model\n【兩個相對完整的人，選擇共同生活。】\n【Two relatively whole individuals choose to build a life together.】\n━━━━━━━━━━━━━━"}, {"title": "《11｜How Does Love Become Control?》", "content": "害怕失去\nFear of loss\n↓\n控制 Control\n↓\n得到短期安全感\nTemporary sense of safety\n↓\n對方失去自由\nPartner loses freedom\n↓\n關係品質下降\nRelationship quality declines\n↓\n更害怕失去\nGreater fear of loss\n↓\n更多控制\nMore control\n↓\n【控制常常不是愛太多，而是安全感不足。】\n【Control often comes not from too much love, but from too little security.】\n━━━━━━━━━━━━━━"}, {"title": "《12｜How Does Love Become Self-Sacrifice?》", "content": "「為了你，我什麼都不要。」\n“I'll give up everything for you.”\n↓\n長期壓抑需求\nSuppress personal needs\n↓\n界線消失\nBoundaries disappear\n↓\n疲勞\nExhaustion\n↓\n委屈\nResentment\n↓\n隱形帳本\nInvisible scorekeeping\n↓\n「我為你做這麼多，你怎麼可以……」\n“I've done so much for you. How could you...?”\n↓\n成熟的愛不是完全沒有付出\nMature love does involve giving.\n↓\n但付出必須具有\nBut giving must have\n【可持續性 Sustainability】\n↓\n【如果愛必須靠一個人長期耗竭才能存在，這套關係系統就需要更新。】\n【If love can survive only through one person's chronic exhaustion, the relationship system needs updating.】\n━━━━━━━━━━━━━━"}, {"title": "《13｜How Does Love Become Harm?》", "content": "需求沒有被理解\nUnmet needs\n↓\n失望 Disappointment\n↓\n沒有表達\nUnexpressed disappointment\n↓\n委屈 Resentment\n↓\n長期累積\nAccumulation\n↓\n憤怒 Anger\n↓\n攻擊 Attack\n↓\n防衛 Defense\n↓\n反擊 Counterattack\n↓\n關係受傷\nRelationship damage\n↓\n所以很多關係不是突然壞掉\nMany relationships do not suddenly collapse.\n↓\n而是\nInstead\n【小型Prediction Errors長期沒有被更新。】\n【Small prediction errors remain uncorrected for too long.】\n━━━━━━━━━━━━━━"}, {"title": "《14｜What Is Relationship Wisdom?》", "content": "不是\nNot\n「找到永遠不跟我吵架的人。」\n“Finding someone who never argues with me.”\n而是\nBut\n「我們吵完還能更新。」\n“We can update after conflict.”\n不是\nNot\n「永遠符合我的期待。」\n“Always meeting my expectations.”\n而是\nBut\n「期待不同時，我們可以重新協商。」\n“When expectations differ, we can renegotiate.”\n不是\nNot\n「永遠不變。」\n“Never changing.”\n而是\nBut\n【關係改變之後，我們仍有能力重新建模。】\n【When the relationship changes, we still have the ability to rebuild our shared model.】\n━━━━━━━━━━━━━━"}, {"title": "《15｜The Five Stages of Love》", "content": "第一階｜感覺型\nStage 1｜Feeling-Based Love\n我喜歡你\nI like you.\n↓\n第二階｜需求型\nStage 2｜Need-Based Love\n我需要你\nI need you.\n↓\n第三階｜交易型\nStage 3｜Transactional Love\n你對我好，我就對你好\nIf you treat me well, I'll treat you well.\n↓\n第四階｜能力型\nStage 4｜Capability-Based Love\n我們能溝通、協調、修復\nWe can communicate, negotiate, and repair.\n↓\n第五階｜智慧型\nStage 5｜Wisdom-Based Love\n我們允許彼此成長\nWe allow each other to grow.\n↓\n並持續更新共同生活的系統\nAnd continuously update the system of our shared life.\n↓\n【成熟不是感覺消失，而是感覺之上長出了能力。】\n【Maturity does not mean feelings disappear; it means capabilities grow on top of feelings.】\n━━━━━━━━━━━━━━"}, {"title": "《16｜The Love Generation Formula》", "content": "人性知識\nKnowledge of Human Nature\n＋\n需求辨識\nNeed Recognition\n＋\n界線\nBoundaries\n＋\n安全依附\nSecure Attachment\n＋\n承諾\nCommitment\n＋\n溝通\nCommunication\n＋\n衝突處理\nConflict Management\n＋\n情緒調節\nEmotional Regulation\n↓\n真實關係\nReal Relationship\n↓\n壓力測試\nStress Test\n↓\nPrediction Error\n預測誤差\n↓\n交換資訊\nInformation Exchange\n↓\n模型修正\nModel Correction\n↓\n重新協商\nRenegotiation\n↓\n再次行動\nNew Action\n↓\nFeedback\n回饋\n↓\n關係能力\nRelationship Capability\n↓\n反覆重現\nRepeated Success\n↓\n信任累積\nTrust Accumulation\n↓\n關係智慧\nRelationship Wisdom\n━━━━━━━━━━━━━━"}, {"title": "《17｜Seven Questions for Updating a Relationship》", "content": "①我們真正衝突的需求是什麼？\nWhat needs are actually in conflict?\n②哪一條界線沒有說清楚？\nWhich boundary has not been clearly communicated?\n③我對對方有什麼沒有被驗證的期待？\nWhat untested expectations do I have of my partner?\n④我們在哪裡出現資訊失真？\nWhere has information become distorted?\n⑤我們是在解決問題，還是在證明誰對？\nAre we solving the problem or proving who is right?\n⑥這次衝突暴露了哪個能力缺口？\nWhat capability gap has this conflict revealed?\n⑦下一次遇到相同情境，我們要怎麼做得不同？\nWhat will we do differently next time?\n↓\n感情問題\nRelationship Problem\n↓\n轉化成\nbecomes\n【可更新的能力問題】\n【an updatable capability problem】\n━━━━━━━━━━━━━━"}, {"title": "《18｜Final Mind Map》", "content": "吸引 Attraction\n↓\n靠近 Connection\n↓\n理解 Understanding\n↓\n發現差異 Difference\n↓\nPrediction Error 預測誤差\n↓\n溝通 Communication\n↓\n界線 Boundaries\n↓\n協商 Negotiation\n↓\n承諾 Commitment\n↓\n真實生活 Real Life\n↓\n壓力測試 Stress Test\n↓\n衝突 Conflict\n↓\nFeedback 回饋\n↓\n修復 Repair\n↓\n模型更新 Model Update\n↓\n信任累積 Trust Accumulation\n↓\n關係能力 Relationship Capability\n↓\n長期合作 Long-Term Cooperation\n↓\n關係智慧 Relationship Wisdom\n━━━━━━━━━━━━━━"}, {"title": "《19｜The Core Wisdom of Love》", "content": "心動讓愛開始。\nAttraction starts love.\n理解讓愛看見彼此。\nUnderstanding allows love to truly see each other.\n界線讓愛不互相吞噬。\nBoundaries prevent love from consuming either person.\n溝通讓資訊可以流動。\nCommunication keeps information flowing.\n承諾讓關係不被短期情緒控制。\nCommitment prevents temporary emotions from controlling the relationship.\n衝突提供Prediction Error。\nConflict provides prediction errors.\n修復讓錯誤可以被更新。\nRepair allows errors to be corrected.\n時間讓信任形成複利。\nTime allows trust to compound.\n━━━━━━━━━━━━━━"}], "健康": [{"title": "《健康的生成系統｜The Health Generation System》", "content": "健康 Health\n≠只有沒有疾病 Absence of Disease Alone\n健康不是要求自己永遠正向，而是能感受愉悅、投入、連結與意義，也能在不健康時調節、恢復並更新生活條件。\nHealth is not permanent positivity; it is the capacity to experience pleasure, engagement, connection, and meaning, while recovering and updating when life becomes difficult.\n↓\n健康更像一套能持續調節身心、建立關係、創造意義、回應現實並更新生活模型的動態系統。\nHealth is a dynamic system for regulating body and mind, building relationships, creating meaning, responding to reality, and updating life models.\n愉快讓人短暫舒服；能力讓健康能被重新生成；系統讓穩定可以持續；智慧讓人在變動與痛苦中仍保有更新能力。\nPleasure brings temporary comfort; capability regenerates well-being; systems sustain stability; wisdom preserves adaptability through change and pain.\n━━━━━━━━━━━━━━"}, {"title": "**《1｜Ontology: What Is Health?》**", "content": "很多人以為健康＝每天都很開心、沒有煩惱。\nMany people believe health means feeling good all the time.\n但愉快感受只是健康系統的一個狀態變數。\nPleasant emotion is only one state variable in a health system.\n真正的健康＝身體穩態＋情緒調節＋關係連結＋自主性＋勝任感＋意義＋希望＋恢復力＋更新能力。\nReal health = physiological regulation + emotional regulation + connection + autonomy + competence + meaning + hope + resilience + updating capability.\n【短暫健康可能靠運氣，持續生成健康需要系統。】\n━━━━━━━━━━━━━━"}, {"title": "**《2｜Goal Function of Health》**", "content": "低維目標：健康越多越好，痛苦越少越好。\nLow-level goal: maximize pleasure and minimize pain.\n高維目標：在真實人生的限制與波動中，提高長期生命品質、調節能力、關係品質、自主性、意義感與恢復力。\nHigher-level goal: improve long-term quality of life, regulation, connection, autonomy, meaning, and resilience within real-world constraints.\n健康目標函數＝身心穩態 × 關係品質 × 自主性 × 勝任感 × 意義感 × 恢復力 × 更新能力。\n━━━━━━━━━━━━━━"}, {"title": "**《3｜Core Concepts》**", "content": "感受 Emotion／需求 Needs／注意力 Attention／安全感 Safety／關係 Connection／自主 Autonomy／勝任 Competence／意義 Meaning。\n壓力 Stress／恢復 Recovery／界線 Boundaries／習慣 Habits／價值 Values／希望 Hope／韌性 Resilience／成長 Growth。\n時間配置 Time Allocation／選擇權 Optionality／心理彈性 Flexibility／安全基地 Secure Base。\n健康≠健康；沒有衝突≠好關係；忙碌≠充實；成功≠自我價值；痛苦≠人生失敗。\n【沒有清楚概念，就容易把刺激、認可與逃避誤認成健康。】\n━━━━━━━━━━━━━━"}, {"title": "**《4｜Key Variables》**", "content": "收入穩定度／收入成長率／儲蓄率／固定成本／負債成本／資產配置／流動性／風險集中度。\n技能稀缺性／市場需求／信用／時間投入／健康／家庭責任／決策品質／資訊品質／制度／科技／運氣／更新速度。\n生活例子：兩個人月收入都十萬元，一人固定支出九萬五，另一人留下四萬持續累積資產。\n相同收入，不同結構，長期會生成完全不同的健康軌跡。\n【健康是一個多變數系統，不要用單一收入解釋整個財務人生。】\n━━━━━━━━━━━━━━"}, {"title": "**《5｜Relationships and Feedback Loops》**", "content": "惡性循環：收入不足→焦慮↑→短期決策↑→高成本借貸↑→現金流↓→焦慮再↑。\n生活膨脹循環：收入↑→消費標準↑→固定成本↑→必須維持高收入→選擇權↓。\n能力複利循環：能力↑→解決問題價值↑→收入↑→可投資盈餘↑→學習與資產↑→能力再↑。\n【真正的健康智慧，是找到生成結果的 Feedback Loop，而不是只追逐結果。】\n━━━━━━━━━━━━━━"}, {"title": "**《6｜Parameters》**", "content": "多少固定成本會壓縮自由？多少負債開始威脅生存？多少槓桿超出承受能力？\n多少緊急預備金才適合自己的風險結構？多少收入集中在單一來源？\n判斷必須加入年齡、家庭責任、收入穩定度、資產、負債、流動性、時間、風險承受力與人生目標。\n【智慧不只是知道變數，更是知道變數的適當範圍。】\n━━━━━━━━━━━━━━"}, {"title": "**《7｜Strategy》**", "content": "提升高價值技能／增加問題解決能力／建立第二收入／降低無效固定成本／建立預備金。\n降低高成本負債／建立投資紀律／分散風險／累積信用／建立品牌、知識與內容資產。\n建立可複製流程／利用AI提高單位時間產出／保留流動性。\n【策略不是唯一答案，而是可測試、可比較、可更新的候選解法。】\n━━━━━━━━━━━━━━"}, {"title": "**《8｜Procedure》**", "content": "財務現況→盤點收入→支出→資產→負債→風險→設定目標→找瓶頸→提出候選策略→小規模測試。\n→取得結果→Feedback→Prediction Error→修正策略→再次執行。\n【知道健康道理不是能力，能把知識變成可執行程序才開始形成能力。】\n━━━━━━━━━━━━━━"}, {"title": "**《9｜Feedback》**", "content": "觀察：收入成長率／自由現金流／儲蓄率／淨資產／流動性／負債成本／收入集中度。\n再看：資產集中度／單位時間產值／非工時收入占比／緊急預備月數／風險曝險／技能市場需求／選擇權。\n收入提高但固定成本同步暴增，系統韌性反而可能下降。\n【收入是輸出，健康要看整個系統的狀態。】\n━━━━━━━━━━━━━━"}, {"title": "**《10｜Update Mechanism》**", "content": "市場、產業、科技、AI、利率、需求、工作、家庭、健康與人生目標都會變。\n行動→結果→Feedback→Prediction Error→診斷哪個假設、能力、成本、風險或策略失準。\n→模型修正→Health System N+1→再次測試。\n【真正的健康安全，不是找到永遠正確的方法，而是擁有持續修正方法的能力。】\n━━━━━━━━━━━━━━"}, {"title": "**《11｜How Health Becomes Consumption》**", "content": "收入增加→身分焦慮→消費升級→固定成本增加→必須維持更高收入→自由下降。\n看起來富有，可能只是把未來的選擇權提前消費。\n【看起來富有與真正富有，是兩套不同系統。】\n━━━━━━━━━━━━━━"}, {"title": "**《12｜How Health Becomes Hoarding》**", "content": "害怕失去→不敢使用資源→不敢投資能力→不敢承擔任何合理風險→錢增加但生命選擇沒有增加。\n【錢是資源，不是人生的終端目標。】\n━━━━━━━━━━━━━━"}, {"title": "**《13｜How Health Becomes Gambling》**", "content": "渴望快速致富→FOMO→忽略尾部風險→槓桿↑→短期成功→過度自信→槓桿再增加→系統脆弱。\n【一次賺很多錢，不能證明模型正確；也可能只是風險尚未顯現。】\n━━━━━━━━━━━━━━"}, {"title": "**《14｜What Is Health Wisdom?》**", "content": "不是永遠選到最高報酬，而是預測錯了仍能生存。\n不是永遠不犯錯，而是讓單次錯誤無法摧毀整個系統。\n不是錢最多，而是資源能持續轉化成選擇權。\n【讓錯誤可承受，讓正確可以複利。】\n━━━━━━━━━━━━━━"}, {"title": "**《15｜The Five Stages of Health》**", "content": "第一階｜生存型：有錢支付下一張帳單。\n第二階｜收入型：用時間與能力交換收入。\n第三階｜累積型：收入→盈餘→資產→複利。\n第四階｜系統型：能力＋資產＋品牌＋信用＋流程＋科技共同產生價值。\n第五階｜智慧型：健康服務生命、自由、利他與長期生成。\n━━━━━━━━━━━━━━"}, {"title": "**《16｜The Health Generation Formula》**", "content": "知識＋能力＋需求辨識＋價值創造＋信用＋資源配置＋風險管理＋時間。\n→真實市場→壓力測試→Outcome→Prediction Error→Feedback→Model Update。\n→能力提升→更高價值→盈餘→資產→複利→選擇權→健康智慧。\n━━━━━━━━━━━━━━"}, {"title": "**《17｜Nine Questions for Updating Health》**", "content": "①我的真正目標函數是什麼？\n②最大瓶頸是收入、成本、能力、資產、流動性還是風險？\n③我的收入解決了誰的什麼問題？\n④這個價值是否仍具有稀缺性？\n⑤收入是否過度依賴單一來源？\n⑥哪些資產正在正向複利？\n⑦哪些成本或負債正在反向複利？\n⑧這次結果暴露哪個模型錯誤？\n⑨下次要做什麼不同？\n━━━━━━━━━━━━━━"}, {"title": "**《18｜Final Mind Map》**", "content": "現實世界→發現問題→辨識需求→知識→能力→解決問題→創造價值→交換→收入→盈餘。\n→資源配置→資產→風險管理→時間→複利→Feedback→Prediction Error→Model Update。\n→更高能力→更高價值→更多選擇權→健康智慧。\n━━━━━━━━━━━━━━"}, {"title": "**《19｜Core Wisdom of Health》**", "content": "收入讓資源進入系統。\n盈餘讓資源可以留下。\n資產讓過去的價值參與未來。\n風險管理讓錯誤不至於摧毀系統。\n信用降低交換摩擦。\n流動性讓人在變局中保有行動空間。\n時間讓正確的小優勢形成複利。\nPrediction Error 讓錯誤模型被看見。\n更新機制讓健康系統適應新環境。\n━━━━━━━━━━━━━━"}], "幸福": [{"title": "**《幸福的生成系統｜The Happiness Generation System》**", "content": "幸福 Happiness\n≠只有快樂感受 ≠ Pleasant Feelings Alone\n↓\n幸福更像一套能持續調節身心、建立關係、創造意義、回應現實並更新生活模型的動態系統。\nHappiness is a dynamic system for regulating body and mind, building relationships, creating meaning, responding to reality, and updating life models.\n愉快讓人短暫舒服；能力讓幸福能被重新生成；系統讓穩定可以持續；智慧讓人在變動與痛苦中仍保有更新能力。\nPleasure brings temporary comfort; capability regenerates well-being; systems sustain stability; wisdom preserves adaptability through change and pain.\n━━━━━━━━━━━━━━"}, {"title": "**《1｜Ontology: What Is Happiness?》**", "content": "很多人以為幸福＝每天都很開心、沒有煩惱。\nMany people believe happiness means feeling good all the time.\n但愉快感受只是幸福系統的一個狀態變數。\nPleasant emotion is only one state variable in a happiness system.\n真正的幸福＝身體穩態＋情緒調節＋關係連結＋自主性＋勝任感＋意義＋希望＋恢復力＋更新能力。\nReal happiness = physiological regulation + emotional regulation + connection + autonomy + competence + meaning + hope + resilience + updating capability.\n【短暫快樂可能靠運氣，持續生成幸福需要系統。】\n━━━━━━━━━━━━━━"}, {"title": "**《2｜Goal Function of Happiness》**", "content": "低維目標：快樂越多越好，痛苦越少越好。\nLow-level goal: maximize pleasure and minimize pain.\n高維目標：在真實人生的限制與波動中，提高長期生命品質、調節能力、關係品質、自主性、意義感與恢復力。\nHigher-level goal: improve long-term quality of life, regulation, connection, autonomy, meaning, and resilience within real-world constraints.\n幸福目標函數＝身心穩態 × 關係品質 × 自主性 × 勝任感 × 意義感 × 恢復力 × 更新能力。\n━━━━━━━━━━━━━━"}, {"title": "**《3｜Core Concepts》**", "content": "感受 Emotion／需求 Needs／注意力 Attention／安全感 Safety／關係 Connection／自主 Autonomy／勝任 Competence／意義 Meaning。\n壓力 Stress／恢復 Recovery／界線 Boundaries／習慣 Habits／價值 Values／希望 Hope／韌性 Resilience／成長 Growth。\n時間配置 Time Allocation／選擇權 Optionality／心理彈性 Flexibility／安全基地 Secure Base。\n快樂≠幸福；沒有衝突≠好關係；忙碌≠充實；成功≠自我價值；痛苦≠人生失敗。\n【沒有清楚概念，就容易把刺激、認可與逃避誤認成幸福。】\n━━━━━━━━━━━━━━"}, {"title": "**《4｜Key Variables》**", "content": "收入穩定度／收入成長率／儲蓄率／固定成本／負債成本／資產配置／流動性／風險集中度。\n技能稀缺性／市場需求／信用／時間投入／健康／家庭責任／決策品質／資訊品質／制度／科技／運氣／更新速度。\n生活例子：兩個人月收入都十萬元，一人固定支出九萬五，另一人留下四萬持續累積資產。\n相同收入，不同結構，長期會生成完全不同的幸福軌跡。\n【幸福是一個多變數系統，不要用單一收入解釋整個財務人生。】\n━━━━━━━━━━━━━━"}, {"title": "**《5｜Relationships and Feedback Loops》**", "content": "惡性循環：收入不足→焦慮↑→短期決策↑→高成本借貸↑→現金流↓→焦慮再↑。\n生活膨脹循環：收入↑→消費標準↑→固定成本↑→必須維持高收入→選擇權↓。\n能力複利循環：能力↑→解決問題價值↑→收入↑→可投資盈餘↑→學習與資產↑→能力再↑。\n【真正的幸福智慧，是找到生成結果的 Feedback Loop，而不是只追逐結果。】\n━━━━━━━━━━━━━━"}, {"title": "**《6｜Parameters》**", "content": "多少固定成本會壓縮自由？多少負債開始威脅生存？多少槓桿超出承受能力？\n多少緊急預備金才適合自己的風險結構？多少收入集中在單一來源？\n判斷必須加入年齡、家庭責任、收入穩定度、資產、負債、流動性、時間、風險承受力與人生目標。\n【智慧不只是知道變數，更是知道變數的適當範圍。】\n━━━━━━━━━━━━━━"}, {"title": "**《7｜Strategy》**", "content": "提升高價值技能／增加問題解決能力／建立第二收入／降低無效固定成本／建立預備金。\n降低高成本負債／建立投資紀律／分散風險／累積信用／建立品牌、知識與內容資產。\n建立可複製流程／利用AI提高單位時間產出／保留流動性。\n【策略不是唯一答案，而是可測試、可比較、可更新的候選解法。】\n━━━━━━━━━━━━━━"}, {"title": "**《8｜Procedure》**", "content": "財務現況→盤點收入→支出→資產→負債→風險→設定目標→找瓶頸→提出候選策略→小規模測試。\n→取得結果→Feedback→Prediction Error→修正策略→再次執行。\n【知道幸福道理不是能力，能把知識變成可執行程序才開始形成能力。】\n━━━━━━━━━━━━━━"}, {"title": "**《9｜Feedback》**", "content": "觀察：收入成長率／自由現金流／儲蓄率／淨資產／流動性／負債成本／收入集中度。\n再看：資產集中度／單位時間產值／非工時收入占比／緊急預備月數／風險曝險／技能市場需求／選擇權。\n收入提高但固定成本同步暴增，系統韌性反而可能下降。\n【收入是輸出，幸福要看整個系統的狀態。】\n━━━━━━━━━━━━━━"}, {"title": "**《10｜Update Mechanism》**", "content": "市場、產業、科技、AI、利率、需求、工作、家庭、健康與人生目標都會變。\n行動→結果→Feedback→Prediction Error→診斷哪個假設、能力、成本、風險或策略失準。\n→模型修正→Happiness System N+1→再次測試。\n【真正的幸福安全，不是找到永遠正確的方法，而是擁有持續修正方法的能力。】\n━━━━━━━━━━━━━━"}, {"title": "**《11｜How Happiness Becomes Consumption》**", "content": "收入增加→身分焦慮→消費升級→固定成本增加→必須維持更高收入→自由下降。\n看起來富有，可能只是把未來的選擇權提前消費。\n【看起來富有與真正富有，是兩套不同系統。】\n━━━━━━━━━━━━━━"}, {"title": "**《12｜How Happiness Becomes Hoarding》**", "content": "害怕失去→不敢使用資源→不敢投資能力→不敢承擔任何合理風險→錢增加但生命選擇沒有增加。\n【錢是資源，不是人生的終端目標。】\n━━━━━━━━━━━━━━"}, {"title": "**《13｜How Happiness Becomes Gambling》**", "content": "渴望快速致富→FOMO→忽略尾部風險→槓桿↑→短期成功→過度自信→槓桿再增加→系統脆弱。\n【一次賺很多錢，不能證明模型正確；也可能只是風險尚未顯現。】\n━━━━━━━━━━━━━━"}, {"title": "**《14｜What Is Happiness Wisdom?》**", "content": "不是永遠選到最高報酬，而是預測錯了仍能生存。\n不是永遠不犯錯，而是讓單次錯誤無法摧毀整個系統。\n不是錢最多，而是資源能持續轉化成選擇權。\n【讓錯誤可承受，讓正確可以複利。】\n━━━━━━━━━━━━━━"}, {"title": "**《15｜The Five Stages of Happiness》**", "content": "第一階｜生存型：有錢支付下一張帳單。\n第二階｜收入型：用時間與能力交換收入。\n第三階｜累積型：收入→盈餘→資產→複利。\n第四階｜系統型：能力＋資產＋品牌＋信用＋流程＋科技共同產生價值。\n第五階｜智慧型：幸福服務生命、自由、利他與長期生成。\n━━━━━━━━━━━━━━"}, {"title": "**《16｜The Happiness Generation Formula》**", "content": "知識＋能力＋需求辨識＋價值創造＋信用＋資源配置＋風險管理＋時間。\n→真實市場→壓力測試→Outcome→Prediction Error→Feedback→Model Update。\n→能力提升→更高價值→盈餘→資產→複利→選擇權→幸福智慧。\n━━━━━━━━━━━━━━"}, {"title": "**《17｜Nine Questions for Updating Happiness》**", "content": "①我的真正目標函數是什麼？\n②最大瓶頸是收入、成本、能力、資產、流動性還是風險？\n③我的收入解決了誰的什麼問題？\n④這個價值是否仍具有稀缺性？\n⑤收入是否過度依賴單一來源？\n⑥哪些資產正在正向複利？\n⑦哪些成本或負債正在反向複利？\n⑧這次結果暴露哪個模型錯誤？\n⑨下次要做什麼不同？\n━━━━━━━━━━━━━━"}, {"title": "**《18｜Final Mind Map》**", "content": "現實世界→發現問題→辨識需求→知識→能力→解決問題→創造價值→交換→收入→盈餘。\n→資源配置→資產→風險管理→時間→複利→Feedback→Prediction Error→Model Update。\n→更高能力→更高價值→更多選擇權→幸福智慧。\n━━━━━━━━━━━━━━"}, {"title": "**《19｜Core Wisdom of Happiness》**", "content": "收入讓資源進入系統。\n盈餘讓資源可以留下。\n資產讓過去的價值參與未來。\n風險管理讓錯誤不至於摧毀系統。\n信用降低交換摩擦。\n流動性讓人在變局中保有行動空間。\n時間讓正確的小優勢形成複利。\nPrediction Error 讓錯誤模型被看見。\n更新機制讓幸福系統適應新環境。\n━━━━━━━━━━━━━━"}], "快樂": [{"title": "**《快樂的生成系統｜The Joy Generation System》**", "content": "快樂 Joy\n≠只有快樂感受 ≠ Pleasant Feelings Alone\n快樂不是要求自己永遠正向，而是能感受愉悅、投入、連結與意義，也能在不快樂時調節、恢復並更新生活條件。\nJoy is not permanent positivity; it is the capacity to experience pleasure, engagement, connection, and meaning, while recovering and updating when life becomes difficult.\n↓\n快樂更像一套能持續調節身心、建立關係、創造意義、回應現實並更新生活模型的動態系統。\nJoy is a dynamic system for regulating body and mind, building relationships, creating meaning, responding to reality, and updating life models.\n愉快讓人短暫舒服；能力讓快樂能被重新生成；系統讓穩定可以持續；智慧讓人在變動與痛苦中仍保有更新能力。\nPleasure brings temporary comfort; capability regenerates well-being; systems sustain stability; wisdom preserves adaptability through change and pain.\n━━━━━━━━━━━━━━"}, {"title": "**《1｜Ontology: What Is Joy?》**", "content": "很多人以為快樂＝每天都很開心、沒有煩惱。\nMany people believe joy means feeling good all the time.\n但愉快感受只是快樂系統的一個狀態變數。\nPleasant emotion is only one state variable in a joy system.\n真正的快樂＝身體穩態＋情緒調節＋關係連結＋自主性＋勝任感＋意義＋希望＋恢復力＋更新能力。\nReal joy = physiological regulation + emotional regulation + connection + autonomy + competence + meaning + hope + resilience + updating capability.\n【短暫快樂可能靠運氣，持續生成快樂需要系統。】\n━━━━━━━━━━━━━━"}, {"title": "**《2｜Goal Function of Joy》**", "content": "低維目標：快樂越多越好，痛苦越少越好。\nLow-level goal: maximize pleasure and minimize pain.\n高維目標：在真實人生的限制與波動中，提高長期生命品質、調節能力、關係品質、自主性、意義感與恢復力。\nHigher-level goal: improve long-term quality of life, regulation, connection, autonomy, meaning, and resilience within real-world constraints.\n快樂目標函數＝身心穩態 × 關係品質 × 自主性 × 勝任感 × 意義感 × 恢復力 × 更新能力。\n━━━━━━━━━━━━━━"}, {"title": "**《3｜Core Concepts》**", "content": "感受 Emotion／需求 Needs／注意力 Attention／安全感 Safety／關係 Connection／自主 Autonomy／勝任 Competence／意義 Meaning。\n壓力 Stress／恢復 Recovery／界線 Boundaries／習慣 Habits／價值 Values／希望 Hope／韌性 Resilience／成長 Growth。\n時間配置 Time Allocation／選擇權 Optionality／心理彈性 Flexibility／安全基地 Secure Base。\n快樂≠快樂；沒有衝突≠好關係；忙碌≠充實；成功≠自我價值；痛苦≠人生失敗。\n【沒有清楚概念，就容易把刺激、認可與逃避誤認成快樂。】\n━━━━━━━━━━━━━━"}, {"title": "**《4｜Key Variables》**", "content": "收入穩定度／收入成長率／儲蓄率／固定成本／負債成本／資產配置／流動性／風險集中度。\n技能稀缺性／市場需求／信用／時間投入／健康／家庭責任／決策品質／資訊品質／制度／科技／運氣／更新速度。\n生活例子：兩個人月收入都十萬元，一人固定支出九萬五，另一人留下四萬持續累積資產。\n相同收入，不同結構，長期會生成完全不同的快樂軌跡。\n【快樂是一個多變數系統，不要用單一收入解釋整個財務人生。】\n━━━━━━━━━━━━━━"}, {"title": "**《5｜Relationships and Feedback Loops》**", "content": "惡性循環：收入不足→焦慮↑→短期決策↑→高成本借貸↑→現金流↓→焦慮再↑。\n生活膨脹循環：收入↑→消費標準↑→固定成本↑→必須維持高收入→選擇權↓。\n能力複利循環：能力↑→解決問題價值↑→收入↑→可投資盈餘↑→學習與資產↑→能力再↑。\n【真正的快樂智慧，是找到生成結果的 Feedback Loop，而不是只追逐結果。】\n━━━━━━━━━━━━━━"}, {"title": "**《6｜Parameters》**", "content": "多少固定成本會壓縮自由？多少負債開始威脅生存？多少槓桿超出承受能力？\n多少緊急預備金才適合自己的風險結構？多少收入集中在單一來源？\n判斷必須加入年齡、家庭責任、收入穩定度、資產、負債、流動性、時間、風險承受力與人生目標。\n【智慧不只是知道變數，更是知道變數的適當範圍。】\n━━━━━━━━━━━━━━"}, {"title": "**《7｜Strategy》**", "content": "提升高價值技能／增加問題解決能力／建立第二收入／降低無效固定成本／建立預備金。\n降低高成本負債／建立投資紀律／分散風險／累積信用／建立品牌、知識與內容資產。\n建立可複製流程／利用AI提高單位時間產出／保留流動性。\n【策略不是唯一答案，而是可測試、可比較、可更新的候選解法。】\n━━━━━━━━━━━━━━"}, {"title": "**《8｜Procedure》**", "content": "財務現況→盤點收入→支出→資產→負債→風險→設定目標→找瓶頸→提出候選策略→小規模測試。\n→取得結果→Feedback→Prediction Error→修正策略→再次執行。\n【知道快樂道理不是能力，能把知識變成可執行程序才開始形成能力。】\n━━━━━━━━━━━━━━"}, {"title": "**《9｜Feedback》**", "content": "觀察：收入成長率／自由現金流／儲蓄率／淨資產／流動性／負債成本／收入集中度。\n再看：資產集中度／單位時間產值／非工時收入占比／緊急預備月數／風險曝險／技能市場需求／選擇權。\n收入提高但固定成本同步暴增，系統韌性反而可能下降。\n【收入是輸出，快樂要看整個系統的狀態。】\n━━━━━━━━━━━━━━"}, {"title": "**《10｜Update Mechanism》**", "content": "市場、產業、科技、AI、利率、需求、工作、家庭、健康與人生目標都會變。\n行動→結果→Feedback→Prediction Error→診斷哪個假設、能力、成本、風險或策略失準。\n→模型修正→Joy System N+1→再次測試。\n【真正的快樂安全，不是找到永遠正確的方法，而是擁有持續修正方法的能力。】\n━━━━━━━━━━━━━━"}, {"title": "**《11｜How Joy Becomes Consumption》**", "content": "收入增加→身分焦慮→消費升級→固定成本增加→必須維持更高收入→自由下降。\n看起來富有，可能只是把未來的選擇權提前消費。\n【看起來富有與真正富有，是兩套不同系統。】\n━━━━━━━━━━━━━━"}, {"title": "**《12｜How Joy Becomes Hoarding》**", "content": "害怕失去→不敢使用資源→不敢投資能力→不敢承擔任何合理風險→錢增加但生命選擇沒有增加。\n【錢是資源，不是人生的終端目標。】\n━━━━━━━━━━━━━━"}, {"title": "**《13｜How Joy Becomes Gambling》**", "content": "渴望快速致富→FOMO→忽略尾部風險→槓桿↑→短期成功→過度自信→槓桿再增加→系統脆弱。\n【一次賺很多錢，不能證明模型正確；也可能只是風險尚未顯現。】\n━━━━━━━━━━━━━━"}, {"title": "**《14｜What Is Joy Wisdom?》**", "content": "不是永遠選到最高報酬，而是預測錯了仍能生存。\n不是永遠不犯錯，而是讓單次錯誤無法摧毀整個系統。\n不是錢最多，而是資源能持續轉化成選擇權。\n【讓錯誤可承受，讓正確可以複利。】\n━━━━━━━━━━━━━━"}, {"title": "**《15｜The Five Stages of Joy》**", "content": "第一階｜生存型：有錢支付下一張帳單。\n第二階｜收入型：用時間與能力交換收入。\n第三階｜累積型：收入→盈餘→資產→複利。\n第四階｜系統型：能力＋資產＋品牌＋信用＋流程＋科技共同產生價值。\n第五階｜智慧型：快樂服務生命、自由、利他與長期生成。\n━━━━━━━━━━━━━━"}, {"title": "**《16｜The Joy Generation Formula》**", "content": "知識＋能力＋需求辨識＋價值創造＋信用＋資源配置＋風險管理＋時間。\n→真實市場→壓力測試→Outcome→Prediction Error→Feedback→Model Update。\n→能力提升→更高價值→盈餘→資產→複利→選擇權→快樂智慧。\n━━━━━━━━━━━━━━"}, {"title": "**《17｜Nine Questions for Updating Joy》**", "content": "①我的真正目標函數是什麼？\n②最大瓶頸是收入、成本、能力、資產、流動性還是風險？\n③我的收入解決了誰的什麼問題？\n④這個價值是否仍具有稀缺性？\n⑤收入是否過度依賴單一來源？\n⑥哪些資產正在正向複利？\n⑦哪些成本或負債正在反向複利？\n⑧這次結果暴露哪個模型錯誤？\n⑨下次要做什麼不同？\n━━━━━━━━━━━━━━"}, {"title": "**《18｜Final Mind Map》**", "content": "現實世界→發現問題→辨識需求→知識→能力→解決問題→創造價值→交換→收入→盈餘。\n→資源配置→資產→風險管理→時間→複利→Feedback→Prediction Error→Model Update。\n→更高能力→更高價值→更多選擇權→快樂智慧。\n━━━━━━━━━━━━━━"}, {"title": "**《19｜Core Wisdom of Joy》**", "content": "收入讓資源進入系統。\n盈餘讓資源可以留下。\n資產讓過去的價值參與未來。\n風險管理讓錯誤不至於摧毀系統。\n信用降低交換摩擦。\n流動性讓人在變局中保有行動空間。\n時間讓正確的小優勢形成複利。\nPrediction Error 讓錯誤模型被看見。\n更新機制讓快樂系統適應新環境。\n━━━━━━━━━━━━━━"}], "財富": [{"title": "**《財富的生成系統｜The Wealth Generation System》**", "content": "財富 Wealth\n≠只有錢 Money Alone\n↓\n財富更像一套持續創造、交換、保存、配置、增值與更新價值的系統。\nWealth is a system for continuously creating, exchanging, preserving, allocating, growing, and updating value.\n收入讓錢進來；能力決定收入能否持續；系統決定錢能否留下；智慧決定資源能否穿越變化。\nIncome brings money in; capability sustains it; systems preserve it; wisdom helps resources survive change.\n━━━━━━━━━━━━━━"}, {"title": "**《1｜Ontology: What Is Wealth?》**", "content": "很多人以為財富＝帳戶裡有很多錢。\nMany people believe wealth means having a lot of money.\n但錢只是財富系統的一個狀態變數。\nMoney is only one state variable in a wealth system.\n真正的財富＝價值創造＋交換能力＋現金流＋資產＋信用＋風險韌性＋時間＋選擇權＋更新能力。\nReal wealth = value creation + exchange capability + cash flow + assets + trust + resilience + time + optionality + updating capability.\n【賺到錢可能靠機會，持續擁有財富靠系統。】\n━━━━━━━━━━━━━━"}, {"title": "**《2｜Goal Function of Wealth》**", "content": "低維目標：錢越多越好。\nLow-level goal: maximize money.\n高維目標：在可承受風險下，提高長期生存、選擇權與價值創造能力。\nHigher-level goal: increase survival, optionality, and value creation under manageable risk.\n財富目標函數＝價值創造 × 可持續現金流 × 資產累積 × 風險韌性 × 長期選擇權。\n━━━━━━━━━━━━━━"}, {"title": "**《3｜Core Concepts》**", "content": "價值 Value／需求 Demand／稀缺性 Scarcity／能力 Capability／交換 Exchange／收入 Income／成本 Cost／現金流 Cash Flow。\n儲蓄 Saving／資產 Assets／負債 Liabilities／風險 Risk／報酬 Return／信用 Trust／槓桿 Leverage／複利 Compounding。\n資源配置 Allocation／選擇權 Optionality／流動性 Liquidity／安全邊際 Margin of Safety。\n收入≠財富；高消費≠富有；投機≠投資；高報酬≠低風險；價格上漲≠永久價值增加。\n【沒有概念，就無法精確辨識財富。】\n━━━━━━━━━━━━━━"}, {"title": "**《4｜Key Variables》**", "content": "收入穩定度／收入成長率／儲蓄率／固定成本／負債成本／資產配置／流動性／風險集中度。\n技能稀缺性／市場需求／信用／時間投入／健康／家庭責任／決策品質／資訊品質／制度／科技／運氣／更新速度。\n生活例子：兩個人月收入都十萬元，一人固定支出九萬五，另一人留下四萬持續累積資產。\n相同收入，不同結構，長期會生成完全不同的財富軌跡。\n【財富是一個多變數系統，不要用單一收入解釋整個財務人生。】\n━━━━━━━━━━━━━━"}, {"title": "**《5｜Relationships and Feedback Loops》**", "content": "惡性循環：收入不足→焦慮↑→短期決策↑→高成本借貸↑→現金流↓→焦慮再↑。\n生活膨脹循環：收入↑→消費標準↑→固定成本↑→必須維持高收入→選擇權↓。\n能力複利循環：能力↑→解決問題價值↑→收入↑→可投資盈餘↑→學習與資產↑→能力再↑。\n【真正的財富智慧，是找到生成結果的 Feedback Loop，而不是只追逐結果。】\n━━━━━━━━━━━━━━"}, {"title": "**《6｜Parameters》**", "content": "多少固定成本會壓縮自由？多少負債開始威脅生存？多少槓桿超出承受能力？\n多少緊急預備金才適合自己的風險結構？多少收入集中在單一來源？\n判斷必須加入年齡、家庭責任、收入穩定度、資產、負債、流動性、時間、風險承受力與人生目標。\n【智慧不只是知道變數，更是知道變數的適當範圍。】\n━━━━━━━━━━━━━━"}, {"title": "**《7｜Strategy》**", "content": "提升高價值技能／增加問題解決能力／建立第二收入／降低無效固定成本／建立預備金。\n降低高成本負債／建立投資紀律／分散風險／累積信用／建立品牌、知識與內容資產。\n建立可複製流程／利用AI提高單位時間產出／保留流動性。\n【策略不是唯一答案，而是可測試、可比較、可更新的候選解法。】\n━━━━━━━━━━━━━━"}, {"title": "**《8｜Procedure》**", "content": "財務現況→盤點收入→支出→資產→負債→風險→設定目標→找瓶頸→提出候選策略→小規模測試。\n→取得結果→Feedback→Prediction Error→修正策略→再次執行。\n【知道財富道理不是能力，能把知識變成可執行程序才開始形成能力。】\n━━━━━━━━━━━━━━"}, {"title": "**《9｜Feedback》**", "content": "觀察：收入成長率／自由現金流／儲蓄率／淨資產／流動性／負債成本／收入集中度。\n再看：資產集中度／單位時間產值／非工時收入占比／緊急預備月數／風險曝險／技能市場需求／選擇權。\n收入提高但固定成本同步暴增，系統韌性反而可能下降。\n【收入是輸出，財富要看整個系統的狀態。】\n━━━━━━━━━━━━━━"}, {"title": "**《10｜Update Mechanism》**", "content": "市場、產業、科技、AI、利率、需求、工作、家庭、健康與人生目標都會變。\n行動→結果→Feedback→Prediction Error→診斷哪個假設、能力、成本、風險或策略失準。\n→模型修正→Wealth System N+1→再次測試。\n【真正的財富安全，不是找到永遠正確的方法，而是擁有持續修正方法的能力。】\n━━━━━━━━━━━━━━"}, {"title": "**《11｜How Wealth Becomes Consumption》**", "content": "收入增加→身分焦慮→消費升級→固定成本增加→必須維持更高收入→自由下降。\n看起來富有，可能只是把未來的選擇權提前消費。\n【看起來富有與真正富有，是兩套不同系統。】\n━━━━━━━━━━━━━━"}, {"title": "**《12｜How Wealth Becomes Hoarding》**", "content": "害怕失去→不敢使用資源→不敢投資能力→不敢承擔任何合理風險→錢增加但生命選擇沒有增加。\n【錢是資源，不是人生的終端目標。】\n━━━━━━━━━━━━━━"}, {"title": "**《13｜How Wealth Becomes Gambling》**", "content": "渴望快速致富→FOMO→忽略尾部風險→槓桿↑→短期成功→過度自信→槓桿再增加→系統脆弱。\n【一次賺很多錢，不能證明模型正確；也可能只是風險尚未顯現。】\n━━━━━━━━━━━━━━"}, {"title": "**《14｜What Is Wealth Wisdom?》**", "content": "不是永遠選到最高報酬，而是預測錯了仍能生存。\n不是永遠不犯錯，而是讓單次錯誤無法摧毀整個系統。\n不是錢最多，而是資源能持續轉化成選擇權。\n【讓錯誤可承受，讓正確可以複利。】\n━━━━━━━━━━━━━━"}, {"title": "**《15｜The Five Stages of Wealth》**", "content": "第一階｜生存型：有錢支付下一張帳單。\n第二階｜收入型：用時間與能力交換收入。\n第三階｜累積型：收入→盈餘→資產→複利。\n第四階｜系統型：能力＋資產＋品牌＋信用＋流程＋科技共同產生價值。\n第五階｜智慧型：財富服務生命、自由、利他與長期生成。\n━━━━━━━━━━━━━━"}, {"title": "**《16｜The Wealth Generation Formula》**", "content": "知識＋能力＋需求辨識＋價值創造＋信用＋資源配置＋風險管理＋時間。\n→真實市場→壓力測試→Outcome→Prediction Error→Feedback→Model Update。\n→能力提升→更高價值→盈餘→資產→複利→選擇權→財富智慧。\n━━━━━━━━━━━━━━"}, {"title": "**《17｜Nine Questions for Updating Wealth》**", "content": "①我的真正目標函數是什麼？\n②最大瓶頸是收入、成本、能力、資產、流動性還是風險？\n③我的收入解決了誰的什麼問題？\n④這個價值是否仍具有稀缺性？\n⑤收入是否過度依賴單一來源？\n⑥哪些資產正在正向複利？\n⑦哪些成本或負債正在反向複利？\n⑧這次結果暴露哪個模型錯誤？\n⑨下次要做什麼不同？\n━━━━━━━━━━━━━━"}, {"title": "**《18｜Final Mind Map》**", "content": "現實世界→發現問題→辨識需求→知識→能力→解決問題→創造價值→交換→收入→盈餘。\n→資源配置→資產→風險管理→時間→複利→Feedback→Prediction Error→Model Update。\n→更高能力→更高價值→更多選擇權→財富智慧。\n━━━━━━━━━━━━━━"}, {"title": "**《19｜Core Wisdom of Wealth》**", "content": "收入讓資源進入系統。\n盈餘讓資源可以留下。\n資產讓過去的價值參與未來。\n風險管理讓錯誤不至於摧毀系統。\n信用降低交換摩擦。\n流動性讓人在變局中保有行動空間。\n時間讓正確的小優勢形成複利。\nPrediction Error 讓錯誤模型被看見。\n更新機制讓財富系統適應新環境。\n━━━━━━━━━━━━━━"}]};
+        
+        const systems = Object.keys(data);
+        let currentSystem = null;
+        
+        // 建立系統選擇按鈕
+        const selectorDiv = document.getElementById('systemSelector');
+        systems.forEach(system => {
+            const btn = document.createElement('button');
+            btn.className = 'system-btn';
+            btn.textContent = system;
+            btn.onclick = function() {
+                selectSystem(system, this);
+            };
+            selectorDiv.appendChild(btn);
+        });
+        
+        // 選擇系統
+        function selectSystem(systemName, btn) {
+            currentSystem = systemName;
+            
+            // 更新按鈕狀態
+            document.querySelectorAll('.system-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // 更新內容
+            renderContent(systemName);
+        }
+        
+        // 渲染內容
+        function renderContent(systemName) {
+            const contentDiv = document.getElementById('contentArea');
+            const systemData = data[systemName];
+            
+            contentDiv.innerHTML = '<h2><span class="system-name">' + systemName + '</span>的生成系統 | ' + systemName + ' Generation System</h2>';
+            
+            const container = document.createElement('div');
+            container.className = 'sections-container';
+            
+            systemData.forEach((section, index) => {
+                const card = document.createElement('div');
+                card.className = 'section-card';
+                
+                const sectionHeader = document.createElement('div');
+                sectionHeader.className = 'section-header';
+                sectionHeader.textContent = section.title;
+                sectionHeader.innerHTML = section.title + '<span class="toggle-icon">▼</span>';
+                
+                sectionHeader.onclick = function() {
+                    card.classList.toggle('expanded');
+                };
+                
+                const sectionContent = document.createElement('div');
+                sectionContent.className = 'section-content';
+                
+                const bilingualDiv = document.createElement('div');
+                bilingualDiv.className = 'bilingual';
+                
+                const chineseDiv = document.createElement('div');
+                chineseDiv.className = 'chinese';
+                chineseDiv.textContent = section.content;
+                
+                const englishDiv = document.createElement('div');
+                englishDiv.className = 'english';
+                
+                const englishLabel = document.createElement('div');
+                englishLabel.className = 'english-label';
+                englishLabel.textContent = '英文 | English';
+                
+                const ttsBtn = document.createElement('button');
+                ttsBtn.className = 'tts-btn';
+                ttsBtn.textContent = '🔊 Speak';
+                ttsBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    speakText(section.content);
+                };
+                
+                englishDiv.appendChild(englishLabel);
+                englishDiv.appendChild(ttsBtn);
+                
+                bilingualDiv.appendChild(chineseDiv);
+                bilingualDiv.appendChild(englishDiv);
+                
+                sectionContent.appendChild(bilingualDiv);
+                
+                card.appendChild(sectionHeader);
+                card.appendChild(sectionContent);
+                
+                container.appendChild(card);
+            });
+            
+            contentDiv.appendChild(container);
+        }
+        
+        // 英文發聲
+        function speakText(text) {
+            // 取消任何正在進行的語音
+            speechSynthesis.cancel();
+            
+            // 建立說話請求
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            utterance.pitch = 1;
+            utterance.volume = 1;
+            
+            speechSynthesis.speak(utterance);
+        }
+        
+        // 初始化：選擇第一個系統
+        window.addEventListener('load', function() {
+            const firstBtn = document.querySelector('.system-btn');
+            if (firstBtn) {
+                firstBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
