@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High Agency 班級自治OS｜互動完整版 4.0</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --navy: #1A2B5F;
+            --gold: #C9960C;
+            --teal: #0A7A72;
+            --light-gray: #F5F5F5;
+            --border-gray: #E0E0E0;
+            --success: #28a745;
+            --danger: #dc3545;
+        }
+        body {
+            font-family: 'Microsoft JhengHei', 微軟正黑體, sans-serif;
+            background-color: #ffffff;
+            color: var(--navy);
+            line-height: 1.6;
+        }
+        .container-wrapper { display: flex; min-height: 100vh; }
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, var(--navy) 0%, #0D1B3E 100%);
+            color: white;
+            padding: 30px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+        .sidebar-logo {
+            padding: 0 25px 30px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+        .sidebar-logo h1 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: var(--gold);
+        }
+        .nav-section { margin-bottom: 20px; }
+        .nav-section-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            padding: 0 25px;
+            margin-bottom: 10px;
+        }
+        .nav-item {
+            padding: 10px 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            color: rgba(255,255,255,0.8);
+            font-size: 12px;
+        }
+        .nav-item:hover { background: rgba(255,255,255,0.1); color: var(--gold); }
+        .nav-item.active {
+            border-left-color: var(--gold);
+            background: rgba(201, 150, 12, 0.15);
+            color: var(--gold);
+        }
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 35px 45px;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+        .page-header {
+            margin-bottom: 25px;
+            border-bottom: 3px solid var(--gold);
+            padding-bottom: 15px;
+        }
+        .page-header h1 { font-size: 28px; color: var(--navy); margin-bottom: 5px; }
+        .card {
+            background: white;
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+        .card-header {
+            background: linear-gradient(90deg, var(--navy) 0%, #0D1B3E 100%);
+            color: white;
+            padding: 16px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .card-body { padding: 20px; }
+        .tab-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            border-bottom: 2px solid var(--border-gray);
+            flex-wrap: wrap;
+        }
+        .tab-button {
+            padding: 8px 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            color: rgba(26,43,95,0.6);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            margin-bottom: -2px;
+        }
+        .tab-button.active {
+            color: var(--navy);
+            border-bottom-color: var(--gold);
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: var(--navy);
+            font-size: 12px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 7px;
+            border: 1px solid var(--border-gray);
+            border-radius: 4px;
+            font-family: 'Microsoft JhengHei', sans-serif;
+            font-size: 12px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 12px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--navy) 0%, #0D1B3E 100%);
+            color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(26,43,95,0.3); }
+        .btn-danger { background: var(--danger); color: white; }
+        .table-full {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+        .table-full thead { background: var(--light-gray); }
+        .table-full th, .table-full td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-gray);
+        }
+        .table-full th { font-weight: bold; color: var(--navy); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .rating-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            margin: 10px 0;
+        }
+        .rating-select {
+            width: 100%;
+            padding: 5px;
+            font-size: 11px;
+        }
+        .alert {
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 12px;
+        }
+        .alert-success { background: #d4edda; border-left: 3px solid var(--success); color: #155724; }
+        .alert-danger { background: #f8d7da; border-left: 3px solid var(--danger); color: #721c24; }
+        .member-item {
+            background: var(--light-gray);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+        .member-info { flex: 1; }
+        .member-actions { display: flex; gap: 6px; }
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+        .stats-table thead { background: var(--light-gray); }
+        .stats-table th, .stats-table td {
+            padding: 6px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-gray);
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: var(--gold);
+            color: var(--navy);
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            margin: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-wrapper">
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <h1>⭐ High Agency</h1>
+                <p>班級自治OS｜互動版</p>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">管理系統</div>
+                <div class="nav-item active" onclick="switchPage('eval')">🎯 同儕評比系統</div>
+                <div class="nav-item" onclick="switchPage('culture')">🎨 班級文化</div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <!-- 同儕評比系統 -->
+            <div id="eval" class="page active">
+                <div class="page-header">
+                    <h1>🎯 同儕評比系統</h1>
+                    <p>6向度評分 + 實名制他評 + 統計分析</p>
+                </div>
+
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="switchTab('self-eval')">🪞 自評</button>
+                    <button class="tab-button" onclick="switchTab('peer-eval')">👥 他評</button>
+                    <button class="tab-button" onclick="switchTab('eval-stats')">📊 統計</button>
+                </div>
+
+                <!-- 自評 -->
+                <div id="self-eval" class="tab-content active">
+                    <div class="card">
+                        <div class="card-header">🪞 自我評價（6向度）</div>
+                        <div class="card-body">
+                            <div id="self-eval-alert"></div>
+                            <form onsubmit="submitSelfEval(event)">
+                                <div class="form-group">
+                                    <label>我的職位 *</label>
+                                    <select id="self-officer" required>
+                                        <option value="">選擇</option>
+                                        <option value="班長">班長</option><option value="副班長">副班長</option><option value="風紀股長">風紀股長</option><option value="學藝股長">學藝股長</option><option value="服務股長">服務股長</option><option value="總務股長">總務股長</option><option value="輔導股長">輔導股長</option><option value="康樂股長">康樂股長</option><option value="圖書股長">圖書股長</option><option value="合作股長">合作股長</option><option value="環保股長">環保股長</option><option value="班級代表">班級代表</option><option value="資訊股長">資訊股長</option>
+                                    </select>
+                                </div>
+
+                                <div style="background: var(--light-gray); padding: 10px; border-radius: 6px; margin: 12px 0; font-size: 12px; font-weight: bold;">
+                                    6大評分向度：
+                                    <div style="margin-top: 6px; font-size: 11px; font-weight: normal;">
+                                        1️⃣ 責任感 | 2️⃣ 主動性 | 3️⃣ 完成度<br>
+                                        4️⃣ 溝通合作 | 5️⃣ 問題處理 | 6️⃣ 持續改善
+                                    </div>
+                                </div>
+
+                                <div class="rating-grid" id="self-ratings">
+                                    <select class="rating-select" id="self-1" required><option value="">-</option><option value="1">1⭐</option><option value="2">2⭐</option><option value="3">3⭐</option><option value="4">4⭐</option><option value="5">5⭐</option></select>
+                                    <select class="rating-select" id="self-2" required><option value="">-</option><option value="1">1⭐</option><option value="2">2⭐</option><option value="3">3⭐</option><option value="4">4⭐</option><option value="5">5⭐</option></select>
+                                    <select class="rating-select" id="self-3" required><option value="">-</option><option value="1">1⭐</option><option value="2">2⭐</option><option value="3">3⭐</option><option value="4">4⭐</option><option value="5">5⭐</option></select>
+                                    <select class="rating-select" id="self-4" required><option value="">-</option><option value="1">1⭐</option><option value="2">2⭐</option><option value="3">3⭐</option><option value="4">4⭐</option><option value="5">5⭐</option></select>
+                                    <select class="rating-select" id="self-5" required><option value="">-</option><option value="1">1⭐</option><option value="2">2⭐</option><option value="3">3⭐</option><option value="4">4⭐</option><option value="5">5⭐</option></select>
+                                    <select class="rating-select" id="self-6" required><option value="">-</option><option value="1">1⭐</option><option value="2">2⭐</option><option value="3">3⭐</option><option value="4">4⭐</option><option value="5">5⭐</option></select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>我的反思和改善方向</label>
+                                    <textarea id="self-comment" style="min-height: 70px;"></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">📤 提交自評</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">📋 我的自評紀錄</div>
+                        <div class="card-body" id="self-eval-history"></div>
+                    </div>
+                </div>
+
+                <!-- 他評 -->
+                <div id="peer-eval" class="tab-content">
+                    <div class="card">
+                        <div class="card-header">👥 評比同學（實名制）</div>
+                        <div class="card-body">
+                            <div id="peer-eval-alert"></div>
+                            <form onsubmit="submitPeerEval(event)">
+                                <div style="background: #fff3cd; padding: 10px; border-radius: 6px; margin-bottom: 12px; font-size: 11px; border-left: 3px solid var(--gold);">
+                                    ⚠️ 實名制評比：防止漏評和重複評比。同一人無法評同一幹部兩次。
+                                </div>
+
+                                <div class="grid-2">
+                                    <div class="form-group">
+                                        <label>學號 *</label>
+                                        <input type="text" id="peer-id" required placeholder="例：202">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>姓名 *</label>
+                                        <input type="text" id="peer-name" required placeholder="例：王小明">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>評比對象（被評人） *</label>
+                                    <select id="peer-officer" required>
+                                        <option value="">選擇幹部</option>
+                                        <option value="班長">班長</option><option value="副班長">副班長</option><option value="風紀股長">風紀股長</option><option value="學藝股長">學藝股長</option><option value="服務股長">服務股長</option><option value="總務股長">總務股長</option><option value="輔導股長">輔導股長</option><option value="康樂股長">康樂股長</option><option value="圖書股長">圖書股長</option><option value="合作股長">合作股長</option><option value="環保股長">環保股長</option><option value="班級代表">班級代表</option><option value="資訊股長">資訊股長</option>
+                                    </select>
+                                </div>
+
+                                <div class="rating-grid">
+                                    <select class="rating-select" id="peer-1" required><option value="">-</option><option value="1">1⭐</option><option value="2">2⭐</option><option value="3">3⭐</option><option value="4">4⭐</option><option value="5">5⭐</option></select>
+                                    <select class="rating-select" id="peer-2" required><option value="">-</option><option value="1">1⭐</option><option value="2">2⭐</option><option value="3">3⭐</option><option value="4">4⭐</option><option value="5">5⭐</option></select>
+                                    <select class="rating-select" id="peer-3" required><option value="">-</option><option value="1">1⭐</option><option value="2">2⭐</option><option value="3">3⭐</option><option value="4">4⭐</option><option value="5">5⭐</option></select>
+                                    <select class="rating-select" id="peer-4" required><option value="">-</option><option value="1">1⭐</option><option value="2">2⭐</option><option value="3">3⭐</option><option value="4">4⭐</option><option value="5">5⭐</option></select>
+                                    <select class="rating-select" id="peer-5" required><option value="">-</option><option value="1">1⭐</option><option value="2">2⭐</option><option value="3">3⭐</option><option value="4">4⭐</option><option value="5">5⭐</option></select>
+                                    <select class="rating-select" id="peer-6" required><option value="">-</option><option value="1">1⭐</option><option value="2">2⭐</option><option value="3">3⭐</option><option value="4">4⭐</option><option value="5">5⭐</option></select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>觀察評論（禁止人身攻擊）</label>
+                                    <textarea id="peer-comment" style="min-height: 70px;" placeholder="例：「他這次的執行力很不錯，提出的建議很實用」"></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">📤 提交評比</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">📋 評比紀錄</div>
+                        <div class="card-body" id="peer-eval-history"></div>
+                    </div>
+                </div>
+
+                <!-- 統計 -->
+                <div id="eval-stats" class="tab-content">
+                    <div class="card">
+                        <div class="card-header">📊 自評 vs 他評對比</div>
+                        <div class="card-body" id="eval-comparison"></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">📈 Prediction Error 差異分析</div>
+                        <div class="card-body" id="prediction-error"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 班級文化 -->
+            <div id="culture" class="page">
+                <div class="page-header">
+                    <h1>🎨 班級文化</h1>
+                    <p>班級宣言 • 成員檔案 • 獎勵系統</p>
+                </div>
+
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="switchTab('class-mission')">📝 班級宣言</button>
+                    <button class="tab-button" onclick="switchTab('members')">👫 成員檔案</button>
+                    <button class="tab-button" onclick="switchTab('rewards')">🏆 獎勵系統</button>
+                </div>
+
+                <!-- 班級宣言 -->
+                <div id="class-mission" class="tab-content active">
+                    <div class="card">
+                        <div class="card-header">📝 班級宣言編輯</div>
+                        <div class="card-body">
+                            <form onsubmit="saveMission(event)">
+                                <div class="form-group">
+                                    <label>班級名稱 *</label>
+                                    <input type="text" id="class-name" placeholder="例：205班 / 獵鷹班" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>班級宣言 *</label>
+                                    <textarea id="class-vision" placeholder="班級的精神和目標" style="min-height: 70px;" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>班級座右銘</label>
+                                    <input type="text" id="class-motto" placeholder="例：High Agency, High Achievement">
+                                </div>
+                                <div class="form-group">
+                                    <label>班級核心價值</label>
+                                    <input type="text" id="class-values" placeholder="例：責任、合作、創新">
+                                </div>
+                                <button type="submit" class="btn btn-primary">💾 保存宣言</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">✨ 班級宣言展示</div>
+                        <div class="card-body" id="mission-display"></div>
+                    </div>
+                </div>
+
+                <!-- 成員檔案 -->
+                <div id="members" class="tab-content">
+                    <div class="card">
+                        <div class="card-header">➕ 新增成員</div>
+                        <div class="card-body">
+                            <form onsubmit="addMember(event)">
+                                <div class="grid-2">
+                                    <div class="form-group">
+                                        <label>學號 *</label>
+                                        <input type="text" id="member-id" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>姓名 *</label>
+                                        <input type="text" id="member-name" required>
+                                    </div>
+                                </div>
+
+                                <div class="grid-2">
+                                    <div class="form-group">
+                                        <label>性別</label>
+                                        <select id="member-gender">
+                                            <option value="">未設定</option>
+                                            <option value="男">男</option>
+                                            <option value="女">女</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>職位</label>
+                                        <select id="member-role">
+                                            <option value="">無</option>
+                                            <option value="班長">班長</option><option value="副班長">副班長</option><option value="風紀股長">風紀股長</option><option value="學藝股長">學藝股長</option><option value="服務股長">服務股長</option><option value="總務股長">總務股長</option><option value="輔導股長">輔導股長</option><option value="康樂股長">康樂股長</option><option value="圖書股長">圖書股長</option><option value="合作股長">合作股長</option><option value="環保股長">環保股長</option><option value="班級代表">班級代表</option><option value="資訊股長">資訊股長</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">✓ 新增</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">👥 全班成員名單</div>
+                        <div class="card-body" id="members-list"></div>
+                    </div>
+                </div>
+
+                <!-- 獎勵系統 -->
+                <div id="rewards" class="tab-content">
+                    <div class="card">
+                        <div class="card-header">➕ 新增獎勵記錄</div>
+                        <div class="card-body">
+                            <form onsubmit="addReward(event)">
+                                <div class="form-group">
+                                    <label>獲獎人（學號+姓名） *</label>
+                                    <select id="reward-member" required>
+                                        <option value="">選擇成員</option>
+                                    </select>
+                                </div>
+
+                                <div class="grid-2">
+                                    <div class="form-group">
+                                        <label>獎勵類型 *</label>
+                                        <select id="reward-type" required>
+                                            <option value="">選擇</option>
+                                            <option value="xp">增加XP</option>
+                                            <option value="badge">獲得徽章</option>
+                                            <option value="title">升級等級</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>獎勵內容 *</label>
+                                        <input type="text" id="reward-content" required placeholder="例：+100XP、領導者徽章">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>理由</label>
+                                    <textarea id="reward-reason" style="min-height: 60px;"></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">🎖️ 新增獎勵</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">🏆 獎勵榜單</div>
+                        <div class="card-body" id="rewards-list"></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">📊 成員XP統計</div>
+                        <div class="card-body" id="xp-stats"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+const OFFICERS = ["班長","副班長","風紀股長","學藝股長","服務股長","總務股長","輔導股長","康樂股長","圖書股長","合作股長","環保股長","班級代表","資訊股長"];
+
+function switchPage(pageName) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageName).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+function switchTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById(tabName).classList.add('active');
+    document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+function getStorage(key, defaultValue = []) {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : defaultValue;
+}
+
+function saveStorage(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+}
+
+function submitSelfEval(event) {
+    event.preventDefault();
+    const officer = document.getElementById('self-officer').value;
+    const ratings = [];
+    for (let i = 1; i <= 6; i++) {
+        const val = document.getElementById(`self-${i}`).value;
+        if (!val) {
+            alert('⚠️ 請完成所有6向度評分');
+            return;
+        }
+        ratings.push(parseInt(val));
+    }
+    const avg = (ratings.reduce((a, b) => a + b) / ratings.length).toFixed(1);
+    
+    const eval = {
+        id: Date.now(),
+        officer: officer,
+        ratings: ratings,
+        avg: avg,
+        comment: document.getElementById('self-comment').value,
+        date: new Date().toLocaleDateString('zh-TW'),
+        type: 'self'
+    };
+
+    const evals = getStorage('evals', []);
+    evals.push(eval);
+    saveStorage('evals', evals);
+
+    document.getElementById('self-eval-alert').innerHTML = '<div class="alert alert-success">✅ 自評已提交！平均分：' + avg + '</div>';
+    event.target.reset();
+    displaySelfHistory();
+}
+
+function submitPeerEval(event) {
+    event.preventDefault();
+    const sid = document.getElementById('peer-id').value;
+    const sname = document.getElementById('peer-name').value;
+    const officer = document.getElementById('peer-officer').value;
+    
+    const evals = getStorage('evals', []);
+    if (evals.find(e => e.type === 'peer' && e.studentId === sid && e.officer === officer)) {
+        document.getElementById('peer-eval-alert').innerHTML = '<div class="alert alert-danger">❌ ' + sid + ' ' + sname + ' 已評比過 ' + officer + '！無法重複評比</div>';
+        return;
+    }
+
+    const ratings = [];
+    for (let i = 1; i <= 6; i++) {
+        const val = document.getElementById(`peer-${i}`).value;
+        if (!val) {
+            alert('⚠️ 請完成所有6向度評分');
+            return;
+        }
+        ratings.push(parseInt(val));
+    }
+    const avg = (ratings.reduce((a, b) => a + b) / ratings.length).toFixed(1);
+
+    const eval = {
+        id: Date.now(),
+        studentId: sid,
+        studentName: sname,
+        officer: officer,
+        ratings: ratings,
+        avg: avg,
+        comment: document.getElementById('peer-comment').value,
+        date: new Date().toLocaleDateString('zh-TW'),
+        type: 'peer'
+    };
+
+    evals.push(eval);
+    saveStorage('evals', evals);
+
+    document.getElementById('peer-eval-alert').innerHTML = '<div class="alert alert-success">✅ ' + sname + ' 評比 ' + officer + ' 已提交！</div>';
+    event.target.reset();
+    displayPeerHistory();
+}
+
+function displaySelfHistory() {
+    const evals = getStorage('evals', []).filter(e => e.type === 'self');
+    let html = '';
+    if (evals.length === 0) {
+        html = '<p style="color: #999;">暫無自評紀錄</p>';
+    } else {
+        evals.forEach(e => {
+            html += `<div style="background: var(--light-gray); padding: 12px; border-radius: 6px; margin-bottom: 10px; border-left: 4px solid var(--teal);">
+                <div style="font-weight: bold; color: var(--navy);">${e.officer} - ${e.date}</div>
+                <div style="font-size: 11px; margin-top: 6px;">平均分：<strong>${e.avg}</strong> | 評分：${e.ratings.join(', ')}</div>
+                <div style="font-size: 11px; color: rgba(26,43,95,0.7); margin-top: 4px;">💭 ${e.comment || '無'}</div>
+            </div>`;
+        });
+    }
+    document.getElementById('self-eval-history').innerHTML = html;
+}
+
+function displayPeerHistory() {
+    const evals = getStorage('evals', []).filter(e => e.type === 'peer');
+    let html = '';
+    if (evals.length === 0) {
+        html = '<p style="color: #999;">暫無他評紀錄</p>';
+    } else {
+        evals.forEach(e => {
+            html += `<div style="background: var(--light-gray); padding: 12px; border-radius: 6px; margin-bottom: 10px; border-left: 4px solid var(--gold);">
+                <div style="font-weight: bold; color: var(--navy);">${e.studentName} (${e.studentId}) → ${e.officer}</div>
+                <div style="font-size: 11px; margin-top: 6px;">日期：${e.date} | 平均分：<strong>${e.avg}</strong> | 評分：${e.ratings.join(', ')}</div>
+                <div style="font-size: 11px; color: rgba(26,43,95,0.7); margin-top: 4px;">💬 ${e.comment || '無'}</div>
+            </div>`;
+        });
+    }
+    document.getElementById('peer-eval-history').innerHTML = html;
+}
+
+function displayStats() {
+    const evals = getStorage('evals', []);
+    const selfEvals = evals.filter(e => e.type === 'self');
+    const peerEvals = evals.filter(e => e.type === 'peer');
+    
+    let html = '<table class="table-full"><thead><tr><th>幹部</th><th>自評</th><th>他評</th><th>他評數</th><th>平均差異</th></tr></thead><tbody>';
+    
+    OFFICERS.forEach(officer => {
+        const selfAvg = selfEvals.filter(e => e.officer === officer).map(e => parseFloat(e.avg))[0] || '-';
+        const peerData = peerEvals.filter(e => e.officer === officer);
+        const peerAvg = peerData.length > 0 ? (peerData.reduce((a, b) => a + parseFloat(b.avg), 0) / peerData.length).toFixed(1) : '-';
+        const diff = (selfAvg !== '-' && peerAvg !== '-') ? (parseFloat(selfAvg) - parseFloat(peerAvg)).toFixed(2) : '-';
+        
+        let status = '';
+        if (diff !== '-') {
+            if (Math.abs(diff) < 0.5) status = '✓ 認知一致';
+            else if (diff > 0.5) status = '⚠️ 自評高於他評';
+            else status = '💡 他評高於自評';
+        }
+        
+        html += `<tr>
+            <td>${officer}</td>
+            <td>${selfAvg}</td>
+            <td>${peerAvg}</td>
+            <td>${peerData.length}</td>
+            <td>${diff} ${status}</td>
+        </tr>`;
+    });
+    
+    html += '</tbody></table>';
+    document.getElementById('eval-comparison').innerHTML = html;
+
+    html = '<div>';
+    OFFICERS.forEach(officer => {
+        const peerData = peerEvals.filter(e => e.officer === officer);
+        const selfAvg = selfEvals.filter(e => e.officer === officer).map(e => parseFloat(e.avg))[0];
+        const peerAvg = peerData.length > 0 ? (peerData.reduce((a, b) => a + parseFloat(b.avg), 0) / peerData.length) : 0;
+        
+        if (peerData.length > 0 && selfAvg) {
+            const diff = (selfAvg - peerAvg).toFixed(2);
+            let analysis = '';
+            if (Math.abs(diff) < 0.5) analysis = '✓ <strong>認知基本一致</strong> - 自我認知和同學評價相符，說明自我認知準確';
+            else if (diff > 0.5) analysis = '⚠️ <strong>自評高於他評</strong> - 建議更謙虛地看待自己的表現，多聽取同學意見';
+            else analysis = '💡 <strong>他評高於自評</strong> - 同學認可度高，建議更有信心，繼續保持努力';
+            
+            html += `<div style="background: var(--light-gray); padding: 12px; border-radius: 6px; margin-bottom: 10px; border-left: 4px solid var(--navy);">
+                <div style="font-weight: bold; color: var(--navy);">${officer}</div>
+                <div style="font-size: 11px; margin-top: 4px;">自評：${selfAvg} | 他評平均：${peerAvg.toFixed(1)} | 差異：${diff}</div>
+                <div style="font-size: 11px; margin-top: 6px;">${analysis}</div>
+            </div>`;
+        }
+    });
+    html += '</div>';
+    document.getElementById('prediction-error').innerHTML = html;
+}
+
+function saveMission(event) {
+    event.preventDefault();
+    const mission = {
+        name: document.getElementById('class-name').value,
+        vision: document.getElementById('class-vision').value,
+        motto: document.getElementById('class-motto').value,
+        values: document.getElementById('class-values').value
+    };
+    saveStorage('mission', mission);
+    alert('✓ 班級宣言已保存');
+    displayMission();
+}
+
+function displayMission() {
+    const mission = getStorage('mission', {});
+    if (!mission.vision) {
+        document.getElementById('mission-display').innerHTML = '<p style="color: #999;">尚未設定班級宣言</p>';
+        return;
+    }
+    
+    let html = `<div style="background: linear-gradient(135deg, var(--navy) 0%, #0D1B3E 100%); color: white; padding: 20px; border-radius: 6px; text-align: center;">
+        <div style="font-size: 18px; font-weight: bold; margin-bottom: 12px;">${mission.name}</div>
+        <div style="font-size: 14px; margin-bottom: 10px; font-weight: bold; line-height: 1.6;">「${mission.vision}」</div>
+        <div style="font-size: 12px; color: var(--gold); margin-bottom: 10px; font-weight: bold;">${mission.motto || '班級座右銘'}</div>
+        <div style="font-size: 12px;">核心價值：${mission.values || '責任、合作、創新'}</div>
+    </div>`;
+    document.getElementById('mission-display').innerHTML = html;
+}
+
+function addMember(event) {
+    event.preventDefault();
+    const member = {
+        id: document.getElementById('member-id').value,
+        name: document.getElementById('member-name').value,
+        gender: document.getElementById('member-gender').value,
+        role: document.getElementById('member-role').value,
+        xp: 0
+    };
+
+    const members = getStorage('members', []);
+    members.push(member);
+    saveStorage('members', members);
+
+    updateRewardMemberSelect();
+    alert('✓ 成員已新增');
+    event.target.reset();
+    displayMembers();
+}
+
+function deleteMembe(id) {
+    if (confirm('確定要刪除這位成員嗎？')) {
+        const members = getStorage('members', []).filter(m => m.id !== id);
+        saveStorage('members', members);
+        updateRewardMemberSelect();
+        displayMembers();
+    }
+}
+
+function displayMembers() {
+    const members = getStorage('members', []);
+    let html = '';
+    if (members.length === 0) {
+        html = '<p style="color: #999;">暫無成員，請先新增成員</p>';
+    } else {
+        members.forEach(m => {
+            html += `<div class="member-item">
+                <div class="member-info">
+                    <div style="font-weight: bold;">${m.id} ${m.name}</div>
+                    <div style="font-size: 10px; color: rgba(26,43,95,0.6);">${m.gender || '未設定'} | ${m.role || '無職位'}</div>
+                </div>
+                <div class="member-actions">
+                    <button onclick="deleteMembe('${m.id}')" class="btn btn-danger" style="padding: 4px 8px; font-size: 11px;">刪除</button>
+                </div>
+            </div>`;
+        });
+    }
+    document.getElementById('members-list').innerHTML = html;
+}
+
+function updateRewardMemberSelect() {
+    const members = getStorage('members', []);
+    let html = '<option value="">選擇成員</option>';
+    members.forEach(m => {
+        html += `<option value="${m.id}|${m.name}">${m.id} ${m.name}</option>`;
+    });
+    document.getElementById('reward-member').innerHTML = html;
+}
+
+function addReward(event) {
+    event.preventDefault();
+    const [memberId, memberName] = document.getElementById('reward-member').value.split('|');
+    const reward = {
+        id: Date.now(),
+        memberId: memberId,
+        memberName: memberName,
+        type: document.getElementById('reward-type').value,
+        content: document.getElementById('reward-content').value,
+        reason: document.getElementById('reward-reason').value,
+        date: new Date().toLocaleDateString('zh-TW')
+    };
+
+    const rewards = getStorage('rewards', []);
+    rewards.push(reward);
+    saveStorage('rewards', rewards);
+
+    // 更新XP
+    if (reward.type === 'xp') {
+        const members = getStorage('members', []);
+        const member = members.find(m => m.id === memberId);
+        if (member) {
+            const xpNum = parseInt(reward.content.match(/\d+/)[0]) || 0;
+            member.xp = (member.xp || 0) + xpNum;
+            saveStorage('members', members);
+        }
+    }
+
+    alert('🎖️ 獎勵已新增');
+    event.target.reset();
+    displayRewards();
+    displayXPStats();
+}
+
+function displayRewards() {
+    const rewards = getStorage('rewards', []);
+    let html = '';
+    if (rewards.length === 0) {
+        html = '<p style="color: #999;">暫無獎勵紀錄</p>';
+    } else {
+        rewards.forEach(r => {
+            html += `<div style="background: var(--light-gray); padding: 12px; border-radius: 6px; margin-bottom: 10px; border-left: 4px solid var(--gold);">
+                <div style="font-weight: bold; color: var(--navy);">🎖️ ${r.memberName} - ${r.content}</div>
+                <div style="font-size: 11px; color: rgba(26,43,95,0.6); margin-top: 4px;">${r.date} | ${r.reason}</div>
+            </div>`;
+        });
+    }
+    document.getElementById('rewards-list').innerHTML = html;
+}
+
+function displayXPStats() {
+    const members = getStorage('members', []).sort((a, b) => (b.xp || 0) - (a.xp || 0));
+    let html = '<table class="table-full"><thead><tr><th>姓名</th><th>學號</th><th>XP</th><th>等級</th></tr></thead><tbody>';
+    
+    members.forEach((m, idx) => {
+        const xp = m.xp || 0;
+        let level = '銅';
+        if (xp >= 500) level = '鑽';
+        else if (xp >= 300) level = '金';
+        else if (xp >= 100) level = '銀';
+        
+        html += `<tr><td>${m.name}</td><td>${m.id}</td><td>${xp}</td><td>${level}</td></tr>`;
+    });
+    
+    html += '</tbody></table>';
+    document.getElementById('xp-stats').innerHTML = html;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    displaySelfHistory();
+    displayPeerHistory();
+    displayStats();
+    displayMission();
+    displayMembers();
+    updateRewardMemberSelect();
+    displayRewards();
+    displayXPStats();
+});
+    </script>
+</body>
+</html>
