@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高Agency手機自律系統 - Phone Autonomy OS</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --navy: #1A2B5F;
+            --gold: #C9960C;
+            --teal: #0A7A72;
+        }
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            background: #F5F5F5;
+            color: #1A1A1A;
+            line-height: 1.6;
+        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        
+        header {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        header h1 { font-size: 32px; margin-bottom: 10px; }
+        header .subtitle { font-size: 16px; opacity: 0.95; }
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .tab-btn {
+            padding: 12px 24px;
+            border: 2px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+        }
+        .tab-btn:hover { border-color: var(--gold); color: var(--gold); }
+        .tab-btn.active {
+            background: var(--navy);
+            color: white;
+            border-color: var(--navy);
+        }
+        
+        .content { display: none; }
+        .content.show { display: block; }
+        
+        .section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .section h2 {
+            color: var(--navy);
+            font-size: 24px;
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--gold);
+            padding-bottom: 10px;
+        }
+        .section h3 {
+            color: var(--teal);
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .bilingual-item {
+            background: #F9F9F9;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--teal);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .zh-side {
+            flex: 1;
+        }
+        .zh-side .label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .zh-side .text {
+            color: var(--navy);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .en-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .en-side .label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .en-side .text {
+            color: #555;
+            font-size: 15px;
+            font-style: italic;
+            line-height: 1.6;
+            flex: 1;
+        }
+        
+        .tts-btn {
+            background: var(--teal);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            align-self: flex-start;
+            margin-top: auto;
+        }
+        .tts-btn:hover {
+            background: #085654;
+            transform: translateY(-2px);
+        }
+        .tts-btn.playing {
+            background: var(--gold);
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .card {
+            padding: 12px;
+            background: #F9F9F9;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .card:hover {
+            background: var(--gold);
+            color: white;
+            border-color: var(--gold);
+        }
+        .card.selected {
+            background: var(--navy);
+            color: white;
+            border-color: var(--navy);
+        }
+        
+        .skill-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        .skill-header {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .skill-header .arrow {
+            transition: transform 0.3s;
+        }
+        .skill-card.expanded .skill-header .arrow {
+            transform: rotate(180deg);
+        }
+        .skill-body {
+            display: none;
+            padding: 20px;
+            background: #F9F9F9;
+        }
+        .skill-card.expanded .skill-body {
+            display: block;
+        }
+        .skill-body ul { margin-left: 20px; }
+        .skill-body li { margin: 8px 0; color: #333; }
+        
+        .flow-item {
+            padding: 15px;
+            background: #F0F0F0;
+            margin: 10px 0;
+            border-left: 4px solid var(--teal);
+            border-radius: 4px;
+        }
+        .flow-item strong { color: var(--navy); }
+        
+        .input-group {
+            margin: 15px 0;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--navy);
+        }
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            font-size: 14px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: var(--navy);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #0F1B4D;
+            transform: translateY(-2px);
+        }
+        
+        table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+        table th {
+            background: var(--navy);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        table tr:nth-child(even) {
+            background: #F9F9F9;
+        }
+        
+        @media (max-width: 900px) {
+            .bilingual-item {
+                grid-template-columns: 1fr;
+            }
+            .card-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 高Agency手機自律系統</h1>
+            <div class="subtitle">Phone Autonomy OS | 重新設計系統，而不是靠意志力忍耐</div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('diagnosis')">📊 診斷系統</button>
+            <button class="tab-btn" onclick="switchTab('skills')">🎯 Skill庫</button>
+            <button class="tab-btn" onclick="switchTab('tree')">🌳 決策樹</button>
+            <button class="tab-btn" onclick="switchTab('tracking')">📈 追蹤</button>
+            <button class="tab-btn" onclick="switchTab('guide')">📚 指南</button>
+        </div>
+
+        <!-- DIAGNOSIS TAB -->
+        <div id="diagnosis" class="content show">
+            <div class="section">
+                <h2>📊 13步診斷流程</h2>
+                <div class="bilingual-item">
+                    <div class="zh-side">
+                        <div class="label">診斷說明</div>
+                        <div class="text">讓我們逐步理解你的手機行為機制。回答越詳細，系統越精準。</div>
+                    </div>
+                    <div class="en-side">
+                        <div class="label">System Intro</div>
+                        <div class="text">Understand your phone behavior mechanism step by step. The more detailed your answers, the more accurate the system.</div>
+                        <button class="tts-btn" onclick="speakText('Understand your phone behavior mechanism step by step. The more detailed your answers, the more accurate the system.')">🔊 Speak</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>01 | Input | 蒐集真實資料</h3>
+                <div class="bilingual-item">
+                    <div class="zh-side">
+                        <div class="label">第一步</div>
+                        <div class="text">你最容易忍不住拿手機的時刻？(可複選)</div>
+                    </div>
+                    <div class="en-side">
+                        <div class="label">Step 1</div>
+                        <div class="text">When do you find it hardest to resist picking up your phone?</div>
+                        <button class="tts-btn" onclick="speakText('When do you find it hardest to resist picking up your phone?')">🔊 Speak</button>
+                    </div>
+                </div>
+                <div class="card-grid">
+                    <div class="card" onclick="toggleCard(this)">上課無聊時</div>
+                    <div class="card" onclick="toggleCard(this)">老師講太久</div>
+                    <div class="card" onclick="toggleCard(this)">看不懂時</div>
+                    <div class="card" onclick="toggleCard(this)">寫題目卡住</div>
+                    <div class="card" onclick="toggleCard(this)">讀書時</div>
+                    <div class="card" onclick="toggleCard(this)">睡覺前</div>
+                    <div class="card" onclick="toggleCard(this)">剛起床</div>
+                    <div class="card" onclick="toggleCard(this)">吃飯時</div>
+                    <div class="card" onclick="toggleCard(this)">等人時</div>
+                    <div class="card" onclick="toggleCard(this)">心情不好時</div>
+                    <div class="card" onclick="toggleCard(this)">焦慮時</div>
+                    <div class="card" onclick="toggleCard(this)">孤單時</div>
+                    <div class="card" onclick="toggleCard(this)">收到通知時</div>
+                    <div class="card" onclick="toggleCard(this)">看到手機放桌上</div>
+                    <div class="card" onclick="toggleCard(this)">朋友傳訊息</div>
+                    <div class="card" onclick="toggleCard(this)">沒有事情做</div>
+                </div>
+
+                <div class="bilingual-item">
+                    <div class="zh-side">
+                        <div class="label">第二問</div>
+                        <div class="text">拿起手機後通常做什麼？</div>
+                    </div>
+                    <div class="en-side">
+                        <div class="label">Question 2</div>
+                        <div class="text">What do you usually do when you pick up your phone?</div>
+                        <button class="tts-btn" onclick="speakText('What do you usually do when you pick up your phone?')">🔊 Speak</button>
+                    </div>
+                </div>
+                <div class="card-grid">
+                    <div class="card" onclick="toggleCard(this)">LINE</div>
+                    <div class="card" onclick="toggleCard(this)">Instagram</div>
+                    <div class="card" onclick="toggleCard(this)">YouTube</div>
+                    <div class="card" onclick="toggleCard(this)">短影音</div>
+                    <div class="card" onclick="toggleCard(this)">遊戲</div>
+                    <div class="card" onclick="toggleCard(this)">購物</div>
+                    <div class="card" onclick="toggleCard(this)">看新聞</div>
+                    <div class="card" onclick="toggleCard(this)">查資料後順便滑</div>
+                </div>
+
+                <div class="bilingual-item">
+                    <div class="zh-side">
+                        <div class="label">預期vs現實</div>
+                        <div class="text">原本只想用多久？實際用了多久？<br/>Expected vs Actual = Prediction Error出現</div>
+                    </div>
+                    <div class="en-side">
+                        <div class="label">Expected vs Actual</div>
+                        <div class="text">How long did you plan to use it? How long did you actually use it?<br/>This gap reveals your prediction error.</div>
+                        <button class="tts-btn" onclick="speakText('How long did you plan to use it? How long did you actually use it? This gap reveals your prediction error.')">🔊 Speak</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>02 | Diagnosis | 診斷機制，不是人格</h3>
+                <div class="bilingual-item">
+                    <div class="zh-side">
+                        <div class="label">重要提醒</div>
+                        <div class="text">不要接受「我就是沒有自制力」的自診。真正的問題是什麼機制生成了這個行為？</div>
+                    </div>
+                    <div class="en-side">
+                        <div class="label">Key Principle</div>
+                        <div class="text">Don't accept "I have no self-control." Ask: What mechanism generates this behavior?</div>
+                        <button class="tts-btn" onclick="speakText('Do not accept I have no self control. Ask: What mechanism generates this behavior?')">🔊 Speak</button>
+                    </div>
+                </div>
+                <div class="card-grid">
+                    <div class="card">A｜無聊型</div>
+                    <div class="card">B｜焦慮逃避型</div>
+                    <div class="card">C｜通知觸發型</div>
+                    <div class="card">D｜習慣自動型</div>
+                    <div class="card">E｜任務太難型</div>
+                    <div class="card">F｜任務太大型</div>
+                    <div class="card">G｜即時獎賞型</div>
+                    <div class="card">H｜社交需求型</div>
+                    <div class="card">I｜睡眠不足型</div>
+                    <div class="card">J｜環境誘惑型</div>
+                    <div class="card">K｜情緒調節型</div>
+                    <div class="card">L｜缺乏目標型</div>
+                    <div class="card">M｜啟動困難型</div>
+                    <div class="card">N｜注意力週期型</div>
+                    <div class="card">O｜FOMO型</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>03-13 | 完整流程概覽</h3>
+                <div class="flow-item">
+                    <strong>03｜Pattern</strong> - 找反覆出現的模式（時間、地點、情緒、前置事件）<br/>
+                    <em style="color:#666;font-size:14px;">Find recurring patterns: timing, location, emotions, preceding events</em>
+                </div>
+                <div class="flow-item">
+                    <strong>04｜Bottleneck</strong> - 找真正的限制節點（環境｜任務難度｜注意力｜情緒｜通知）<br/>
+                    <em style="color:#666;font-size:14px;">Find the true constraint: environment | task difficulty | attention | emotion | notifications</em>
+                </div>
+                <div class="flow-item">
+                    <strong>05｜Priority Node</strong> - 選最大槓桿點（不要改十件事，先改一件最有影響的）<br/>
+                    <em style="color:#666;font-size:14px;">Choose the highest leverage point. Don't fix ten things; fix the one that matters most.</em>
+                </div>
+                <div class="flow-item">
+                    <strong>06-13｜完整迴路</strong> - Skill設計、最小介入、行動、Feedback、Prediction Error、Model Update、Retest<br/>
+                    <em style="color:#666;font-size:14px;">Skill design → Minimum intervention → Action → Feedback → Error recognition → Update → Retest</em>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="alert('✅ 診斷資料保存中...')">💾 保存診斷資料</button>
+        </div>
+
+        <!-- SKILLS TAB -->
+        <div id="skills" class="content">
+            <div class="section">
+                <h2>🎯 15種核心Skill</h2>
+                <div class="bilingual-item">
+                    <div class="zh-side">
+                        <div class="label">Skill說明</div>
+                        <div class="text">根據不同的Bottleneck，配不同的能力。按卡片展開查看具體方法。</div>
+                    </div>
+                    <div class="en-side">
+                        <div class="label">How Skills Work</div>
+                        <div class="text">Match different bottlenecks with targeted skills. Click to expand and see specific methods.</div>
+                        <button class="tts-btn" onclick="speakText('Match different bottlenecks with targeted skills. Click to expand and see specific methods.')">🔊 Speak</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="skill-card">
+                    <div class="skill-header" onclick="toggleSkill(this)">
+                        📵 手機離視線Skill【環境刺激型】
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="skill-body">
+                        <strong style="color:var(--navy);">Phone Out of Sight Skill 【Visual Stimulus Type】</strong>
+                        <ul>
+                            <li>手機放書包最內層 → Put phone in innermost pocket of backpack</li>
+                            <li>手機放教室指定位置 → Keep phone at designated classroom location</li>
+                            <li>進教室前手機離開桌面 → Remove phone from desk before entering class</li>
+                        </ul>
+                        <div class="bilingual-item" style="margin-top:15px;">
+                            <div class="zh-side">
+                                <div class="label">核心原理</div>
+                                <div class="text">降低刺激的可見性 = 降低衝動觸發機率</div>
+                            </div>
+                            <div class="en-side">
+                                <div class="label">Core Principle</div>
+                                <div class="text">Reduce visibility of temptation = Reduce impulse trigger frequency</div>
+                                <button class="tts-btn" onclick="speakText('Reduce visibility of temptation. This reduces impulse trigger frequency.')">🔊 Speak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header" onclick="toggleSkill(this)">
+                        🔕 通知斷流Skill【通知觸發型】
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="skill-body">
+                        <strong style="color:var(--navy);">Notification Cutoff Skill 【Trigger Type】</strong>
+                        <ul>
+                            <li>關閉非必要通知 → Turn off non-essential notifications</li>
+                            <li>取消震動 → Disable vibration</li>
+                            <li>移除鎖定畫面預覽 → Remove lock screen previews</li>
+                            <li>設定勿擾模式時段 → Set Do Not Disturb schedules</li>
+                        </ul>
+                        <div class="bilingual-item" style="margin-top:15px;">
+                            <div class="zh-side">
+                                <div class="label">核心原理</div>
+                                <div class="text">外在刺激消失 = 自動衝動消失</div>
+                            </div>
+                            <div class="en-side">
+                                <div class="label">Core Principle</div>
+                                <div class="text">Remove external triggers = Eliminate automatic impulses</div>
+                                <button class="tts-btn" onclick="speakText('Remove external triggers. This eliminates automatic impulses.')">🔊 Speak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header" onclick="toggleSkill(this)">
+                        ⏱️ 10分鐘專注Skill【注意力週期型】
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="skill-body">
+                        <strong style="color:var(--navy);">10-Minute Focus Skill 【Attention Cycle Type】</strong>
+                        <ul>
+                            <li>不要求專心一整節 → Don't demand full-class focus</li>
+                            <li>只要求先完成10分鐘 → Only require 10 minutes to start</li>
+                            <li>設置小型獎賞間隔 → Set mini-reward intervals</li>
+                            <li>10分鐘後允許短暫休息 → Allow brief breaks after 10 minutes</li>
+                        </ul>
+                        <div class="bilingual-item" style="margin-top:15px;">
+                            <div class="zh-side">
+                                <div class="label">核心原理</div>
+                                <div class="text">降低心理負擔 = 更容易開始</div>
+                            </div>
+                            <div class="en-side">
+                                <div class="label">Core Principle</div>
+                                <div class="text">Lower psychological burden = Easier to start</div>
+                                <button class="tts-btn" onclick="speakText('Lower psychological burden to make it easier to start.')">🔊 Speak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header" onclick="toggleSkill(this)">
+                        ✂️ 任務拆解Skill【任務太大型、啟動困難型】
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="skill-body">
+                        <strong style="color:var(--navy);">Task Breakdown Skill 【Overwhelm Type】</strong>
+                        <ul>
+                            <li>「讀英文」→ 先讀第一段 → "Read English" → Start with paragraph 1</li>
+                            <li>圈3個關鍵字 → Circle 3 keywords</li>
+                            <li>回答第1題 → Answer question 1</li>
+                            <li>每一步都小到不需要手機逃離 → Each step small enough to avoid phone escape</li>
+                        </ul>
+                        <div class="bilingual-item" style="margin-top:15px;">
+                            <div class="zh-side">
+                                <div class="label">核心原理</div>
+                                <div class="text">小任務 = 低逃避誘因</div>
+                            </div>
+                            <div class="en-side">
+                                <div class="label">Core Principle</div>
+                                <div class="text">Micro-tasks = Reduced escape temptation</div>
+                                <button class="tts-btn" onclick="speakText('Micro tasks reduce escape temptation.')">🔊 Speak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header" onclick="toggleSkill(this)">
+                        🚀 5分鐘啟動Skill【啟動困難型】
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="skill-body">
+                        <strong style="color:var(--navy);">5-Minute Startup Skill 【Activation Barrier Type】</strong>
+                        <ul>
+                            <li>不要求完成 → Don't demand completion</li>
+                            <li>只要求開始5分鐘 → Only require starting for 5 minutes</li>
+                            <li>5分鐘後「如果還想做就繼續」 → "Continue if you want to" after 5 minutes</li>
+                            <li>重點是跨越啟動障礙 → The goal is crossing the activation barrier</li>
+                        </ul>
+                        <div class="bilingual-item" style="margin-top:15px;">
+                            <div class="zh-side">
+                                <div class="label">核心原理</div>
+                                <div class="text">開始比完成重要 = 動力會跟上來</div>
+                            </div>
+                            <div class="en-side">
+                                <div class="label">Core Principle</label>
+                                <div class="text">Starting is harder than continuing = Momentum follows</div>
+                                <button class="tts-btn" onclick="speakText('Starting is harder than continuing. Momentum follows naturally.')">🔊 Speak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header" onclick="toggleSkill(this)">
+                        ⏸️ 延遲衝動Skill【習慣自動型、即時獎賞型】
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="skill-body">
+                        <strong style="color:var(--navy);">Impulse Delay Skill 【Automatic Habit Type】</strong>
+                        <ul>
+                            <li>想拿手機時先等60秒 → Wait 60 seconds before picking up phone</li>
+                            <li>可以數數、喝水、走動 → Count, drink water, or move around</li>
+                            <li>60秒後決定是否真的需要 → Decide afterward if you really need it</li>
+                            <li>大多數衝動會在延遲中消失 → Most urges disappear during the delay</li>
+                        </ul>
+                        <div class="bilingual-item" style="margin-top:15px;">
+                            <div class="zh-side">
+                                <div class="label">核心原理</div>
+                                <div class="text">衝動是波浪 = 等等就過</div>
+                            </div>
+                            <div class="en-side">
+                                <div class="label">Core Principle</div>
+                                <div class="text">Urges are like waves = They pass with time</div>
+                                <button class="tts-btn" onclick="speakText('Urges are like waves. They pass with time.')">🔊 Speak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header" onclick="toggleSkill(this)">
+                        🅿️ 手機停車場Skill【環境誘惑型、習慣自動型】
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="skill-body">
+                        <strong style="color:var(--navy);">Phone Parking Lot Skill 【Habit Automation Type】</strong>
+                        <ul>
+                            <li>進入教室前手機固定停在同位置 → Keep phone at same spot before entering class</li>
+                            <li>每次都放在同一個地點 → Same location every time</li>
+                            <li>養成「手機停車場」的習慣 → Establish "phone parking lot" habit</li>
+                            <li>下課再取回 → Retrieve it after class</li>
+                        </ul>
+                        <div class="bilingual-item" style="margin-top:15px;">
+                            <div class="zh-side">
+                                <div class="label">核心原理</div>
+                                <div class="text">習慣化 = 環境自動執行</div>
+                            </div>
+                            <div class="en-side">
+                                <div class="label">Core Principle</div>
+                                <div class="text">Habit automation = Environment executes for you</div>
+                                <button class="tts-btn" onclick="speakText('Habit automation means your environment executes for you.')">🔊 Speak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header" onclick="toggleSkill(this)">
+                        🚫 短影音阻力Skill【即時獎賞型、FOMO型】
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="skill-body">
+                        <strong style="color:var(--navy);">Short Video Friction Skill 【Immediate Reward Type】</strong>
+                        <ul>
+                            <li>把高誘惑APP移出首頁 → Move addictive apps off home screen</li>
+                            <li>登出帳號 → Log out of accounts</li>
+                            <li>設定使用限制 → Set usage limits</li>
+                            <li>增加開啟步驟 → Add extra steps to open</li>
+                        </ul>
+                        <div class="bilingual-item" style="margin-top:15px;">
+                            <div class="zh-side">
+                                <div class="label">核心原理</div>
+                                <div class="text">摩擦增加 = 衝動的代價升高</div>
+                            </div>
+                            <div class="en-side">
+                                <div class="label">Core Principle</div>
+                                <div class="text">Friction beats willpower = Higher cost of impulse</div>
+                                <button class="tts-btn" onclick="speakText('Friction beats willpower by raising the cost of impulse.')">🔊 Speak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header" onclick="toggleSkill(this)">
+                        🛏️ 睡前關機Skill【睡眠不足型、習慣自動型】
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="skill-body">
+                        <strong style="color:var(--navy);">Bedtime Shutdown Skill 【Sleep Deprivation Type】</strong>
+                        <ul>
+                            <li>睡前固定時間設定鬧鐘 → Set alarm at fixed pre-sleep time</li>
+                            <li>鬧鐘響→手機離床 → When alarm rings → phone leaves bed</li>
+                            <li>手機放充電區（不在臥室） → Charge phone outside bedroom</li>
+                            <li>保護睡眠時段 → Protect your sleep window</li>
+                        </ul>
+                        <div class="bilingual-item" style="margin-top:15px;">
+                            <div class="zh-side">
+                                <div class="label">核心原理</div>
+                                <div class="text">好睡眠 = 隔天更有自控力</div>
+                            </div>
+                            <div class="en-side">
+                                <div class="label">Core Principle</div>
+                                <div class="text">Good sleep = More self-control tomorrow</div>
+                                <button class="tts-btn" onclick="speakText('Good sleep enables more self control tomorrow.')">🔊 Speak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header" onclick="toggleSkill(this)">
+                        🔄 替代行為Skill【無聊型、焦慮逃避型】
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="skill-body">
+                        <strong style="color:var(--navy);">Alternative Behavior Skill 【Avoidance Type】</strong>
+                        <ul>
+                            <li>無聊時不能只說「不能滑手機」 → Don't just say "no phone"</li>
+                            <li>提供具體替代：喝水、伸展、走動 → Offer alternatives: drink, stretch, walk</li>
+                            <li>整理桌面、看一頁書 → Organize desk or read one page</li>
+                            <li>替代品要更容易取得 → Alternatives must be easier to access</li>
+                        </ul>
+                        <div class="bilingual-item" style="margin-top:15px;">
+                            <div class="zh-side">
+                                <div class="label">核心原理</div>
+                                <div class="text">天性討厭空白 = 提供更好的選項</div>
+                            </div>
+                            <div class="en-side">
+                                <div class="label">Core Principle</div>
+                                <div class="text">Nature abhors a void = Offer better options</div>
+                                <button class="tts-btn" onclick="speakText('Nature abhors a void. Offer better options.')">🔊 Speak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header" onclick="toggleSkill(this)">
+                        😌 情緒辨識Skill【情緒調節型、焦慮逃避型】
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="skill-body">
+                        <strong style="color:var(--navy);">Emotion Recognition Skill 【Emotion Regulation Type】</strong>
+                        <ul>
+                            <li>想滑手機時先暫停 → Pause before reaching for phone</li>
+                            <li>問自己：無聊？焦慮？挫折？孤單？疲累？ → Ask: Bored? Anxious? Frustrated? Lonely? Tired?</li>
+                            <li>針對情緒選擇對應行動 → Choose action matching the emotion</li>
+                            <li>例如：焦慮→深呼吸，孤單→傳訊息給朋友 → E.g.: Anxious→breathe, Lonely→message friend</li>
+                        </ul>
+                        <div class="bilingual-item" style="margin-top:15px;">
+                            <div class="zh-side">
+                                <div class="label">核心原理</div>
+                                <div class="text">看見情緒 = 不被情緒自動駕駛</div>
+                            </div>
+                            <div class="en-side">
+                                <div class="label">Core Principle</div>
+                                <div class="text">See the emotion = Break automatic reaction</div>
+                                <button class="tts-btn" onclick="speakText('Seeing the emotion breaks the automatic reaction.')">🔊 Speak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header" onclick="toggleSkill(this)">
+                        🏔️ 任務降難Skill【任務太難型、焦慮逃避型】
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="skill-body">
+                        <strong style="color:var(--navy);">Task Difficulty Adjustment Skill 【Hard Task Type】</strong>
+                        <ul>
+                            <li>任務太難導致逃避 → Hard tasks trigger escape</li>
+                            <li>降低第一步難度 → Lower difficulty of first step</li>
+                            <li>或尋求資源協助 → Or seek resource help</li>
+                            <li>先完成簡單版本，再挑戰難版本 → Easy version first, then hard</li>
+                        </ul>
+                        <div class="bilingual-item" style="margin-top:15px;">
+                            <div class="zh-side">
+                                <div class="label">核心原理</div>
+                                <div class="text">難度適中 = 專注力在</div>
+                            </div>
+                            <div class="en-side">
+                                <div class="label">Core Principle</div>
+                                <div class="text">Right difficulty = Sustained focus</div>
+                                <button class="tts-btn" onclick="speakText('Right difficulty level sustains focus.')">🔊 Speak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header" onclick="toggleSkill(this)">
+                        🎁 獎賞延遲Skill【即時獎賞型】
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="skill-body">
+                        <strong style="color:var(--navy);">Reward Delay Skill 【Immediate Gratification Type】</strong>
+                        <ul>
+                            <li>完成25分鐘任務 → 才能用5分鐘手機 → After 25 min task → 5 min phone time</li>
+                            <li>不是禁止獎賞，是延遲獎賞 → Not no reward, but delayed reward</li>
+                            <li>視覺化進度（例如番茄鐘） → Visualize progress (e.g., Pomodoro timer)</li>
+                            <li>獎賞要夠吸引，才值得等待 → Reward must be compelling enough to wait for</li>
+                        </ul>
+                        <div class="bilingual-item" style="margin-top:15px;">
+                            <div class="zh-side">
+                                <div class="label">核心原理</div>
+                                <div class="text">延遲滿足 = 大腦執行功能訓練</div>
+                            </div>
+                            <div class="en-side">
+                                <div class="label">Core Principle</div>
+                                <div class="text">Delayed gratification = Executive function training</div>
+                                <button class="tts-btn" onclick="speakText('Delayed gratification trains your executive function.')">🔊 Speak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header" onclick="toggleSkill(this)">
+                        🔋 專注恢復Skill【注意力週期型、睡眠不足型】
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="skill-body">
+                        <strong style="color:var(--navy);">Focus Recovery Skill 【Attention Cycle Type】</strong>
+                        <ul>
+                            <li>注意力掉下來時短暫恢復 → Brief recovery when focus drops</li>
+                            <li>30秒眼睛休息（看遠方） → 30-second eye break (look far away)</li>
+                            <li>2分鐘走動、喝水 → 2-minute walk and hydration</li>
+                            <li>然後再進下一輪專注 → Then back to focus cycle</li>
+                        </ul>
+                        <div class="bilingual-item" style="margin-top:15px;">
+                            <div class="zh-side">
+                                <div class="label">核心原理</div>
+                                <div class="text">週期性恢復 = 延長總專注時間</div>
+                            </div>
+                            <div class="en-side">
+                                <div class="label">Core Principle</div>
+                                <div class="text">Periodic recovery = Extended total focus time</div>
+                                <button class="tts-btn" onclick="speakText('Periodic recovery extends your total focus time.')">🔊 Speak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header" onclick="toggleSkill(this)">
+                        🎯 目標連結Skill【缺乏目標型、FOMO型】
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="skill-body">
+                        <strong style="color:var(--navy);">Goal Connection Skill 【Low Purpose Type】</strong>
+                        <ul>
+                            <li>把「不玩手機」連結到更大的目標 → Link "no phone" to bigger goal</li>
+                            <li>例如：「我要考上理想科系」 → E.g.: "I want to get into my dream school"</li>
+                            <li>「我要保持睡眠品質」 → "I want to maintain sleep quality"</li>
+                            <li>每當想拿手機時，想起這個目標 → Recall this when tempted</li>
+                        </ul>
+                        <div class="bilingual-item" style="margin-top:15px;">
+                            <div class="zh-side">
+                                <div class="label">核心原理</div>
+                                <div class="text">內在動機 > 外在禁止</div>
+                            </div>
+                            <div class="en-side">
+                                <div class="label">Core Principle</div>
+                                <div class="text">Internal motivation > External prohibition</div>
+                                <button class="tts-btn" onclick="speakText('Internal motivation defeats external prohibition.')">🔊 Speak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DECISION TREE TAB -->
+        <div id="tree" class="content">
+            <div class="section">
+                <h2>🌳 不用Token的決策樹</h2>
+                <div class="bilingual-item">
+                    <div class="zh-side">
+                        <div class="label">決策系統</div>
+                        <div class="text">根據你的Bottleneck，系統自動推薦對應的Skill。</div>
+                    </div>
+                    <div class="en-side">
+                        <div class="label">Decision System</div>
+                        <div class="text">The system automatically recommends skills based on your bottleneck.</div>
+                        <button class="tts-btn" onclick="speakText('The system automatically recommends skills based on your bottleneck.')">🔊 Speak</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="flow-item">
+                    <strong>IF: 上課看到手機就想拿</strong><br/>
+                    <em>IF: I want to pick up phone when I see it in class</em><br/>
+                    <strong style="color:var(--teal);">Bottleneck: 手機視覺刺激 | Visual Stimulus</strong><br/>
+                    <strong style="color:var(--navy);">THEN: 【手機離視線Skill】→ 明天手機進書包 | 【Phone Out of Sight】→ Put phone in backpack tomorrow</strong>
+                </div>
+                <div class="flow-item">
+                    <strong>IF: 通知一來就拿</strong><br/>
+                    <em>IF: I pick up phone every time I get a notification</em><br/>
+                    <strong style="color:var(--teal);">Bottleneck: 通知觸發 | Notification Trigger</strong><br/>
+                    <strong style="color:var(--navy);">THEN: 【通知斷流Skill】→ 關閉非必要通知 | 【Notification Cutoff】→ Turn off non-essential notifications</strong>
+                </div>
+                <div class="flow-item">
+                    <strong>IF: 讀書不到5分鐘就拿</strong><br/>
+                    <em>IF: I pick up phone within 5 minutes of studying</em><br/>
+                    <strong style="color:var(--teal);">Bottleneck: 啟動困難 + 短期注意力 | Activation Barrier + Short Attention</strong><br/>
+                    <strong style="color:var(--navy);">THEN: 【5分鐘啟動】+【10分鐘專注】→ 只要求先讀5分鐘 | 【5-Min Startup】+【10-Min Focus】→ Only require studying for 5 minutes first</strong>
+                </div>
+                <div class="flow-item">
+                    <strong>IF: 遇到不會的題目就拿</strong><br/>
+                    <em>IF: I pick up phone when I encounter a difficult problem</em><br/>
+                    <strong style="color:var(--teal);">Bottleneck: 挫折逃避 + 任務難度 | Frustration Avoidance + Task Difficulty</strong><br/>
+                    <strong style="color:var(--navy);">THEN: 【任務降難】+【情緒辨識】→ 先看中文再看講解 | 【Difficulty Adjustment】+【Emotion Recognition】→ Read Chinese explanation before solution</strong>
+                </div>
+                <div class="flow-item">
+                    <strong>IF: 心情不好就滑</strong><br/>
+                    <em>IF: I scroll phone when feeling bad</em><br/>
+                    <strong style="color:var(--teal);">Bottleneck: 情緒調節 | Emotion Regulation</strong><br/>
+                    <strong style="color:var(--navy);">THEN: 【情緒辨識】+【替代行為】→ 先辨識情緒再選替代行為 | 【Emotion Recognition】+【Alternative Behavior】→ Identify emotion, then choose alternative</strong>
+                </div>
+                <div class="flow-item">
+                    <strong>IF: 睡前一直滑</strong><br/>
+                    <em>IF: I keep scrolling before bed</em><br/>
+                    <strong style="color:var(--teal);">Bottleneck: 睡眠不足 + 習慣自動 | Sleep Deprivation + Automatic Habit</strong><br/>
+                    <strong style="color:var(--navy);">THEN: 【睡前關機】+【延遲衝動】→ 22:30手機離床 | 【Bedtime Shutdown】+【Impulse Delay】→ Phone off bed at 10:30 PM</strong>
+                </div>
+                <div class="flow-item">
+                    <strong>IF: 短影音一開就停不下來</strong><br/>
+                    <em>IF: Once I start short videos, I can't stop</em><br/>
+                    <strong style="color:var(--teal);">Bottleneck: 即時獎賞成癮 | Immediate Reward Addiction</strong><br/>
+                    <strong style="color:var(--navy);">THEN: 【短影音阻力】+【獎賞延遲】→ 登出APP、移出首頁 | 【Short Video Friction】+【Reward Delay】→ Log out, remove from home screen</strong>
+                </div>
+                <div class="flow-item">
+                    <strong>IF: 只是習慣性解鎖</strong><br/>
+                    <em>IF: I unlock phone out of habit</em><br/>
+                    <strong style="color:var(--teal);">Bottleneck: 習慣自動型 | Automatic Habit Type</strong><br/>
+                    <strong style="color:var(--navy);">THEN: 【手機停車場】+【延遲衝動】→ 固定時間檢查手機 | 【Phone Parking Lot】+【Impulse Delay】→ Check phone at scheduled times only</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACKING TAB -->
+        <div id="tracking" class="content">
+            <div class="section">
+                <h2>📈 實驗追蹤 & Feedback系統</h2>
+                <div class="bilingual-item">
+                    <div class="zh-side">
+                        <div class="label">追蹤系統</div>
+                        <div class="text">記錄Baseline → Week1 → Week2 → Week4的變化。</div>
+                    </div>
+                    <div class="en-side">
+                        <div class="label">Tracking System</div>
+                        <div class="text">Record changes from Baseline → Week1 → Week2 → Week4.</div>
+                        <button class="tts-btn" onclick="speakText('Record changes from Baseline to Week1, Week2, and Week4.')">🔊 Speak</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>🔬 開始一項新實驗 | Start a New Experiment</h3>
+                <div class="input-group">
+                    <label>實驗名稱 | Experiment Name</label>
+                    <input type="text" placeholder="例如：手機放書包測試 | E.g.: Phone in backpack test">
+                </div>
+                <div class="input-group">
+                    <label>對應的Priority Node | Priority Node</label>
+                    <select>
+                        <option>手機位置 | Phone Location</option>
+                        <option>通知設定 | Notification Settings</option>
+                        <option>使用時間邊界 | Usage Time Boundary</option>
+                        <option>情緒觸發 | Emotion Trigger</option>
+                        <option>環境設計 | Environment Design</option>
+                        <option>任務拆解 | Task Breakdown</option>
+                    </select>
+                </div>
+
+                <h3>📝 每日Feedback (簡單5題) | Daily Feedback (5 Quick Questions)</h3>
+                <div class="input-group">
+                    <label>想拿手機幾次？ | How many times did you want to pick up phone?</label>
+                    <input type="number" min="0" placeholder="0">
+                </div>
+                <div class="input-group">
+                    <label>實際拿手機幾次？ | How many times did you actually pick it up?</label>
+                    <input type="number" min="0" placeholder="0">
+                </div>
+                <div class="input-group">
+                    <label>最強Trigger是什麼？ | What was the strongest trigger?</label>
+                    <input type="text" placeholder="例如：老師講話時 | E.g.: When teacher talks">
+                </div>
+                <div class="input-group">
+                    <label>今天的方法有沒有幫助？ | Did today's method help?</label>
+                    <select>
+                        <option>非常有幫助 ⭐⭐⭐ | Very helpful</option>
+                        <option>有幫助 ⭐⭐ | Somewhat helpful</option>
+                        <option>沒有什麼差別 ⭐ | No difference</option>
+                        <option>沒有幫助 ✗ | Not helpful</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>下一步要保持還是修改？ | Keep or adjust method?</label>
+                    <select>
+                        <option>保持這個方法 | Keep this method</option>
+                        <option>微調方法 | Fine-tune method</option>
+                        <option>改變策略 | Change strategy</option>
+                    </select>
+                </div>
+                <button class="btn-primary" onclick="alert('✅ Feedback已保存 | Feedback saved!')">💾 保存Feedback | Save Feedback</button>
+            </div>
+        </div>
+
+        <!-- GUIDE TAB -->
+        <div id="guide" class="content">
+            <div class="section">
+                <h2>📚 高Agency系統完整指南</h2>
+                <div class="bilingual-item">
+                    <div class="zh-side">
+                        <div class="label">系統說明</div>
+                        <div class="text">從「被手機控制」到「用系統控制手機」的進化。</div>
+                    </div>
+                    <div class="en-side">
+                        <div class="label">System Guide</div>
+                        <div class="text">Evolution from "controlled by phone" to "controlling your system."</div>
+                        <button class="tts-btn" onclick="speakText('Evolution from controlled by phone to controlling your system.')">🔊 Speak</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>🏗️ 九層High Agency能力階梯 | 9 Levels of High Agency</h3>
+                <div class="flow-item">
+                    <strong>第1層 | Level 1: 看見行為</strong><br/>
+                    See your behavior - I know I'm using my phone
+                </div>
+                <div class="flow-item">
+                    <strong>第2層 | Level 2: 看見Trigger</strong><br/>
+                    See triggers - I know when I pick it up
+                </div>
+                <div class="flow-item">
+                    <strong>第3層 | Level 3: 看見Pattern</strong><br/>
+                    See patterns - I know 62% of usage happens in specific situations
+                </div>
+                <div class="flow-item">
+                    <strong>第4層 | Level 4: 辨識Mechanism</strong><br/>
+                    Identify mechanism - I know what system generates this behavior
+                </div>
+                <div class="flow-item">
+                    <strong>第5層 | Level 5: 找到Bottleneck</strong><br/>
+                    Find bottleneck - I know which variable limits me most
+                </div>
+                <div class="flow-item">
+                    <strong>第6層 | Level 6: 選擇Priority Node</strong><br/>
+                    Choose priority - I know which one to change first
+                </div>
+                <div class="flow-item">
+                    <strong>第7層 | Level 7: 設計Minimum Intervention</strong><br/>
+                    Design intervention - I know I only need to change one variable
+                </div>
+                <div class="flow-item">
+                    <strong>第8層 | Level 8: 讀取Feedback與Prediction Error</strong><br/>
+                    Read feedback - I know expected vs actual = learning
+                </div>
+                <div class="flow-item">
+                    <strong>第9層 | Level 9: 自我更新</strong><br/>
+                    Self-update - I can redesign my system when my assumptions were wrong
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>🎯 真正的High Agency定義 | True High Agency</h3>
+                <table>
+                    <tr>
+                        <th>低Agency | Low Agency</th>
+                        <th>中Agency | Mid Agency</th>
+                        <th>高Agency | High Agency</th>
+                    </tr>
+                    <tr>
+                        <td>老師叫我不能玩<br/>Teacher tells me not to</td>
+                        <td>我要努力控制自己<br/>I try to control myself</td>
+                        <td>我知道什麼情境會讓自己失控<br/>I know which situations make me lose control</td>
+                    </tr>
+                    <tr>
+                        <td>被動接受禁止<br/>Passively accept rules</td>
+                        <td>意志力vs衝動<br/>Willpower vs impulse</td>
+                        <td>我知道哪些變數可以控制<br/>I know which variables I can control</td>
+                    </tr>
+                    <tr>
+                        <td>罰寫、扣分、沒收<br/>Punishment-based</td>
+                        <td>自責、自我監督<br/>Self-blame cycle</td>
+                        <td>我可以設計環境降低誘惑<br/>I can design my environment</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>我可以測試策略看是否有效<br/>I can test and iterate</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>我可以承認原本的假設錯了<br/>I can admit my assumptions were wrong</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="section">
+                <h3>💡 核心洞見 | Core Insights</h3>
+                <div class="bilingual-item">
+                    <div class="zh-side">
+                        <div class="label">洞見1</div>
+                        <div class="text">真正的自律不是：「我可以一直忍。」<br/>真正的自律是：「我知道如何重新設計自己的系統。」</div>
+                    </div>
+                    <div class="en-side">
+                        <div class="label">Insight 1</div>
+                        <div class="text">True discipline is NOT enduring willpower. It's knowing how to redesign your system.</div>
+                        <button class="tts-btn" onclick="speakText('True discipline is not enduring willpower. It is knowing how to redesign your system.')">🔊 Speak</button>
+                    </div>
+                </div>
+
+                <div class="bilingual-item">
+                    <div class="zh-side">
+                        <div class="label">洞見2</div>
+                        <div class="text">真正的自由也不是：「我想滑就滑。」<br/>而是：「手機在我旁邊，我仍然擁有選擇下一個行動的能力。」</div>
+                    </div>
+                    <div class="en-side">
+                        <div class="label">Insight 2</div>
+                        <div class="text">True freedom is NOT "scroll whenever I want." It's having choice even when tempted.</div>
+                        <button class="tts-btn" onclick="speakText('True freedom is having the choice to act differently, even when tempted.')">🔊 Speak</button>
+                    </div>
+                </div>
+
+                <div class="bilingual-item">
+                    <div class="zh-side">
+                        <div class="label">洞見3</div>
+                        <div class="text">最終進化：老師控制 → 規則控制 → 環境控制 → 學生自我觀察 → 學生自我調節 → 學生自我更新 → 外部控制逐漸撤除</div>
+                    </div>
+                    <div class="en-side">
+                        <div class="label">Insight 3</div>
+                        <div class="text">Evolution: External control → Rules → Environment → Self-observation → Self-regulation → Self-update → Independence</div>
+                        <button class="tts-btn" onclick="speakText('From external control to complete self-regulation and independence.')">🔊 Speak</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            // Hide all content
+            document.querySelectorAll('.content').forEach(el => {
+                el.classList.remove('show');
+            });
+            // Remove active from all tabs
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('active');
+            });
+            // Show selected content
+            document.getElementById(tabId).classList.add('show');
+            // Mark tab as active
+            event.target.classList.add('active');
+        }
+
+        function toggleCard(el) {
+            el.classList.toggle('selected');
+        }
+
+        function toggleSkill(el) {
+            el.parentElement.classList.toggle('expanded');
+        }
+
+        function speakText(text) {
+            // Stop any currently playing speech
+            window.speechSynthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            utterance.pitch = 1;
+            utterance.volume = 1;
+            
+            // Change button appearance while speaking
+            const btn = event.target;
+            btn.classList.add('playing');
+            
+            utterance.onend = function() {
+                btn.classList.remove('playing');
+            };
+            
+            utterance.onerror = function() {
+                btn.classList.remove('playing');
+            };
+            
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>
