@@ -1,0 +1,1963 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeOS 智慧能力生成器 | LifeOS Wisdom Capability Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #1A2B5F;
+            --gold: #C9960C;
+            --teal: #0A7A72;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --dark-gray: #333333;
+        }
+
+        body {
+            font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif;
+            background-color: var(--white);
+            color: var(--dark-gray);
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ====== HEADER ====== */
+        .header {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+            color: var(--white);
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 50px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(26, 43, 95, 0.15);
+        }
+
+        .header h1 {
+            font-size: 42px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .header .bilingual {
+            font-size: 28px;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .header p {
+            font-size: 16px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* ====== NAVIGATION ====== */
+        .nav-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: var(--white);
+            border: 2px solid var(--navy);
+            color: var(--navy);
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: "Microsoft JhengHei", sans-serif;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: var(--navy);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 43, 95, 0.2);
+        }
+
+        /* ====== SECTIONS ====== */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ====== SYSTEM CARDS ====== */
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .system-card {
+            background: var(--light-gray);
+            border-left: 4px solid var(--gold);
+            padding: 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .system-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(26, 43, 95, 0.1);
+        }
+
+        .system-card h3 {
+            color: var(--navy);
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .system-card p {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* ====== ABILITY CARDS ====== */
+        .abilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .ability-card {
+            background: var(--white);
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .ability-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 8px 32px rgba(201, 150, 12, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .ability-card-header {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+            color: var(--white);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ability-card-header .icon {
+            font-size: 32px;
+        }
+
+        .ability-card-header h3 {
+            margin-bottom: 4px;
+            font-size: 18px;
+        }
+
+        .ability-card-header p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .ability-card-body {
+            padding: 20px;
+            display: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .ability-card.expanded .ability-card-body {
+            display: block;
+            max-height: 2000px;
+        }
+
+        /* ====== BILINGUAL CONTENT ====== */
+        .bilingual-box {
+            background: var(--light-gray);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border-left: 3px solid var(--teal);
+        }
+
+        .bilingual-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(201, 150, 12, 0.2);
+        }
+
+        .bilingual-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .bilingual-item .zh, .bilingual-item .en {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .bilingual-item .zh {
+            color: var(--navy);
+            font-weight: 500;
+        }
+
+        .bilingual-item .en {
+            color: var(--teal);
+        }
+
+        /* ====== TTS BUTTON ====== */
+        .tts-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: var(--gold);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .tts-btn:hover {
+            background: #B8850A;
+            transform: scale(1.05);
+        }
+
+        .tts-btn.playing {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* ====== TABS ====== */
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--light-gray);
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark-gray);
+            position: relative;
+            transition: color 0.3s ease;
+            font-family: "Microsoft JhengHei", sans-serif;
+        }
+
+        .tab-btn.active {
+            color: var(--navy);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gold);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ====== DIAGNOSTIC TOOL ====== */
+        .diagnostic-box {
+            background: linear-gradient(135deg, rgba(10, 122, 114, 0.05) 0%, rgba(201, 150, 12, 0.05) 100%);
+            border: 2px solid var(--teal);
+            padding: 24px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .diagnostic-box h4 {
+            color: var(--navy);
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .question-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(26, 43, 95, 0.1);
+        }
+
+        .question-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-item p {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--navy);
+            font-size: 14px;
+        }
+
+        .question-item .bilingual-item {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        /* ====== FOOTER ====== */
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 2px solid var(--light-gray);
+            color: var(--dark-gray);
+            font-size: 13px;
+        }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .header .bilingual {
+                font-size: 20px;
+            }
+
+            .bilingual-item {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .abilities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .systems-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ====== RADAR CHART ====== */
+        .radar-container {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+        }
+
+        .radar-svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* ====== REPORT SECTION ====== */
+        .report-box {
+            background: var(--light-gray);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .report-box h4 {
+            color: var(--navy);
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .report-section {
+            margin-bottom: 20px;
+        }
+
+        .report-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .report-section h5 {
+            color: var(--teal);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .report-section p {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* ====== SYSTEM TAG ====== */
+        .system-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--teal);
+            color: var(--white);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--navy);
+            color: var(--white);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(26, 43, 95, 0.2);
+        }
+
+        .scroll-top-btn:hover {
+            background: var(--teal);
+            transform: translateY(-4px);
+        }
+
+        .scroll-top-btn.show {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>LifeOS 智慧能力生成器</h1>
+            <div class="bilingual">LifeOS Wisdom Capability Generator</div>
+            <p>
+                不是測你知道多少。
+                <br/>
+                Not measuring what you know.
+                <br/><br/>
+                而是找到你目前卡住的能力節點，直接開始升級。
+                <br/>
+                But finding where you're stuck and upgrading directly.
+            </p>
+        </div>
+
+        <!-- MAIN NAVIGATION -->
+        <div class="nav-container">
+            <button class="nav-btn active" data-section="overview">🏠 總覽 Overview</button>
+            <button class="nav-btn" data-section="abilities">⚡ 16大能力 16 Abilities</button>
+            <button class="nav-btn" data-section="systems">🔗 能力系統 Systems</button>
+            <button class="nav-btn" data-section="diagnosis">🔍 快速診斷 Quick Scan</button>
+            <button class="nav-btn" data-section="journal">📓 智慧日誌 Wisdom Journal</button>
+            <button class="nav-btn" data-section="knowledge">📚 知識庫 Knowledge Base</button>
+        </div>
+
+        <!-- SECTION 1: OVERVIEW -->
+        <div class="section active" id="overview-section">
+            <div class="diagnostic-box">
+                <h4>📖 真正的能力不是十六項技能</h4>
+                <p style="margin-bottom: 20px;">
+                    <span style="color: var(--navy); font-weight: 600;">而是十六個能力節點彼此連結、彼此支援、彼此驗證、彼此更新，形成一個能持續生成成果與智慧的能力網路。</span>
+                </p>
+                <p>
+                    <span class="tts-btn" data-speak="True capability is not 16 separate skills. But 16 capability nodes interconnected, supporting each other, verifying each other, and updating together—forming a network that continuously generates results and wisdom." style="margin-left: 0;">🔊</span>
+                </p>
+            </div>
+
+            <div style="margin-top: 30px; padding: 20px; background: var(--light-gray); border-radius: 8px;">
+                <h3 style="color: var(--navy); margin-bottom: 20px;">🎯 APP四大入口</h3>
+                <div class="systems-grid">
+                    <div class="system-card">
+                        <h3>① 快速能力掃描</h3>
+                        <p>識別你目前最強與最弱的能力節點。Identify your strongest and weakest capability nodes.</p>
+                    </div>
+                    <div class="system-card">
+                        <h3>② 16大能力地圖</h3>
+                        <p>完整的舊模式→新模式轉換指南。Complete old→new pattern transformation guide.</p>
+                    </div>
+                    <div class="system-card">
+                        <h3>③ 今日能力訓練</h3>
+                        <p>進入現實任務，真實練習，取得回饋。Real tasks, actual practice, genuine feedback.</p>
+                    </div>
+                    <div class="system-card">
+                        <h3>④ 智慧成長報告</h3>
+                        <p>追蹤你的預測→現實→更新週期。Track your prediction→reality→update cycles.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; padding: 20px; background: var(--light-gray); border-radius: 8px;">
+                <h3 style="color: var(--navy); margin-bottom: 20px;">🔄 核心生成迴路</h3>
+                <div class="bilingual-box" style="border-left-color: var(--navy);">
+                    <div style="font-weight: 600; color: var(--navy); margin-bottom: 12px; font-size: 14px;">
+                        輸入 → 理解 → 建模 → 發現不足 → 補充資訊 → 形成預測 → 精準表達 → 決策 → 行動 → 現實回饋 → Prediction Error → 修正模型 → 再次行動 → 跨域遷移 → 能力形成 → 智慧生成
+                    </div>
+                    <div style="font-size: 13px; color: var(--teal);">
+                        <p style="margin-bottom: 8px;">Input → Comprehension → Modeling → Identify gaps → Add information → Form predictions → Express precisely → Decide → Act → Reality feedback → Prediction Error → Correct model → Act again → Transfer domains → Capability formation → Wisdom generation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: ABILITIES -->
+        <div class="section" id="abilities-section">
+            <h2 style="margin-bottom: 30px; color: var(--navy);">📚 16大能力完整展開</h2>
+            <div class="abilities-grid" id="abilities-grid"></div>
+        </div>
+
+        <!-- SECTION 3: SYSTEMS -->
+        <div class="section" id="systems-section">
+            <h2 style="margin-bottom: 30px; color: var(--navy);">🔗 16大能力的四個系統</h2>
+            <div id="systems-grid-section"></div>
+        </div>
+
+        <!-- SECTION 4: DIAGNOSIS -->
+        <div class="section" id="diagnosis-section">
+            <h2 style="margin-bottom: 30px; color: var(--navy);">🔍 快速能力掃描</h2>
+            <div style="padding: 20px; background: var(--light-gray); border-radius: 8px; margin-bottom: 30px;">
+                <p style="font-size: 14px; line-height: 1.8; color: var(--dark-gray);">
+                    <span style="color: var(--navy); font-weight: 600;">按下每一個能力下方的「診斷」按鈕，進行針對性的掃描。</span><br/>
+                    Click the "Diagnosis" button under each ability for targeted scanning.
+                </p>
+            </div>
+            <div id="diagnosis-grid"></div>
+        </div>
+
+        <!-- SECTION 5: JOURNAL -->
+        <div class="section" id="journal-section">
+            <h2 style="margin-bottom: 30px; color: var(--navy);">📓 智慧日誌 - Wisdom Journal</h2>
+            <div class="diagnostic-box">
+                <h4>🎯 每天追蹤你的Prediction Error</h4>
+                <p style="margin-bottom: 20px; font-size: 14px;">
+                    智慧不是閱讀量。智慧來自：
+                    <span class="tts-btn" data-speak="Wisdom is not about reading volume. Wisdom comes from: Prediction versus Reality, Error, Update.">🔊</span>
+                </p>
+                <p style="font-size: 13px; margin-bottom: 20px;">Prediction vs Reality → Error → Update</p>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <div style="display: grid; gap: 20px;">
+                    <div class="report-box">
+                        <h4>① 今天發生什麼重要事件？</h4>
+                        <textarea style="width: 100%; height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-family: inherit; font-size: 14px;" placeholder="What important event happened today? | 用英文或中文描述..."></textarea>
+                    </div>
+
+                    <div class="report-box">
+                        <h4>② 我原本怎麼解讀？</h4>
+                        <textarea style="width: 100%; height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-family: inherit; font-size: 14px;" placeholder="How did you interpret it originally? | 我的第一反應是..."></textarea>
+                    </div>
+
+                    <div class="report-box">
+                        <h4>③ 我原本預測什麼？</h4>
+                        <textarea style="width: 100%; height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-family: inherit; font-size: 14px;" placeholder="What did you predict would happen? | 我預期的結果是..."></textarea>
+                    </div>
+
+                    <div class="report-box">
+                        <h4>④ 現實真正發生什麼？</h4>
+                        <textarea style="width: 100%; height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-family: inherit; font-size: 14px;" placeholder="What actually happened? | 實際發生的是..."></textarea>
+                    </div>
+
+                    <div class="report-box">
+                        <h4>⑤ Prediction Error是什麼？</h4>
+                        <textarea style="width: 100%; height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-family: inherit; font-size: 14px;" placeholder="What was the gap between prediction and reality? | 預測和現實之間的差異..."></textarea>
+                    </div>
+
+                    <div class="report-box">
+                        <h4>⑥ 我的模型下一版怎麼改？</h4>
+                        <textarea style="width: 100%; height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-family: inherit; font-size: 14px;" placeholder="How should you update your model? | 我需要改變..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 6: KNOWLEDGE BASE -->
+        <div class="section" id="knowledge-section">
+            <h2 style="margin-bottom: 30px; color: var(--navy);">📚 知識庫 - Knowledge Base</h2>
+            <div style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                <div class="report-box">
+                    <h4>💡 16大能力的本質</h4>
+                    <p style="font-size: 13px; line-height: 1.8;">
+                        真正的能力不是知道。而是在面對真實問題時，能快速調用正確的思維模型與行動。Real capability is not knowing. It's rapidly accessing the right mental models and actions when facing real problems.
+                    </p>
+                </div>
+
+                <div class="report-box">
+                    <h4>🎯 三層能力結構</h4>
+                    <div style="font-size: 13px; line-height: 1.8;">
+                        <p><span style="color: var(--navy); font-weight: 600;">第一層 Level 1：知識 Knowledge</span> - 我知道什麼？I know what?</p>
+                        <p style="margin-top: 8px;"><span style="color: var(--teal); font-weight: 600;">第二層 Level 2：能力 Capability</span> - 我能不能在真實情境中做到？Can I do it in real situations?</p>
+                        <p style="margin-top: 8px;"><span style="color: var(--gold); font-weight: 600;">第三層 Level 3：智慧 Wisdom</span> - 情境改變後，我能不能判斷何時、為何、如何使用，並根據結果更新？Can I judge when, why, how to use it—and update based on results?</p>
+                    </div>
+                </div>
+
+                <div class="report-box">
+                    <h4>🔄 Prediction Error公式</h4>
+                    <div style="font-size: 13px; line-height: 1.8; font-family: 'Courier New', monospace; background: white; padding: 12px; border-radius: 6px; border-left: 3px solid var(--gold);">
+                        <p style="margin: 0;">預測 Prediction</p>
+                        <p style="margin-top: 4px;">vs</p>
+                        <p style="margin-top: 4px;">現實 Reality</p>
+                        <p style="margin-top: 4px;">↓</p>
+                        <p style="margin-top: 4px; color: var(--navy); font-weight: 600;">誤差 Error</p>
+                        <p style="margin-top: 4px;">↓</p>
+                        <p style="margin-top: 4px; color: var(--teal); font-weight: 600;">更新 Update</p>
+                    </div>
+                </div>
+
+                <div class="report-box">
+                    <h4>📊 十個評分維度</h4>
+                    <div style="font-size: 12px; line-height: 1.8;">
+                        <p>Knowledge｜知識結構度</p>
+                        <p>Modeling｜建模能力</p>
+                        <p>Gap Detection｜缺口偵測力</p>
+                        <p>Prediction｜預測能力</p>
+                        <p>Precision｜精準表達力</p>
+                        <p>Action｜行動轉換力</p>
+                        <p>Feedback｜回饋讀取力</p>
+                        <p>Updating｜模型更新力</p>
+                        <p>Transfer｜跨域遷移力</p>
+                        <p>Agency｜高能動性</p>
+                    </div>
+                </div>
+
+                <div class="report-box">
+                    <h4>🎓 精準表達轉換</h4>
+                    <div style="font-size: 12px; line-height: 1.8;">
+                        <p><span style="color: var(--dark-gray);">模糊語言 Vague</span> → <span style="color: var(--navy); font-weight: 600;">精準語言 Precise</span></p>
+                        <p style="margin-top: 6px; font-style: italic;">「我很失敗」</p>
+                        <p style="margin-top: 2px;">→ 「這次結果沒有達到我的目標」</p>
+                        <p style="margin-top: 6px; font-style: italic;">「我英文不好」</p>
+                        <p style="margin-top: 2px;">→ 「目前句法解析速度不足」</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p>LifeOS 智慧能力生成器 | LifeOS Wisdom Capability Generator</p>
+            <p style="margin-top: 10px; font-size: 12px;">Made with ❤️ by Anne Wang (王欣蓉)</p>
+        </div>
+    </div>
+
+    <button class="scroll-top-btn" id="scrollTopBtn">↑</button>
+
+    <!-- DATA EMBED -->
+    <script type="application/json" id="capabilities-data">
+{
+  "abilities": [
+    {
+      "id": 1,
+      "name_zh": "閱讀能力",
+      "name_en": "Reading",
+      "system": "輸入與認知",
+      "icon": "📖",
+      "essence_zh": "閱讀不是把文字看完。閱讀是從資訊中建立可使用的模型。",
+      "essence_en": "Reading is not finishing the text. Reading is building usable models from information.",
+      "old_modes": [
+        {
+          "zh": "看很多書。",
+          "en": "Reading many books."
+        },
+        {
+          "zh": "閱讀速度快。",
+          "en": "Fast reading speed."
+        },
+        {
+          "zh": "一直畫重點。",
+          "en": "Always highlighting."
+        },
+        {
+          "zh": "一直收藏書單。",
+          "en": "Collecting reading lists."
+        },
+        {
+          "zh": "閱讀就是學習。",
+          "en": "Reading equals learning."
+        },
+        {
+          "zh": "看完一本就結束。",
+          "en": "Done after finishing a book."
+        }
+      ],
+      "new_modes": [
+        {
+          "zh": "建立知識模型。",
+          "en": "Build knowledge models."
+        },
+        {
+          "zh": "閱讀後理解。",
+          "en": "Understand after reading."
+        },
+        {
+          "zh": "閱讀後回寫。",
+          "en": "Write reflections after reading."
+        },
+        {
+          "zh": "閱讀後輸出。",
+          "en": "Output after reading."
+        },
+        {
+          "zh": "閱讀後更新模型。",
+          "en": "Update models after reading."
+        },
+        {
+          "zh": "閱讀後提升決策。",
+          "en": "Improve decisions after reading."
+        }
+      ],
+      "diagnosis_questions": [
+        {
+          "zh": "你看完一本書後通常留下什麼？",
+          "en": "What do you typically retain after finishing a book?"
+        },
+        {
+          "zh": "讀到與自己原本觀點衝突的內容時，你通常？",
+          "en": "When encountering conflicting ideas, do you usually:"
+        },
+        {
+          "zh": "你能不能說出作者的核心論點？",
+          "en": "Can you articulate the author's core thesis?"
+        },
+        {
+          "zh": "你能不能區分事實、推論、假設？",
+          "en": "Can you distinguish facts, inferences, and assumptions?"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name_zh": "學習能力",
+      "name_en": "Learning",
+      "system": "輸入與認知",
+      "icon": "🧠",
+      "essence_zh": "學習不是累積資訊。學習是讓未來的自己能成功提取與使用。",
+      "essence_en": "Learning is not accumulating information. Learning is enabling your future self to retrieve and apply knowledge.",
+      "old_modes": [
+        {
+          "zh": "一直上課。",
+          "en": "Always attending classes."
+        },
+        {
+          "zh": "一直補習。",
+          "en": "Constant tutoring."
+        },
+        {
+          "zh": "一直背書。",
+          "en": "Always memorizing."
+        },
+        {
+          "zh": "一直做筆記。",
+          "en": "Endless note-taking."
+        },
+        {
+          "zh": "一直看影片。",
+          "en": "Watching videos constantly."
+        },
+        {
+          "zh": "一直努力。",
+          "en": "Just trying harder."
+        }
+      ],
+      "new_modes": [
+        {
+          "zh": "快速理解。",
+          "en": "Rapid comprehension."
+        },
+        {
+          "zh": "能力生成。",
+          "en": "Capability generation."
+        },
+        {
+          "zh": "刻意練習。",
+          "en": "Deliberate practice."
+        },
+        {
+          "zh": "AI協作。",
+          "en": "AI collaboration."
+        },
+        {
+          "zh": "知識遷移。",
+          "en": "Knowledge transfer."
+        },
+        {
+          "zh": "終身更新。",
+          "en": "Lifelong updating."
+        }
+      ],
+      "diagnosis_questions": [
+        {
+          "zh": "考錯一題，你第一個反應是什麼？",
+          "en": "When you get a question wrong, what's your first reaction?"
+        },
+        {
+          "zh": "你能不能找出失效的能力節點？",
+          "en": "Can you identify which capability is insufficient?"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name_zh": "思考能力",
+      "name_en": "Thinking",
+      "system": "輸入與認知",
+      "icon": "🤔",
+      "essence_zh": "思考不是腦中想很多。思考是建立可以預測現實的模型。",
+      "essence_en": "Thinking is not overthinking. Thinking is building models that can predict reality.",
+      "old_modes": [
+        {
+          "zh": "靠直覺。",
+          "en": "Relying on intuition."
+        },
+        {
+          "zh": "靠經驗。",
+          "en": "Relying on past experience."
+        },
+        {
+          "zh": "二分法。",
+          "en": "Binary thinking."
+        },
+        {
+          "zh": "情緒判斷。",
+          "en": "Emotional judgment."
+        },
+        {
+          "zh": "線性思考。",
+          "en": "Linear thinking."
+        },
+        {
+          "zh": "一直分析。",
+          "en": "Endless analysis."
+        }
+      ],
+      "new_modes": [
+        {
+          "zh": "系統思考。",
+          "en": "Systems thinking."
+        },
+        {
+          "zh": "第一性原理。",
+          "en": "First principles."
+        },
+        {
+          "zh": "建立模型。",
+          "en": "Model building."
+        },
+        {
+          "zh": "機率思考。",
+          "en": "Probabilistic thinking."
+        },
+        {
+          "zh": "高維推演。",
+          "en": "Higher-dimensional reasoning."
+        },
+        {
+          "zh": "預測未來。",
+          "en": "Predictive forecasting."
+        }
+      ],
+      "diagnosis_questions": [
+        {
+          "zh": "朋友已讀不回。你的第一個模型是？",
+          "en": "A friend reads but doesn't reply. What's your first model?"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name_zh": "提問能力",
+      "name_en": "Questioning",
+      "system": "輸入與認知",
+      "icon": "❓",
+      "essence_zh": "提問不是問題很多。提問是快速找到『最值得降低的不確定性』。",
+      "essence_en": "Questioning is not asking many questions. It's finding the most valuable uncertainty to reduce.",
+      "old_modes": [
+        {
+          "zh": "一直問答案。",
+          "en": "Always asking for answers."
+        },
+        {
+          "zh": "Google搜尋。",
+          "en": "Just googling."
+        },
+        {
+          "zh": "一直請教。",
+          "en": "Constantly asking others."
+        },
+        {
+          "zh": "想到就問。",
+          "en": "Asking randomly."
+        },
+        {
+          "zh": "問題很多。",
+          "en": "Many scattered questions."
+        },
+        {
+          "zh": "等待別人回答。",
+          "en": "Waiting for answers."
+        }
+      ],
+      "new_modes": [
+        {
+          "zh": "問本質。",
+          "en": "Ask about essence."
+        },
+        {
+          "zh": "問限制節點。",
+          "en": "Ask about constraints."
+        },
+        {
+          "zh": "問生成原因。",
+          "en": "Ask about root causes."
+        },
+        {
+          "zh": "問模型。",
+          "en": "Ask about models."
+        },
+        {
+          "zh": "問更新方向。",
+          "en": "Ask about directions."
+        },
+        {
+          "zh": "設計AI Prompt。",
+          "en": "Design AI prompts."
+        }
+      ],
+      "diagnosis_questions": []
+    },
+    {
+      "id": 5,
+      "name_zh": "寫作能力",
+      "name_en": "Writing",
+      "system": "輸出與行動",
+      "icon": "✍️",
+      "essence_zh": "寫作不是文筆漂亮。寫作是把內在模型結構化輸出。",
+      "essence_en": "Writing is not beautiful prose. Writing is structuring and externalizing your mental models.",
+      "old_modes": [
+        {
+          "zh": "文筆很好。",
+          "en": "Having beautiful prose."
+        },
+        {
+          "zh": "字很多。",
+          "en": "Writing a lot."
+        },
+        {
+          "zh": "修辭漂亮。",
+          "en": "Flowery language."
+        },
+        {
+          "zh": "一直寫。",
+          "en": "Writing constantly."
+        },
+        {
+          "zh": "模仿別人。",
+          "en": "Imitating others."
+        },
+        {
+          "zh": "想到就寫。",
+          "en": "Writing as thoughts come."
+        }
+      ],
+      "new_modes": [
+        {
+          "zh": "知識輸出。",
+          "en": "Knowledge output."
+        },
+        {
+          "zh": "建立模型。",
+          "en": "Build models."
+        },
+        {
+          "zh": "結構化表達。",
+          "en": "Structured expression."
+        },
+        {
+          "zh": "建立品牌。",
+          "en": "Build brand."
+        },
+        {
+          "zh": "影響他人。",
+          "en": "Influence others."
+        },
+        {
+          "zh": "生成智慧。",
+          "en": "Generate wisdom."
+        }
+      ],
+      "diagnosis_questions": []
+    },
+    {
+      "id": 6,
+      "name_zh": "表達能力",
+      "name_en": "Expression",
+      "system": "輸出與行動",
+      "icon": "💬",
+      "essence_zh": "表達不是自己說完。表達是讓對方形成接近你原意的模型。",
+      "essence_en": "Expression is not finishing your speech. It's enabling others to form models close to your intent.",
+      "old_modes": [
+        {
+          "zh": "很會講。",
+          "en": "Being a good speaker."
+        },
+        {
+          "zh": "口才很好。",
+          "en": "Having great articulation."
+        },
+        {
+          "zh": "一直講。",
+          "en": "Talking constantly."
+        },
+        {
+          "zh": "背很多內容。",
+          "en": "Memorizing content."
+        },
+        {
+          "zh": "聲音大。",
+          "en": "Speaking loudly."
+        },
+        {
+          "zh": "說服別人。",
+          "en": "Persuading others."
+        }
+      ],
+      "new_modes": [
+        {
+          "zh": "讓人理解。",
+          "en": "Enable understanding."
+        },
+        {
+          "zh": "依對象調整。",
+          "en": "Adapt to audience."
+        },
+        {
+          "zh": "建立共同模型。",
+          "en": "Build shared models."
+        },
+        {
+          "zh": "知識轉譯。",
+          "en": "Translate knowledge."
+        },
+        {
+          "zh": "建立信任。",
+          "en": "Build trust."
+        },
+        {
+          "zh": "改變認知。",
+          "en": "Change perception."
+        }
+      ],
+      "diagnosis_questions": []
+    },
+    {
+      "id": 7,
+      "name_zh": "決策能力",
+      "name_en": "Decision",
+      "system": "輸出與行動",
+      "icon": "⚖️",
+      "essence_zh": "決策不是猜中未來。決策是在資訊有限時，提高長期勝率。",
+      "essence_en": "Decision-making is not predicting the future. It's improving long-term odds with limited information.",
+      "old_modes": [
+        {
+          "zh": "憑感覺。",
+          "en": "Going with feelings."
+        },
+        {
+          "zh": "大家都這樣。",
+          "en": "Following the crowd."
+        },
+        {
+          "zh": "短期利益。",
+          "en": "Chasing quick gains."
+        },
+        {
+          "zh": "避免痛苦。",
+          "en": "Avoiding pain."
+        },
+        {
+          "zh": "快速決定。",
+          "en": "Deciding quickly."
+        },
+        {
+          "zh": "相信經驗。",
+          "en": "Trusting past experience."
+        }
+      ],
+      "new_modes": [
+        {
+          "zh": "目標函數。",
+          "en": "Define objective function."
+        },
+        {
+          "zh": "成本效益。",
+          "en": "Cost-benefit analysis."
+        },
+        {
+          "zh": "風險分析。",
+          "en": "Risk analysis."
+        },
+        {
+          "zh": "機率判斷。",
+          "en": "Probabilistic judgment."
+        },
+        {
+          "zh": "長期最佳化。",
+          "en": "Long-term optimization."
+        },
+        {
+          "zh": "模型更新。",
+          "en": "Update models."
+        }
+      ],
+      "diagnosis_questions": []
+    },
+    {
+      "id": 8,
+      "name_zh": "執行能力",
+      "name_en": "Execution",
+      "system": "輸出與行動",
+      "icon": "🚀",
+      "essence_zh": "執行不是靠意志力。執行是讓正確行動低摩擦地持續發生。",
+      "essence_en": "Execution is not willpower. It's making correct actions happen with minimal friction.",
+      "old_modes": [
+        {
+          "zh": "一直努力。",
+          "en": "Just trying harder."
+        },
+        {
+          "zh": "一直加班。",
+          "en": "Working overtime."
+        },
+        {
+          "zh": "一直忙。",
+          "en": "Staying busy."
+        },
+        {
+          "zh": "一直做。",
+          "en": "Just doing it."
+        },
+        {
+          "zh": "靠意志力。",
+          "en": "Relying on willpower."
+        },
+        {
+          "zh": "做到累。",
+          "en": "Until exhausted."
+        }
+      ],
+      "new_modes": [
+        {
+          "zh": "建立系統。",
+          "en": "Build systems."
+        },
+        {
+          "zh": "建立習慣。",
+          "en": "Build habits."
+        },
+        {
+          "zh": "專注完成。",
+          "en": "Focus on completion."
+        },
+        {
+          "zh": "高品質輸出。",
+          "en": "High-quality output."
+        },
+        {
+          "zh": "持續累積。",
+          "en": "Continuous accumulation."
+        },
+        {
+          "zh": "效率最佳化。",
+          "en": "Optimize efficiency."
+        }
+      ],
+      "diagnosis_questions": []
+    },
+    {
+      "id": 9,
+      "name_zh": "溝通能力",
+      "name_en": "Communication",
+      "system": "連結與影響",
+      "icon": "🤝",
+      "essence_zh": "溝通不是說服。溝通是同步模型、降低資訊失真。",
+      "essence_en": "Communication is not persuasion. It's synchronizing models and reducing information loss.",
+      "old_modes": [
+        {
+          "zh": "一直講道理。",
+          "en": "Always explaining logic."
+        },
+        {
+          "zh": "一直解釋。",
+          "en": "Constantly explaining."
+        },
+        {
+          "zh": "一直證明。",
+          "en": "Always proving points."
+        },
+        {
+          "zh": "討好別人。",
+          "en": "Pleasing others."
+        },
+        {
+          "zh": "避免衝突。",
+          "en": "Avoiding conflict."
+        },
+        {
+          "zh": "講贏別人。",
+          "en": "Winning arguments."
+        }
+      ],
+      "new_modes": [
+        {
+          "zh": "傾聽。",
+          "en": "Listen."
+        },
+        {
+          "zh": "同理。",
+          "en": "Empathize."
+        },
+        {
+          "zh": "同步模型。",
+          "en": "Sync models."
+        },
+        {
+          "zh": "建立信任。",
+          "en": "Build trust."
+        },
+        {
+          "zh": "共同更新。",
+          "en": "Update together."
+        },
+        {
+          "zh": "共同決策。",
+          "en": "Decide together."
+        }
+      ],
+      "diagnosis_questions": []
+    },
+    {
+      "id": 10,
+      "name_zh": "銷售能力",
+      "name_en": "Sales",
+      "system": "連結與影響",
+      "icon": "💰",
+      "essence_zh": "銷售不是成交。銷售是找到真實需求並創造交換價值。",
+      "essence_en": "Sales is not closing deals. It's finding real needs and creating mutual value.",
+      "old_modes": [
+        {
+          "zh": "一直推產品。",
+          "en": "Always pushing products."
+        },
+        {
+          "zh": "一直成交。",
+          "en": "Chasing closes."
+        },
+        {
+          "zh": "一直促銷。",
+          "en": "Constant promotions."
+        },
+        {
+          "zh": "一直打折。",
+          "en": "Always discounting."
+        },
+        {
+          "zh": "一直講產品。",
+          "en": "Only talking about product."
+        },
+        {
+          "zh": "一直追業績。",
+          "en": "Chasing numbers."
+        }
+      ],
+      "new_modes": [
+        {
+          "zh": "分析需求。",
+          "en": "Analyze needs."
+        },
+        {
+          "zh": "建立信任。",
+          "en": "Build trust."
+        },
+        {
+          "zh": "教育市場。",
+          "en": "Educate market."
+        },
+        {
+          "zh": "創造價值。",
+          "en": "Create value."
+        },
+        {
+          "zh": "建立品牌。",
+          "en": "Build brand."
+        },
+        {
+          "zh": "長期經營。",
+          "en": "Long-term nurturing."
+        }
+      ],
+      "diagnosis_questions": []
+    },
+    {
+      "id": 11,
+      "name_zh": "管理能力",
+      "name_en": "Management",
+      "system": "連結與影響",
+      "icon": "📋",
+      "essence_zh": "管理不是一直盯人。管理是建立即使你不在，也能穩定運作的系統。",
+      "essence_en": "Management is not surveillance. It's building systems that work even without you.",
+      "old_modes": [
+        {
+          "zh": "一直管理人。",
+          "en": "Always managing people."
+        },
+        {
+          "zh": "一直開會。",
+          "en": "Endless meetings."
+        },
+        {
+          "zh": "一直監督。",
+          "en": "Constant oversight."
+        },
+        {
+          "zh": "制度很多。",
+          "en": "Too many policies."
+        },
+        {
+          "zh": "SOP很多。",
+          "en": "Excessive SOPs."
+        },
+        {
+          "zh": "一直追進度。",
+          "en": "Chasing progress."
+        }
+      ],
+      "new_modes": [
+        {
+          "zh": "管理系統。",
+          "en": "Manage systems."
+        },
+        {
+          "zh": "管理流程。",
+          "en": "Manage processes."
+        },
+        {
+          "zh": "管理資源。",
+          "en": "Manage resources."
+        },
+        {
+          "zh": "管理風險。",
+          "en": "Manage risks."
+        },
+        {
+          "zh": "管理知識。",
+          "en": "Manage knowledge."
+        },
+        {
+          "zh": "管理更新。",
+          "en": "Manage updates."
+        }
+      ],
+      "diagnosis_questions": []
+    },
+    {
+      "id": 12,
+      "name_zh": "領導能力",
+      "name_en": "Leadership",
+      "system": "連結與影響",
+      "icon": "👑",
+      "essence_zh": "領導不是讓更多人聽你的。領導是讓更多人長出不需要你的能力。",
+      "essence_en": "Leadership is not getting more followers. It's enabling people to thrive without you.",
+      "old_modes": [
+        {
+          "zh": "命令別人。",
+          "en": "Commanding others."
+        },
+        {
+          "zh": "管理別人。",
+          "en": "Managing people."
+        },
+        {
+          "zh": "權力越大越好。",
+          "en": "Power is better."
+        },
+        {
+          "zh": "控制團隊。",
+          "en": "Controlling teams."
+        },
+        {
+          "zh": "自己最厲害。",
+          "en": "I'm the best."
+        },
+        {
+          "zh": "一直要求別人。",
+          "en": "Always demanding."
+        }
+      ],
+      "new_modes": [
+        {
+          "zh": "建立願景。",
+          "en": "Build vision."
+        },
+        {
+          "zh": "培養人才。",
+          "en": "Develop talent."
+        },
+        {
+          "zh": "建立文化。",
+          "en": "Build culture."
+        },
+        {
+          "zh": "賦能團隊。",
+          "en": "Empower teams."
+        },
+        {
+          "zh": "放大能力。",
+          "en": "Amplify capabilities."
+        },
+        {
+          "zh": "建立系統。",
+          "en": "Build systems."
+        }
+      ],
+      "diagnosis_questions": []
+    },
+    {
+      "id": 13,
+      "name_zh": "情緒管理",
+      "name_en": "Emotion",
+      "system": "底層與擴張",
+      "icon": "❤️",
+      "essence_zh": "情緒不是敵人。情緒是系統產生的狀態訊號。",
+      "essence_en": "Emotions are not enemies. They're control signals from your system.",
+      "old_modes": [
+        {
+          "zh": "控制情緒。",
+          "en": "Control emotions."
+        },
+        {
+          "zh": "壓抑情緒。",
+          "en": "Suppress emotions."
+        },
+        {
+          "zh": "不要哭。",
+          "en": "Don't cry."
+        },
+        {
+          "zh": "不要生氣。",
+          "en": "Don't be angry."
+        },
+        {
+          "zh": "一直忍耐。",
+          "en": "Just endure."
+        },
+        {
+          "zh": "逃避情緒。",
+          "en": "Avoid emotions."
+        }
+      ],
+      "new_modes": [
+        {
+          "zh": "覺察情緒。",
+          "en": "Notice emotions."
+        },
+        {
+          "zh": "理解情緒。",
+          "en": "Understand emotions."
+        },
+        {
+          "zh": "更新信念。",
+          "en": "Update beliefs."
+        },
+        {
+          "zh": "調節神經。",
+          "en": "Regulate nervous system."
+        },
+        {
+          "zh": "提升韌性。",
+          "en": "Build resilience."
+        },
+        {
+          "zh": "心理穩定。",
+          "en": "Psychological stability."
+        }
+      ],
+      "diagnosis_questions": []
+    },
+    {
+      "id": 14,
+      "name_zh": "健康管理",
+      "name_en": "Health",
+      "system": "底層與擴張",
+      "icon": "💪",
+      "essence_zh": "健康不是永遠沒有症狀。健康是維持、恢復與調節生命穩態的能力。",
+      "essence_en": "Health is not symptom-free. It's maintaining, recovering, and regulating your life systems.",
+      "old_modes": [
+        {
+          "zh": "生病才管。",
+          "en": "Only manage when sick."
+        },
+        {
+          "zh": "一直吃保健品。",
+          "en": "Taking supplements constantly."
+        },
+        {
+          "zh": "追神藥。",
+          "en": "Chasing miracle cures."
+        },
+        {
+          "zh": "一直檢查。",
+          "en": "Over-testing."
+        },
+        {
+          "zh": "治療疾病。",
+          "en": "Treating disease."
+        },
+        {
+          "zh": "沒有病就是健康。",
+          "en": "No disease = healthy."
+        }
+      ],
+      "new_modes": [
+        {
+          "zh": "睡眠管理。",
+          "en": "Sleep management."
+        },
+        {
+          "zh": "營養管理。",
+          "en": "Nutrition management."
+        },
+        {
+          "zh": "運動管理。",
+          "en": "Movement management."
+        },
+        {
+          "zh": "恢復管理。",
+          "en": "Recovery management."
+        },
+        {
+          "zh": "生命穩態。",
+          "en": "Homeostasis."
+        },
+        {
+          "zh": "健康生成。",
+          "en": "Health generation."
+        }
+      ],
+      "diagnosis_questions": []
+    },
+    {
+      "id": 15,
+      "name_zh": "AI能力",
+      "name_en": "AI",
+      "system": "底層與擴張",
+      "icon": "🤖",
+      "essence_zh": "AI不是答案機。AI是認知放大器與模型測試器。",
+      "essence_en": "AI is not an answer machine. It's a cognitive amplifier and model tester.",
+      "old_modes": [
+        {
+          "zh": "AI聊天。",
+          "en": "AI chatting."
+        },
+        {
+          "zh": "AI搜尋。",
+          "en": "AI searching."
+        },
+        {
+          "zh": "AI幫我寫。",
+          "en": "AI writing for me."
+        },
+        {
+          "zh": "AI翻譯。",
+          "en": "AI translating."
+        },
+        {
+          "zh": "AI取代人。",
+          "en": "AI replacing humans."
+        },
+        {
+          "zh": "一直問AI。",
+          "en": "Always asking AI."
+        }
+      ],
+      "new_modes": [
+        {
+          "zh": "AI第二大腦。",
+          "en": "AI as second brain."
+        },
+        {
+          "zh": "AI流程設計。",
+          "en": "AI for process design."
+        },
+        {
+          "zh": "AI知識管理。",
+          "en": "AI for knowledge."
+        },
+        {
+          "zh": "AI分析。",
+          "en": "AI analysis."
+        },
+        {
+          "zh": "AI決策支援。",
+          "en": "AI decision support."
+        },
+        {
+          "zh": "AI放大能力。",
+          "en": "AI amplification."
+        }
+      ],
+      "diagnosis_questions": []
+    },
+    {
+      "id": 16,
+      "name_zh": "創新能力",
+      "name_en": "Innovation",
+      "system": "底層與擴張",
+      "icon": "💡",
+      "essence_zh": "創新不是突然有靈感。創新是重新排列既有元素，產生新的有效結構。",
+      "essence_en": "Innovation is not sudden inspiration. It's recombining existing elements into new effective structures.",
+      "old_modes": [
+        {
+          "zh": "等待靈感。",
+          "en": "Waiting for inspiration."
+        },
+        {
+          "zh": "模仿成功者。",
+          "en": "Imitating success."
+        },
+        {
+          "zh": "想到就做。",
+          "en": "Acting on whims."
+        },
+        {
+          "zh": "創意很多。",
+          "en": "Lots of ideas."
+        },
+        {
+          "zh": "產品很多。",
+          "en": "Many products."
+        },
+        {
+          "zh": "一直創作。",
+          "en": "Creating constantly."
+        }
+      ],
+      "new_modes": [
+        {
+          "zh": "發現問題。",
+          "en": "Discover problems."
+        },
+        {
+          "zh": "跨域整合。",
+          "en": "Cross-domain integration."
+        },
+        {
+          "zh": "建立模型。",
+          "en": "Build models."
+        },
+        {
+          "zh": "AI協作。",
+          "en": "AI collaboration."
+        },
+        {
+          "zh": "創造價值。",
+          "en": "Create value."
+        },
+        {
+          "zh": "持續創新。",
+          "en": "Continuous innovation."
+        }
+      ],
+      "diagnosis_questions": []
+    }
+  ]
+}
+    </script>
+
+    <script>
+        // 讀取資料
+        const data = JSON.parse(document.getElementById('capabilities-data').textContent);
+        const abilities = data.abilities;
+
+        // ===== 語音合成 =====
+        function speakEnglish(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            utterance.pitch = 1.0;
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // TTS 按鈕事件代理
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('tts-btn')) {
+                const text = e.target.dataset.speak;
+                if (text) {
+                    e.target.classList.add('playing');
+                    speakEnglish(text);
+                    setTimeout(() => e.target.classList.remove('playing'), 1000);
+                }
+            }
+        });
+
+        // ===== 導航 =====
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const sectionName = this.dataset.section;
+                
+                // 隱藏所有section
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                
+                // 更新按鈕狀態
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 顯示對應section
+                const sectionId = sectionName + '-section';
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    section.classList.add('active');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // ===== 能力卡片展開 =====
+        function renderAbilities() {
+            const grid = document.getElementById('abilities-grid');
+            grid.innerHTML = '';
+            
+            abilities.forEach((ability, idx) => {
+                const card = document.createElement('div');
+                card.className = 'ability-card';
+                
+                const oldModes = ability.old_modes.map(m => `<div class="bilingual-item"><div class="zh">✗ ${m.zh}</div><div class="en">✗ ${m.en}</div></div>`).join('');
+                const newModes = ability.new_modes.map(m => `<div class="bilingual-item"><div class="zh">✓ ${m.zh}</div><div class="en">✓ ${m.en}</div></div>`).join('');
+                
+                card.innerHTML = `
+                    <div class="ability-card-header">
+                        <div class="icon">${ability.icon}</div>
+                        <div>
+                            <h3>${ability.name_zh}</h3>
+                            <p>${ability.name_en}</p>
+                        </div>
+                    </div>
+                    <div class="ability-card-body">
+                        <div style="margin-bottom: 16px;">
+                            <span class="system-tag">${ability.system}</span>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h5 style="color: var(--navy); font-weight: 600; margin-bottom: 8px;">能力本質 | Essence</h5>
+                            <div class="bilingual-box">
+                                <div class="zh" style="margin-bottom: 8px;">${ability.essence_zh}</div>
+                                <div class="en">${ability.essence_en}
+                                    <button class="tts-btn" data-speak="${ability.essence_en}">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h5 style="color: var(--navy); font-weight: 600; margin-bottom: 8px;">舊模式 | Old Patterns</h5>
+                            <div class="bilingual-box">${oldModes}</div>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h5 style="color: var(--teal); font-weight: 600; margin-bottom: 8px;">新模式 | New Patterns</h5>
+                            <div class="bilingual-box" style="border-left-color: var(--teal);">${newModes}</div>
+                        </div>
+                        
+                        <button class="nav-btn" style="width: 100%; background: var(--teal); border-color: var(--teal); color: white;">
+                            診斷這個能力 | Diagnose This Ability
+                        </button>
+                    </div>
+                `;
+                
+                card.addEventListener('click', function() {
+                    this.classList.toggle('expanded');
+                });
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // ===== 渲染系統分類 =====
+        function renderSystems() {
+            const systems = {
+                '輸入與認知': [],
+                '輸出與行動': [],
+                '連結與影響': [],
+                '底層與擴張': []
+            };
+            
+            abilities.forEach(ability => {
+                systems[ability.system].push(ability);
+            });
+            
+            const container = document.getElementById('systems-grid-section');
+            container.innerHTML = '';
+            
+            Object.entries(systems).forEach(([systemName, systemAbilities]) => {
+                const systemDiv = document.createElement('div');
+                systemDiv.style.marginBottom = '40px';
+                
+                const title = document.createElement('h3');
+                title.textContent = systemName;
+                title.style.color = 'var(--navy)';
+                title.style.marginBottom = '20px';
+                systemDiv.appendChild(title);
+                
+                const grid = document.createElement('div');
+                grid.className = 'abilities-grid';
+                
+                systemAbilities.forEach(ability => {
+                    const card = document.createElement('div');
+                    card.className = 'ability-card';
+                    card.innerHTML = `
+                        <div class="ability-card-header">
+                            <div class="icon">${ability.icon}</div>
+                            <div>
+                                <h3>${ability.name_zh}</h3>
+                                <p>${ability.name_en}</p>
+                            </div>
+                        </div>
+                        <div class="ability-card-body">
+                            <div class="bilingual-box">
+                                <div class="zh" style="margin-bottom: 8px;">${ability.essence_zh}</div>
+                                <div class="en">${ability.essence_en}
+                                    <button class="tts-btn" data-speak="${ability.essence_en}">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    card.addEventListener('click', function() {
+                        this.classList.toggle('expanded');
+                    });
+                    grid.appendChild(card);
+                });
+                
+                systemDiv.appendChild(grid);
+                container.appendChild(systemDiv);
+            });
+        }
+
+        // ===== 診斷網格 =====
+        function renderDiagnosis() {
+            const grid = document.getElementById('diagnosis-grid');
+            grid.innerHTML = '';
+            grid.className = 'abilities-grid';
+            
+            abilities.forEach(ability => {
+                const card = document.createElement('div');
+                card.className = 'ability-card';
+                
+                const questions = ability.diagnosis_questions.map((q, i) => {
+                    return `
+                        <div class="question-item">
+                            <p>問題 ${i+1}:</p>
+                            <div class="bilingual-item">
+                                <div class="zh">${q.zh}</div>
+                                <div class="en">${q.en}
+                                    <button class="tts-btn" data-speak="${q.en}">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                card.innerHTML = `
+                    <div class="ability-card-header">
+                        <div class="icon">${ability.icon}</div>
+                        <div>
+                            <h3>${ability.name_zh}</h3>
+                            <p>${ability.name_en}</p>
+                        </div>
+                    </div>
+                    <div class="ability-card-body">
+                        ${ability.diagnosis_questions.length > 0 ? `<div class="diagnostic-box">${questions}</div>` : `<p style="font-size: 14px; color: var(--dark-gray);">診斷題目開發中...<br/>Diagnostic questions coming soon...</p>`}
+                    </div>
+                `;
+                
+                card.addEventListener('click', function() {
+                    this.classList.toggle('expanded');
+                });
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // ===== 初始化 =====
+        function init() {
+            renderAbilities();
+            renderSystems();
+            renderDiagnosis();
+            setupScrollTop();
+        }
+
+        function setupScrollTop() {
+            const btn = document.getElementById('scrollTopBtn');
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    btn.classList.add('show');
+                } else {
+                    btn.classList.remove('show');
+                }
+            });
+            
+            btn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
