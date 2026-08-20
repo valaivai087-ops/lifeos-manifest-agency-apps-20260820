@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High Agency 班級自治OS｜完整終極版 3.0</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --navy: #1A2B5F;
+            --gold: #C9960C;
+            --teal: #0A7A72;
+            --light-gray: #F5F5F5;
+            --border-gray: #E0E0E0;
+            --success: #28a745;
+        }
+        body {
+            font-family: 'Microsoft JhengHei', 微軟正黑體, sans-serif;
+            background-color: #ffffff;
+            color: var(--navy);
+            line-height: 1.6;
+        }
+        .container-wrapper { display: flex; min-height: 100vh; }
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, var(--navy) 0%, #0D1B3E 100%);
+            color: white;
+            padding: 30px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+        .sidebar-logo {
+            padding: 0 25px 30px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+        .sidebar-logo h1 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: var(--gold);
+        }
+        .sidebar-logo p {
+            font-size: 11px;
+            color: rgba(255,255,255,0.7);
+        }
+        .nav-section { margin-bottom: 20px; }
+        .nav-section-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            padding: 0 25px;
+            margin-bottom: 10px;
+        }
+        .nav-item {
+            padding: 10px 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            color: rgba(255,255,255,0.8);
+            font-size: 12px;
+        }
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--gold);
+        }
+        .nav-item.active {
+            border-left-color: var(--gold);
+            background: rgba(201, 150, 12, 0.15);
+            color: var(--gold);
+        }
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 35px 45px;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+        .page-header {
+            margin-bottom: 25px;
+            border-bottom: 3px solid var(--gold);
+            padding-bottom: 15px;
+        }
+        .page-header h1 {
+            font-size: 28px;
+            color: var(--navy);
+            margin-bottom: 5px;
+        }
+        .card {
+            background: white;
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+        .card-header {
+            background: linear-gradient(90deg, var(--navy) 0%, #0D1B3E 100%);
+            color: white;
+            padding: 16px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .card-body { padding: 20px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .tab-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            border-bottom: 2px solid var(--border-gray);
+            flex-wrap: wrap;
+        }
+        .tab-button {
+            padding: 8px 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            color: rgba(26,43,95,0.6);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            margin-bottom: -2px;
+        }
+        .tab-button.active {
+            color: var(--navy);
+            border-bottom-color: var(--gold);
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .officer-card {
+            background: white;
+            border: 1px solid var(--border-gray);
+            border-radius: 6px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+        .officer-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 2px 6px rgba(26,43,95,0.1);
+        }
+        .officer-icon { font-size: 20px; margin-bottom: 5px; }
+        .officer-name {
+            font-weight: bold;
+            color: var(--navy);
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        .officer-content {
+            font-size: 12px;
+            display: none;
+        }
+        .officer-content.expanded {
+            display: block;
+        }
+        .task-item {
+            background: var(--light-gray);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--teal);
+            font-size: 11px;
+            line-height: 1.6;
+        }
+        .task-time {
+            color: var(--gold);
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .task-title {
+            font-weight: bold;
+            color: var(--navy);
+            margin-top: 4px;
+            font-size: 12px;
+        }
+        .table-scroll { overflow-x: auto; }
+        .table-full {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+        .table-full thead { background: var(--light-gray); }
+        .table-full th, .table-full td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-gray);
+        }
+        .table-full th {
+            font-weight: bold;
+            color: var(--navy);
+        }
+        .concept-item {
+            background: var(--light-gray);
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border-left: 4px solid var(--gold);
+            font-size: 12px;
+        }
+        .concept-item strong {
+            color: var(--navy);
+        }
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+        .stats-table thead { background: var(--light-gray); }
+        .stats-table th, .stats-table td {
+            padding: 6px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-gray);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-wrapper">
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <h1>⭐ High Agency</h1>
+                <p>班級自治OS｜終極版</p>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">儀表板</div>
+                <div class="nav-item active" onclick="switchPage('dashboard')">📊 班級儀表板</div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">管理系統</div>
+                <div class="nav-item" onclick="switchPage('officers')">👥 14大幹部中心</div>
+                <div class="nav-item" onclick="switchPage('tasks')">📋 任務管理</div>
+                <div class="nav-item" onclick="switchPage('eval')">🎯 評比系統</div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">診斷工具</div>
+                <div class="nav-item" onclick="switchPage('level')">📈 班級Level</div>
+                <div class="nav-item" onclick="switchPage('diagnosis')">🔍 班級診斷</div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">學習中心</div>
+                <div class="nav-item" onclick="switchPage('concepts')">💡 核心概念</div>
+                <div class="nav-item" onclick="switchPage('formula')">🔗 控制迴路</div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">班級文化</div>
+                <div class="nav-item" onclick="switchPage('culture')">🎨 班級宣言</div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <!-- 儀表板 -->
+            <div id="dashboard" class="page active">
+                <div class="page-header">
+                    <h1>📊 班級自治儀表板</h1>
+                    <p>完整監控班級運作狀況</p>
+                </div>
+                <div class="card">
+                    <div class="card-header">🎯 3大High Agency公式</div>
+                    <div class="card-body">
+                        <div style="background: linear-gradient(180deg, #fffae6 0%, white 100%); padding: 12px; border-radius: 6px; border-left: 4px solid var(--gold); margin-bottom: 12px; font-size: 12px;">
+                            <div style="font-weight: bold; color: var(--navy); margin-bottom: 6px;">投入度 = 角色意義 × 任務清晰 × 自主權 × 能力感 × 成果可見 × 社會認同</div>
+                            <div style="font-size: 11px; color: rgba(26,43,95,0.7);">當六個要素都具備時，幹部的投入度最高</div>
+                        </div>
+                        <div style="background: linear-gradient(180deg, #e6f7f5 0%, white 100%); padding: 12px; border-radius: 6px; border-left: 4px solid var(--teal); margin-bottom: 12px; font-size: 12px;">
+                            <div style="font-weight: bold; color: var(--navy); margin-bottom: 6px;">High Agency = 發現問題 × 辨識可控變數 × 提出方案 × 採取行動 × 取得回饋 × 持續修正</div>
+                            <div style="font-size: 11px; color: rgba(26,43,95,0.7);">高度的自主性來自於完整的反饋循環</div>
+                        </div>
+                        <div style="background: linear-gradient(180deg, #e6f0ff 0%, white 100%); padding: 12px; border-radius: 6px; border-left: 4px solid var(--navy); font-size: 12px;">
+                            <div style="font-weight: bold; color: var(--navy); margin-bottom: 6px;">班級自治度 = 角色清晰 × SOP × 責任 × 權限 × 合作 × 回饋 × 更新</div>
+                            <div style="font-size: 11px; color: rgba(26,43,95,0.7);">班級自治的核心是建立一個完整的系統</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 14大幹部中心 -->
+            <div id="officers" class="page">
+                <div class="page-header">
+                    <h1>👥 14大幹部中心</h1>
+                    <p>利他×利己能力發展表</p>
+                </div>
+                <div id="officers-content"></div>
+            </div>
+
+            <!-- 任務管理 -->
+            <div id="tasks" class="page">
+                <div class="page-header">
+                    <h1>📋 任務管理系統</h1>
+                </div>
+
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="switchTab('task-list')">📌 任務清單</button>
+                </div>
+
+                <div id="task-list" class="tab-content active">
+                    <div id="tasks-content"></div>
+                </div>
+            </div>
+
+            <!-- 評比系統 -->
+            <div id="eval" class="page">
+                <div class="page-header">
+                    <h1>🎯 同儕評比系統</h1>
+                </div>
+                <div class="card">
+                    <div class="card-header">6向度評比 + 實名制</div>
+                    <div class="card-body">
+                        <div style="font-size: 12px;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                <div>
+                                    <div style="font-weight: bold; color: var(--success); margin-bottom: 10px;">✅ 禁止人身攻擊</div>
+                                    <div style="font-size: 11px;">✓ 「他主動協助同學」</div>
+                                    <div style="font-size: 11px;">✓ 「他提出很好的建議」</div>
+                                    <div style="font-size: 11px;">✓ 「他需要在溝通上多下功夫」</div>
+                                </div>
+                                <div>
+                                    <div style="font-weight: bold; color: var(--danger); margin-bottom: 10px;">❌ 不可以說</div>
+                                    <div style="font-size: 11px;">✗ 「他人很差勁」</div>
+                                    <div style="font-size: 11px;">✗ 「他做什麼都不行」</div>
+                                    <div style="font-size: 11px;">✗ 「他永遠改不了」</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 班級Level進度 -->
+            <div id="level" class="page">
+                <div class="page-header">
+                    <h1>📈 班級Level進度</h1>
+                </div>
+                <div id="level-content"></div>
+            </div>
+
+            <!-- 班級診斷 -->
+            <div id="diagnosis" class="page">
+                <div class="page-header">
+                    <h1>🔍 班級診斷工具</h1>
+                </div>
+                <div class="card">
+                    <div class="card-header">✓ 班級診斷清單</div>
+                    <div class="card-body">
+                        <table class="stats-table">
+                            <thead><tr><th>項目</th><th>檢查重點</th></tr></thead>
+                            <tbody>
+                                <tr><td>1. 角色清晰</td><td>幹部是否清楚自己的職責和目標</td></tr>
+                                <tr><td>2. 任務透明</td><td>班級是否有明確的SOP和流程</td></tr>
+                                <tr><td>3. 標準定義</td><td>任務是否有清晰的完成標準</td></tr>
+                                <tr><td>4. 權限下放</td><td>幹部是否有適當的決策權</td></tr>
+                                <tr><td>5. 合作機制</td><td>幹部之間是否合作順利</td></tr>
+                                <tr><td>6. 反饋系統</td><td>全班同學是否願意提供回饋</td></tr>
+                                <tr><td>7. 持續改善</td><td>幹部是否根據回饋改進</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- High Agency核心概念 -->
+            <div id="concepts" class="page">
+                <div class="page-header">
+                    <h1>💡 High Agency核心概念</h1>
+                    <p>51個核心概念 × 31個關鍵原則</p>
+                </div>
+
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="switchTab('concept-51')">51個概念</button>
+                    <button class="tab-button" onclick="switchTab('concept-31')">31個原則</button>
+                </div>
+
+                <div id="concept-51" class="tab-content active"></div>
+                <div id="concept-31" class="tab-content"></div>
+            </div>
+
+            <!-- 控制迴路 -->
+            <div id="formula" class="page">
+                <div class="page-header">
+                    <h1>🔗 控制迴路可視化</h1>
+                </div>
+                <div class="card">
+                    <div class="card-header">✓ 正向循環</div>
+                    <div class="card-body">
+                        <div style="font-size: 11px; line-height: 1.8; background: linear-gradient(180deg, #d4edda 0%, white 100%); padding: 12px; border-radius: 6px;">
+                            📋 班級任務 → 👤 真實責任 → 🎯 自主行動 → ⚠️ 遇到問題
+                            <div style="margin: 8px 0;">↓</div>
+                            🔍 錯誤診斷 → 👥 接受回饋 → ✏️ 修正方法 → 💪 能力生成
+                            <div style="margin: 8px 0;">↓</div>
+                            ⭐ 信任增加 → 🎖️ 榮譽提升 → 📈 影響力增加 → 🚀 High Agency提升
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">⚠️ 反向惡性迴路（需阻斷）</div>
+                    <div class="card-body">
+                        <div style="font-size: 11px; line-height: 1.8; background: linear-gradient(180deg, #f8d7da 0%, white 100%); padding: 12px; border-radius: 6px;">
+                            ⚠️ 問題出現 → 😰 隱瞞/逃避 → 📉 問題擴大 → 💔 信任下降
+                            <div style="margin: 8px 0;">↓</div>
+                            🔐 自主權被收回 → 😞 投入度下降 → ❌ 能力生成停止
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 班級宣言 -->
+            <div id="culture" class="page">
+                <div class="page-header">
+                    <h1>🎨 班級宣言</h1>
+                </div>
+                <div class="card">
+                    <div class="card-header">班級文化設定</div>
+                    <div class="card-body">
+                        <form onsubmit="saveCulture(event)">
+                            <div style="margin-bottom: 12px;">
+                                <label style="display: block; font-weight: bold; margin-bottom: 6px;">班級名稱</label>
+                                <input type="text" id="class-name" placeholder="例：205班" style="width: 100%; padding: 6px; border: 1px solid var(--border-gray); border-radius: 4px;">
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <label style="display: block; font-weight: bold; margin-bottom: 6px;">班級宣言</label>
+                                <textarea id="class-mission" placeholder="班級精神和目標" style="width: 100%; padding: 6px; border: 1px solid var(--border-gray); border-radius: 4px; min-height: 60px;"></textarea>
+                            </div>
+                            <button type="submit" style="padding: 8px 16px; background: linear-gradient(135deg, var(--navy) 0%, #0D1B3E 100%); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">💾 保存</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+const OFFICERS = [
+    {name:"班長",icon:"👑",core:"領導力",title:"班級領導者",mission:"負責班級整體運作",util:["認定問題","規劃目標","調度資源","監督進度","協調分工"],selfish:["提升決策力","學習領導","建立影響力","獲得認可","發展自信"]},
+    {name:"副班長",icon:"🤝",core:"協調力",title:"班長助手",mission:"協助備援重要工作",util:["觀察細節","及時支援","準備備案","協助溝通","解決衝突"],selfish:["增強觀察力","學習協調","建立主見","提升適應力","發展備援思維"]},
+    {name:"風紀股長",icon:"⚖️",core:"治理力",title:"秩序維護者",mission:"班級秩序維護",util:["訂定規則","公平執行","記錄檢查","進行提醒","統計回報"],selfish:["培養公正性","學習管理","建立執行力","增強判斷力","發展領導觀"]},
+    {name:"學藝股長",icon:"📚",core:"資訊力",title:"學習推動者",mission:"學習資源管理",util:["收集資訊","整理內容","傳達說明","追蹤進度","提供協助"],selfish:["增強資訊素養","學習整理能力","建立知識管理","提升表達力","發展AI協作"]},
+    {name:"服務股長",icon:"🧹",core:"營運力",title:"服務協調者",mission:"班級服務管理",util:["規劃工作","分配任務","監督執行","檢查品質","改善流程"],selfish:["培養計劃性","學習分工","建立執行力","增強品質意識","發展效率思維"]},
+    {name:"總務股長",icon:"💼",core:"財務力",title:"班費管理者",mission:"班級經費管理",util:["記帳管理","計畫預算","採購用品","保管物品","定期盤點"],selfish:["增強數字力","學習預算觀念","建立成本意識","提升責任感","發展理財觀"]},
+    {name:"輔導股長",icon:"❤️",core:"支持力",title:"心理關懷者",mission:"同學心理支持",util:["觀察狀態","主動傾聽","提供協助","記錄情況","定期追蹤"],selfish:["增強同理心","學習傾聽","建立信任","提升溝通力","發展照顧意識"]},
+    {name:"康樂股長",icon:"🎉",core:"企畫力",title:"活動企劃者",mission:"班級活動策劃",util:["收集想法","規劃方案","準備物資","協調執行","蒐集意見"],selfish:["培養創意","學習企劃","建立組織力","增強協調能力","發展創新思維"]},
+    {name:"圖書股長",icon:"📖",core:"知識力",title:"知識傳播者",mission:"班級知識管理",util:["借閱管理","分類整理","推薦好書","組織分享","推廣閱讀"],selfish:["增強知識力","學習分類","建立品味","提升文化修養","發展思考深度"]},
+    {name:"合作股長",icon:"🤲",core:"協作力",title:"合作促進者",mission:"班級合作推動",util:["記錄會議","協調分工","建立信任","處理衝突","促進參與"],selfish:["培養協商力","學習人際","建立親和力","增強領導感","發展包容思維"]},
+    {name:"環保股長",icon:"🌱",core:"永續力",title:"環保倡導者",mission:"環境保護推動",util:["檢查環境","監督分類","提醒提醒","進行宣導","建立習慣"],selfish:["增強系統思考","學習永續","建立責任感","提升環保意識","發展前瞻視野"]},
+    {name:"班級代表",icon:"🎤",core:"公共治理力",title:"班級聲音代表",mission:"代表班級溝通",util:["蒐集意見","整合聲音","代表發言","傳達決議","反饋結果"],selfish:["培養表達力","學習協商","建立代表性","增強說服力","發展政治敏感度"]},
+    {name:"資訊股長",icon:"💻",core:"AI數位力",title:"科技推廣者",mission:"科技應用推進",util:["檢查設備","解決問題","管理資料","推廣工具","教導使用"],selfish:["增強數位力","學習AI","建立技能","提升問題解決","發展創新觀"]},
+];
+
+const OFFICER_DUTIES = {
+    "班長":[
+        {time:"08:00",name:"班級早自習管理",desc:"開啟教室、點名檢查、維持秩序、準備上課",detail:"檢查同學進度、遲到記錄、教室整潔、課本準備狀態"},
+        {time:"12:00",name:"午餐班級管理",desc:"安排購票、協調配菜、秩序檢查、環境整理",detail:"確認用餐人數、費用收取、衛生監督、垃圾分類"},
+        {time:"16:00",name:"班級衛生檢查",desc:"檢查教室整潔、黑板擦拭、垃圾清理、物品擺放",detail:"地板、桌椅、門窗、廁所、走廊清潔狀況評估"},
+        {time:"17:00",name:"班會紀錄與報告",desc:"整理當日班務、準備班會議題、記錄決議、公告事項",detail:"彙整各股長報告、提出討論項目、追蹤上週決議"}
+    ],
+    "副班長":[
+        {time:"08:30",name:"追蹤班長任務",desc:"協助班長、備援重要工作、確保工作完成",detail:"檢查班長是否完成、準備備方案、隨時支援"},
+        {time:"12:30",name:"協助午餐管理",desc:"確保配菜順利、處理突發狀況、協調同學配合",detail:"檢查配菜進度、解決不適感、加強秩序"},
+        {time:"15:30",name:"檢查衛生死角",desc:"發現班長遺漏之處、補充不足、完善細節",detail:"角落死角、高處灰塵、機械設備、盆栽澆水"},
+        {time:"16:30",name:"協助班會準備",desc:"整理議題、場地布置、準備器材、引導流程",detail:"確認主持人、準備投影機、佈置座位、計時"}
+    ],
+    "風紀股長":[
+        {time:"08:00",name:"晨間秩序檢查",desc:"記錄遲到、缺席、服儀、準時情況",detail:"點名登記、制服檢查、頭髮儀容、違規記錄"},
+        {time:"12:00",name:"午休秩序監督",desc:"檢查午休紀律、禁止喧嘩、監督睡眠時間",detail:"走動巡視、提醒安靜、記錄違規、報告師長"},
+        {time:"14:00",name:"下午秩序檢查",desc:"監督課間秩序、檢查制服、防止打鬧、安全檢查",detail:"走廊監督、階梯檢查、廁所安全、打鬧制止"},
+        {time:"16:30",name:"每日秩序總結",desc:"統計違規情況、分析問題、回報班長、提出建議",detail:"違規人數、類型統計、趨勢分析、改善方案"}
+    ],
+    "學藝股長":[
+        {time:"08:15",name:"整理課業公告",desc:"收集老師指示、整理功課內容、傳達重要資訊",detail:"記錄各科指示、整理公告欄、通知同學"},
+        {time:"12:00",name:"傳達功課說明",desc:"說明功課內容、助教系統配合、提供範例說明",detail:"功課詳細說明、範例講解、問題解答"},
+        {time:"14:30",name:"追蹤補考名單",desc:"確認補考進度、提醒同學準備、記錄報名情況",detail:"名單整理、進度通知、模擬測驗"},
+        {time:"15:00",name:"準備教學資源",desc:"整理講義、準備教材、更新資訊、建檔保管",detail:"檔案分類、材料準備、備份保存、分享平台"}
+    ],
+    "服務股長":[
+        {time:"08:30",name:"分配服務工作",desc:"安排掃地、擦黑板人員、分配工作區域",detail:"人力分配、任務說明、工具準備、時間安排"},
+        {time:"12:00",name:"監督服務執行",desc:"檢查服務進度、協助困難、調整分工、解決問題",detail:"進度檢查、品質監督、困難排除、即時協助"},
+        {time:"15:00",name:"檢查服務品質",desc:"驗收工作成果、評估清潔度、給予回饋、記錄結果",detail:"詳細檢查、拍照記錄、品質評分、改善建議"},
+        {time:"16:00",name:"規劃下週工作",desc:"預排工作時程、分配人力、考慮特殊情況、提前準備",detail:"輪值安排、工具檢查、特殊活動協調、預備方案"}
+    ],
+    "總務股長":[
+        {time:"08:00",name:"班費管理",desc:"記錄收支、維持帳本、確保透明、定期公告",detail:"收費記錄、支出登記、帳目核對、餘額統計"},
+        {time:"10:00",name:"班級物品盤點",desc:"檢查課桌椅、教具狀態、損壞記錄、維修通知",detail:"數量確認、狀態評估、損壞拍照、維修申報"},
+        {time:"14:00",name:"採購用品",desc:"購買班級需用品、保管發票、追蹤收貨、帳目更新",detail:"項目清單、採購渠道、價格比較、品質確認"},
+        {time:"16:00",name:"預算規劃",desc:"計畫下月支出、申請預算、分配資源、長期規劃",detail:"成本預估、優先排序、預算申請、年度規劃"}
+    ],
+    "輔導股長":[
+        {time:"08:30",name:"班級關懷巡查",desc:"觀察同學狀態、發現異常、紀錄情況、主動接觸",detail:"情緒觀察、狀態評估、異常紀錄、詳細描述"},
+        {time:"12:00",name:"午休心理支持",desc:"傾聽同學困擾、提供協助、記錄心事、建議方案",detail:"主動傾聽、同理回應、筆記記錄、適當建議"},
+        {time:"14:30",name:"追蹤缺席同學",desc:"了解缺席原因、聯絡家長、記錄狀況、定期回訪",detail:"原因詳查、聯絡紀錄、承諾事項、回訪時程"},
+        {time:"16:30",name:"整理關懷記錄",desc:"記錄輔導內容、整理檔案、提報師長、分析趨勢",detail:"詳細紀錄、檔案管理、師長報告、月度分析"}
+    ],
+    "康樂股長":[
+        {time:"08:00",name:"班級活動企劃",desc:"收集點子、規劃活動流程、擬定預算、準備方案",detail:"想法蒐集、流程設計、時程安排、預算編列"},
+        {time:"12:00",name:"調查同學需求",desc:"問卷調查、蒐集建議、分析偏好、了解興趣",detail:"線上問卷、意見訪談、數據整理、需求分析"},
+        {time:"14:00",name:"準備活動物資",desc:"採購獎品、整備場地、準備道具、檢查設備",detail:"物品清單、採購執行、場地佈置、設備測試"},
+        {time:"16:00",name:"推動同學參與",desc:"鼓勵報名、招募志工、宣傳活動、解答問題",detail:"宣傳文案、報名推廣、志工招募、問題解答"}
+    ],
+    "圖書股長":[
+        {time:"08:30",name:"圖書借閱管理",desc:"登記借閱、催還逾期書籍、維護借閱簿、核對數量",detail:"借閱登記、催還提醒、期限管理、遺失記錄"},
+        {time:"11:00",name:"書籍整理分類",desc:"上架新書、清理書架、分類排序、更新目錄",detail:"新書上架、舊書整理、分類調整、標籤製作"},
+        {time:"14:00",name:"推薦閱讀",desc:"介紹好書、舉辦書展、製作推介、分享心得",detail:"新書介紹、主題書展、推薦清單、讀書分享"},
+        {time:"15:30",name:"知識分享",desc:"辦讀書會、分享心得、邀請分享者、組織討論",detail:"讀書會規劃、討論主題、邀請嘉賓、紀錄重點"}
+    ],
+    "合作股長":[
+        {time:"08:00",name:"班級會議紀錄",desc:"記錄議題、整理決議、製作會議紀錄、公告重點",detail:"議題記錄、發言摘要、決議登記、公告製作"},
+        {time:"10:30",name:"協調班務分工",desc:"溝通幹部分工、化解衝突、調整人力、協助合作",detail:"分工溝通、衝突調解、人力調度、協作協助"},
+        {time:"14:00",name:"班級信任建立",desc:"舉辦破冰活動、促進合作、建立共識、增進感情",detail:"活動策劃、參與推廣、效果評估、改善建議"},
+        {time:"16:00",name:"校隊支援",desc:"鼓勵代表隊、宣傳班級、組織應援、記錄成績",detail:"隊伍支持、應援活動、宣傳製作、成績統計"}
+    ],
+    "環保股長":[
+        {time:"08:30",name:"環境檢查",desc:"巡視教室、走廊、廁所衛生、記錄問題、通知改善",detail:"全面巡視、垃圾檢查、異味檢查、設施檢查"},
+        {time:"12:00",name:"垃圾分類監督",desc:"檢查分類狀況、糾正錯誤、提醒同學、統計分類",detail:"分類檢查、錯誤糾正、提醒教育、分類統計"},
+        {time:"15:00",name:"資源回收提醒",desc:"推動垃圾分類、節能減碳、收集回收物、送交回收",detail:"分類標示、垃圾轉運、回收物整理、送收單位"},
+        {time:"16:30",name:"環保宣導",desc:"製作海報、教育同學、組織活動、推廣環保",detail:"海報設計、課堂宣導、影片播放、主題活動"}
+    ],
+    "班級代表":[
+        {time:"08:00",name:"收集班級意見",desc:"深入了解同學想法、蒐集建議、記錄需求、分析偏好",detail:"訪談溝通、意見蒐集、筆記記錄、分類整理"},
+        {time:"11:00",name:"整合班級聲音",desc:"發現共識、統合差異、歸納重點、形成代表意見",detail:"共識提煉、觀點整合、主要議題、代表立場"},
+        {time:"14:00",name:"代表發言",desc:"在班會上代表全班發聲、表達班級立場、提出建議",detail:"發言稿準備、立場清晰、建議具體、回應提問"},
+        {time:"16:00",name:"反饋班級決議",desc:"傳達學校公告、執行班級決議、跟進落實、報告結果",detail:"資訊傳達、決議執行、進度追蹤、結果回報"}
+    ],
+    "資訊股長":[
+        {time:"08:15",name:"檢查電腦設備",desc:"測試投影機、電腦功能、檢查連線、準備備機",detail:"開機測試、投影檢查、網路連線、音效測試"},
+        {time:"10:00",name:"故障排除",desc:"協助師生解決技術問題、記錄狀況、提出方案、跟進維修",detail:"故障紀錄、原因排查、暫時解決、正式維修"},
+        {time:"14:00",name:"雲端資料管理",desc:"整理班級雲端、備份檔案、分享資料、清理垃圾",detail:"檔案組織、備份執行、權限設定、定期整理"},
+        {time:"16:00",name:"AI工具應用",desc:"介紹新科技、提升班級效率、教導使用、蒐集回饋",detail:"工具介紹、使用示範、應用場景、效果評估"}
+    ]
+};
+
+function switchPage(pageName) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageName).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+function switchTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById(tabName).classList.add('active');
+    document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+function renderOfficers() {
+    let html = '';
+    OFFICERS.forEach((officer, idx) => {
+        html += `<div class="officer-card" onclick="toggleOfficer(this)">
+            <div class="officer-icon">${officer.icon}</div>
+            <div class="officer-name">${officer.name} - ${officer.title}</div>
+            <div class="officer-content">
+                <div style="margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border-gray);">
+                    <div style="font-weight: bold; color: var(--gold); font-size: 11px;">核心使命</div>
+                    <div style="font-size: 11px; color: rgba(26,43,95,0.8);">${officer.mission}</div>
+                </div>
+                <div style="margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border-gray);">
+                    <div style="font-weight: bold; color: var(--gold); font-size: 11px;">💚 利他價值（對班級的貢獻）</div>
+                    ${officer.util.map(u => `<div style="font-size: 11px;">✓ ${u}</div>`).join('')}
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <div style="font-weight: bold; color: var(--gold); font-size: 11px;">💛 利己能力（個人成長）</div>
+                    ${officer.selfish.map(s => `<div style="font-size: 11px;">✓ ${s}</div>`).join('')}
+                </div>
+                <div style="background: var(--light-gray); padding: 8px; border-radius: 4px; font-size: 10px; font-weight: bold; color: var(--navy);">
+                    🎯 核心能力：${officer.core}
+                </div>
+            </div>
+        </div>`;
+    });
+    document.getElementById('officers-content').innerHTML = html;
+}
+
+function toggleOfficer(el) {
+    const content = el.querySelector('.officer-content');
+    content.classList.toggle('expanded');
+}
+
+function renderTasks() {
+    let html = '';
+    Object.entries(OFFICER_DUTIES).forEach(([officer, duties]) => {
+        html += `<div class="card">
+            <div class="card-header">${officer} - ${duties.length}項任務</div>
+            <div class="card-body">`;
+        duties.forEach((duty, idx) => {
+            html += `<div class="task-item">
+                <div class="task-time">⏰ ${duty.time}</div>
+                <div class="task-title">📌 ${duty.name}</div>
+                <div style="font-size: 11px; color: rgba(26,43,95,0.8); margin-top: 4px;">說明：${duty.desc}</div>
+                <div style="font-size: 10px; color: rgba(26,43,95,0.6); margin-top: 4px;">詳細：${duty.detail}</div>
+            </div>`;
+        });
+        html += '</div></div>';
+    });
+    document.getElementById('tasks-content').innerHTML = html;
+}
+
+function renderConcepts() {
+    const concepts51 = [
+        "1️⃣ 發現問題的能力", "2️⃣ 辨識可控變數", "3️⃣ 提出創新方案", "4️⃣ 採取主動行動", "5️⃣ 取得真實回饋",
+        "6️⃣ 錯誤診斷思維", "7️⃣ 流程不斷更新", "8️⃣ 能力從實踐生成", "9️⃣ 信任通過表現建立", "🔟 責任感的培養",
+        "1️⃣1️⃣ 主動性的激發", "1️⃣2️⃣ 完成度的追求", "1️⃣3️⃣ 溝通合作意願", "1️⃣4️⃣ 問題解決思維", "1️⃣5️⃣ 持續改善精神",
+        "1️⃣6️⃣ 角色清晰認知", "1️⃣7️⃣ 任務透明化", "1️⃣8️⃣ 標準定義明確", "1️⃣9️⃣ 權限下放適當", "2️⃣0️⃣ 合作機制完善",
+        "2️⃣1️⃣ 反饋系統健全", "2️⃣2️⃣ 持續改進文化", "2️⃣3️⃣ 班級共同宣言", "2️⃣4️⃣ 信任關係建立", "2️⃣5️⃣ 成功可見可感",
+        "2️⃣6️⃣ 榮譽認可充分", "2️⃣7️⃣ 班級文化傳承", "2️⃣8️⃣ 預測誤差最小", "2️⃣9️⃣ 反饋迴路閉合", "3️⃣0️⃣ 學習機制常態",
+        "3️⃣1️⃣ 班級自治度提升", "3️⃣2️⃣ 老師介入率降低", "3️⃣3️⃣ 幹部投入度高企", "3️⃣4️⃣ 同學參與程度深", "3️⃣5️⃣ 班級凝聚力增強",
+        "3️⃣6️⃣ 系統思考能力", "3️⃣7️⃣ 領導力不斷提升", "3️⃣8️⃣ 決策品質改善", "3️⃣9️⃣ 執行力明顯增強", "4️⃣0️⃣ 創新力不斷釋放",
+        "4️⃣1️⃣ 抗壓力逐步建立", "4️⃣2️⃣ 適應力持續提高", "4️⃣3️⃣ 團隊意識形成", "4️⃣4️⃣ 集體榮譽感", "4️⃣5️⃣ 自主學習能力",
+        "4️⃣6️⃣ 問題轉化為機遇", "4️⃣7️⃣ 失敗轉化為經驗", "4️⃣8️⃣ 反思變成習慣", "4️⃣9️⃣ 迭代成為日常", "5️⃣0️⃣ 共同成長態勢",
+        "5️⃣1️⃣ 班級進化能力"
+    ];
+
+    const principles31 = [
+        "原則1️⃣ 領導不是自己做最多，而是讓系統運作更好",
+        "原則2️⃣ 成熟系統不能只靠一個人",
+        "原則3️⃣ 秩序不是控制，而是降低彼此干擾",
+        "原則4️⃣ 資訊價值 = 正確資訊 × 正確時間 × 正確對象",
+        "原則5️⃣ 管理不是全做，而是讓對的人做對的事",
+        "原則6️⃣ 完成不是終點，回饋才能進步",
+        "原則7️⃣ 資源有限，智慧在於配置",
+        "原則8️⃣ 幫助不是替別人扛，而是讓支持系統啟動",
+        "原則9️⃣ 好活動不是自己覺得好玩，而是大家願意參與",
+        "原則🔟 知識價值不在收藏，而在轉化與分享",
+        "原則1️⃣1️⃣ 合作不是想法相同，而是不同仍能共同完成",
+        "原則1️⃣2️⃣ 自己的方便，可能成為別人的成本",
+        "原則1️⃣3️⃣ 代表不是替自己發聲，而是整合大家的聲音",
+        "原則1️⃣4️⃣ 科技能力不是會多少工具，而是能解決多少問題",
+        "原則1️⃣5️⃣ 責任感來自於角色意義和實時成果反饋",
+        "原則1️⃣6️⃣ 主動性來自於感受到自己的影響力",
+        "原則1️⃣7️⃣ 完成度取決於標準的明確性和監督的公平性",
+        "原則1️⃣8️⃣ 溝通合作需要心理安全感作為基礎",
+        "原則1️⃣9️⃣ 問題解決能力源自於多次試錯和回饋",
+        "原則2️⃣0️⃣ 改善來自於承認不足和願意改變",
+        "原則2️⃣1️⃣ 信任不是天生的，而是通過行為累積的",
+        "原則2️⃣2️⃣ 權力若不使用就會消失，必須主動行使",
+        "原則2️⃣3️⃣ 透明度越高，信任度越容易建立",
+        "原則2️⃣4️⃣ 失敗的成本越小，嘗試的勇氣越大",
+        "原則2️⃣5️⃣ 複雜問題需要複雜的思考，而非複雜的組織",
+        "原則2️⃣6️⃣ 預測錯誤是學習的開始，不是失敗的結束",
+        "原則2️⃣7️⃣ 班級文化是通過反復實踐才能建立的",
+        "原則2️⃣8️⃣ 每個人的成長都促進整個班級的進化",
+        "原則2️⃣9️⃣ 利己不是自私，而是通過幫助別人來提升自己",
+        "原則3️⃣0️⃣ High Agency是班級自治的終極目標",
+        "原則3️⃣1️⃣ 真正的領導是讓每個人都成為領導者"
+    ];
+
+    let html = '<div>';
+    concepts51.forEach(c => {
+        html += `<div class="concept-item">${c}</div>`;
+    });
+    html += '</div>';
+    document.getElementById('concept-51').innerHTML = html;
+
+    html = '<div>';
+    principles31.forEach(p => {
+        html += `<div class="concept-item">${p}</div>`;
+    });
+    html += '</div>';
+    document.getElementById('concept-31').innerHTML = html;
+}
+
+function renderLevel() {
+    const levels = [
+        {name:"Level 1️⃣ 依賴期",desc:"老師全程指導，幹部執行指令",width:100},
+        {name:"Level 2️⃣ 理解期",desc:"幹部開始理解為什麼要這樣做",width:80},
+        {name:"Level 3️⃣ 執行期",desc:"幹部自主執行任務，提出問題",width:60},
+        {name:"Level 4️⃣ 協調期",desc:"幹部協調合作，解決複雜問題",width:40},
+        {name:"Level 5️⃣ 優化期",desc:"幹部不斷優化流程，提升效率",width:20},
+        {name:"Level 6️⃣ 創新期",desc:"幹部創造新的可能性和改革",width:10},
+        {name:"Level 7️⃣ 傳承期",desc:"幹部引導下一代，形成班級文化",width:0}
+    ];
+
+    let html = '<div class="card"><div class="card-header">班級成熟度進度（7階段）</div><div class="card-body">';
+    levels.forEach(l => {
+        html += `<div style="margin-bottom: 15px;">
+            <div style="font-weight: bold; color: var(--navy); font-size: 12px;">${l.name}</div>
+            <div style="font-size: 11px; color: rgba(26,43,95,0.7); margin-bottom: 6px;">${l.desc}</div>
+            <div style="width: 100%; height: 20px; background: var(--light-gray); border-radius: 4px; overflow: hidden;">
+                <div style="width: ${l.width}%; height: 100%; background: linear-gradient(90deg, var(--teal) 0%, var(--gold) 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: bold;">
+                    ${l.width}%
+                </div>
+            </div>
+        </div>`;
+    });
+    html += '</div></div>';
+    document.getElementById('level-content').innerHTML = html;
+}
+
+function saveCulture(event) {
+    event.preventDefault();
+    alert('✓ 班級宣言已保存');
+    event.target.reset();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    renderOfficers();
+    renderTasks();
+    renderConcepts();
+    renderLevel();
+});
+    </script>
+</body>
+</html>
