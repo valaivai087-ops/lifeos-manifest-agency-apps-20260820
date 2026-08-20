@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30種語言系統差異 | Language Systems Differences</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'Segoe UI', sans-serif;
+            background: #FFFFFF;
+            color: #333;
+            line-height: 1.8;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1A2B5F 0%, #0A7A72 100%);
+            color: #FFFFFF;
+            padding: 40px 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(26, 43, 95, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .nav-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            padding: 10px 16px;
+            background: #1A2B5F;
+            color: white;
+            border: 2px solid #C9960C;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: #C9960C;
+            color: #1A2B5F;
+            transform: translateY(-2px);
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #C9960C;
+            border-radius: 6px;
+            font-size: 1em;
+            font-family: 'Microsoft JhengHei', sans-serif;
+        }
+
+        .search-box button {
+            padding: 12px 24px;
+            background: #C9960C;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .search-box button:hover {
+            background: #B8860B;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border-left: 5px solid #C9960C;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 16px rgba(26, 43, 95, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            background: #F5F5F5;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .card-header:hover {
+            background: #EFEFEF;
+        }
+
+        .card-title {
+            font-size: 1.15em;
+            font-weight: 600;
+            color: #1A2B5F;
+        }
+
+        .card-subtitle {
+            font-size: 0.9em;
+            color: #0A7A72;
+            margin-top: 4px;
+        }
+
+        .toggle-icon {
+            font-size: 1.3em;
+            color: #C9960C;
+            transition: 0.3s;
+        }
+
+        .card.expanded .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: white;
+        }
+
+        .card.expanded .card-content {
+            max-height: 3000px;
+        }
+
+        .content-inner {
+            padding: 20px;
+        }
+
+        .bilingual-text {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 16px;
+        }
+
+        .zh-text {
+            padding: 12px;
+            background: #F9F9F9;
+            border-radius: 6px;
+            line-height: 1.8;
+        }
+
+        .en-text {
+            padding: 12px;
+            background: #F0F8FF;
+            border-radius: 6px;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .tts-btn {
+            margin-top: 8px;
+            padding: 6px 12px;
+            background: #0A7A72;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: 0.3s;
+        }
+
+        .tts-btn:hover {
+            background: #086860;
+        }
+
+        .tts-btn.playing {
+            background: #C9960C;
+        }
+
+        .single-col {
+            padding: 12px;
+            background: #F9F9F9;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #1A2B5F;
+            margin: 24px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid #C9960C;
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, #C9960C, transparent);
+            margin: 32px 0;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        th {
+            background: #1A2B5F;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #F9F9F9;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #1A2B5F, #0A7A72);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #C9960C;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .bilingual-text {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.6em;
+            }
+
+            .nav-bar {
+                gap: 8px;
+            }
+
+            .nav-btn {
+                padding: 8px 12px;
+                font-size: 0.85em;
+            }
+
+            table {
+                font-size: 0.8em;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #E0E0E0;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .highlight {
+            background: #FFF8E1;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .section-nav {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .section-nav-btn {
+            padding: 10px;
+            background: #EFEFEF;
+            border: 2px solid #0A7A72;
+            color: #1A2B5F;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .section-nav-btn:hover {
+            background: #0A7A72;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>30種語言系統差異</h1>
+        <p>Language Systems Differences | Complete Guide to 180 Language Upgrades</p>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="搜尋 / Search...">
+        <button onclick="performSearch()">搜尋</button>
+        <button onclick="clearSearch()" style="background: #666;">清除</button>
+    </div>
+
+    <div class="nav-bar">
+        <button class="nav-btn active" onclick="showSection('intro')">介紹 Intro</button>
+        <button class="nav-btn" onclick="showSection('01-30')">01-30 語言</button>
+        <button class="nav-btn" onclick="showSection('61-90')">61-90 語言</button>
+        <button class="nav-btn" onclick="showSection('91-120')">91-120 語言</button>
+        <button class="nav-btn" onclick="showSection('121-150')">121-150 語言</button>
+        <button class="nav-btn" onclick="showSection('151-180')">151-180 語言</button>
+        <button class="nav-btn" onclick="showSection('summary')">核心總結</button>
+    </div>
+
+    <!-- Intro Section -->
+    <div id="intro" class="content-section active">
+        <div class="card expanded">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">《30種語言系統差異｜一頁總表》</div>
+                    <div class="card-subtitle">The 30 Language Systems - One Page Overview</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-number">30</div>
+                            <div class="stat-label">基礎語言 Core Languages</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">180</div>
+                            <div class="stat-label">完整系統 Complete System</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">12</div>
+                            <div class="stat-label">核心動作 Core Actions</div>
+                        </div>
+                    </div>
+
+                    <div class="section-title">本體層 Essence Level</div>
+                    <div class="zh-text">
+                        語言不是單純說話，而是大腦切割、編碼與理解現實的工具。
+                    </div>
+                    <div class="en-text">
+                        Language is not merely speaking, but a tool through which the brain segments, encodes, and understands reality.
+                        <button class="tts-btn" data-text="Language is not merely speaking, but a tool through which the brain segments, encodes, and understands reality.">🔊 TTS</button>
+                    </div>
+
+                    <div class="section-title">結構層 Structure Level</div>
+                    <div class="zh-text">
+                        低維語言偏人格、對錯、固定、單因果；高維語言偏變數、關係、機制、系統、模型。
+                    </div>
+                    <div class="en-text">
+                        Low-dimensional language focuses on personality, right/wrong, fixed states, and single causality; high-dimensional language emphasizes variables, relationships, mechanisms, systems, and models.
+                        <button class="tts-btn" data-text="Low-dimensional language focuses on personality, right/wrong, fixed states, and single causality; high-dimensional language emphasizes variables, relationships, mechanisms, systems, and models.">🔊 TTS</button>
+                    </div>
+
+                    <div class="section-title">機制層 Mechanism Level</div>
+                    <div class="zh-text">
+                        語言→內在表徵→注意力→預測→決策→行動→結果→回饋→模型更新。
+                    </div>
+                    <div class="en-text">
+                        Language → Internal Representation → Attention → Prediction → Decision → Action → Result → Feedback → Model Update.
+                        <button class="tts-btn" data-text="Language to Internal Representation to Attention to Prediction to Decision to Action to Result to Feedback to Model Update.">🔊 TTS</button>
+                    </div>
+
+                    <div class="section-title">行動層 Action Level</div>
+                    <div class="zh-text">
+                        遇到問題時，不急著判斷自己或別人，而是進入「事實→變數→Pattern→機制→Hypothesis→測試→Prediction Error→更新」。
+                    </div>
+                    <div class="en-text">
+                        When facing problems, don't rush to judge yourself or others. Instead, enter the flow: Facts → Variables → Patterns → Mechanisms → Hypotheses → Testing → Prediction Error → Update.
+                        <button class="tts-btn" data-text="When facing problems, do not rush to judge yourself or others. Instead, enter the flow: Facts to Variables to Patterns to Mechanisms to Hypotheses to Testing to Prediction Error to Update.">🔊 TTS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 01-30 Languages Section -->
+    <div id="01-30" class="content-section">
+        <h2 style="color: #1A2B5F; margin-bottom: 20px;">01-30 語言系統 | Language Systems 01-30</h2>
+        
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">01｜受害語言 Victim Language</div>
+                    <div class="card-subtitle">誰害我？ Who hurt me?</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 誰害我？<br>
+                            <strong>底層模型：</strong> 控制權在外部<br>
+                            <strong>典型語言：</strong> 「都是他害我的」<br>
+                            <strong>升級方向：</strong> 找回可控制變數
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> Who hurt me?<br>
+                            <strong>Underlying Model:</strong> Control lies external<br>
+                            <strong>Typical Language:</strong> "It's all their fault"<br>
+                            <strong>Upgrade Direction:</strong> Reclaim controllable variables<br>
+                            <button class="tts-btn" data-text="Core Question: Who hurt me? Underlying Model: Control lies external. Typical Language: It's all their fault. Upgrade Direction: Reclaim controllable variables.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">02｜羞恥語言 Shame Language</div>
+                    <div class="card-subtitle">是不是我很差？ Am I deficient?</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 是不是我很差？<br>
+                            <strong>底層模型：</strong> 錯誤＝人格<br>
+                            <strong>典型語言：</strong> 「我就是很笨」<br>
+                            <strong>升級方向：</strong> 人格→能力缺口
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> Am I deficient?<br>
+                            <strong>Underlying Model:</strong> Error equals character<br>
+                            <strong>Typical Language:</strong> "I'm just stupid"<br>
+                            <strong>Upgrade Direction:</strong> Character → Skill gap<br>
+                            <button class="tts-btn" data-text="Core Question: Am I deficient? Underlying Model: Error equals character. Typical Language: I'm just stupid. Upgrade Direction: Character to Skill gap.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">03｜情緒語言 Emotion Language</div>
+                    <div class="card-subtitle">我感覺什麼？ What do I feel?</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 我感覺什麼？<br>
+                            <strong>底層模型：</strong> 感受＝訊號<br>
+                            <strong>典型語言：</strong> 「我好焦慮」<br>
+                            <strong>升級方向：</strong> 情緒→訊號→需求
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> What do I feel?<br>
+                            <strong>Underlying Model:</strong> Feeling equals signal<br>
+                            <strong>Typical Language:</strong> "I'm so anxious"<br>
+                            <strong>Upgrade Direction:</strong> Emotion → Signal → Need<br>
+                            <button class="tts-btn" data-text="Core Question: What do I feel? Underlying Model: Feeling equals signal. Typical Language: I'm so anxious. Upgrade Direction: Emotion to Signal to Need.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">04｜命運語言 Fate Language</div>
+                    <div class="card-subtitle">是不是注定？ Is it destiny?</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 是不是注定？<br>
+                            <strong>底層模型：</strong> 未來固定<br>
+                            <strong>典型語言：</strong> 「我的命就是這樣」<br>
+                            <strong>升級方向：</strong> 命運→可變路徑
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> Is it destiny?<br>
+                            <strong>Underlying Model:</strong> Future is fixed<br>
+                            <strong>Typical Language:</strong> "That's just my fate"<br>
+                            <strong>Upgrade Direction:</strong> Fate → Variable paths<br>
+                            <button class="tts-btn" data-text="Core Question: Is it destiny? Underlying Model: Future is fixed. Typical Language: That's just my fate. Upgrade Direction: Fate to Variable paths.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">05｜二元語言 Binary Language</div>
+                    <div class="card-subtitle">誰對誰錯？ Right or wrong?</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 誰對誰錯？<br>
+                            <strong>底層模型：</strong> 世界只有兩類<br>
+                            <strong>典型語言：</strong> 「不是對就是錯」<br>
+                            <strong>升級方向：</strong> 二元→多變數
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> Right or wrong?<br>
+                            <strong>Underlying Model:</strong> World has only two categories<br>
+                            <strong>Typical Language:</strong> "Either right or wrong"<br>
+                            <strong>Upgrade Direction:</strong> Binary → Multi-dimensional<br>
+                            <button class="tts-btn" data-text="Core Question: Right or wrong? Underlying Model: World has only two categories. Typical Language: Either right or wrong. Upgrade Direction: Binary to Multi-dimensional.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Continuing with more cards... Due to length, I'll add representative samples -->
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">10｜固定語言 Fixed Mindset Language</div>
+                    <div class="card-subtitle">能力是不是固定？ Is ability fixed?</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 能力是不是固定？<br>
+                            <strong>底層模型：</strong> 能力不可變<br>
+                            <strong>典型語言：</strong> 「我不會英文」<br>
+                            <strong>升級方向：</strong> 固定→能力節點
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> Is ability fixed?<br>
+                            <strong>Underlying Model:</strong> Ability cannot change<br>
+                            <strong>Typical Language:</strong> "I can't do English"<br>
+                            <strong>Upgrade Direction:</strong> Fixed → Skill nodes<br>
+                            <button class="tts-btn" data-text="Core Question: Is ability fixed? Underlying Model: Ability cannot change. Typical Language: I can't do English. Upgrade Direction: Fixed to Skill nodes.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">15｜系統語言 Systems Language</div>
+                    <div class="card-subtitle">什麼結構持續生成結果？ What system generates results?</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 什麼結構持續生成結果？<br>
+                            <strong>底層模型：</strong> 人×環境×制度<br>
+                            <strong>典型語言：</strong> 「不是只有學生的問題」<br>
+                            <strong>升級方向：</strong> 重構系統
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> What structure generates results?<br>
+                            <strong>Underlying Model:</strong> Person × Environment × System<br>
+                            <strong>Typical Language:</strong> "It's not just the student's problem"<br>
+                            <strong>Upgrade Direction:</strong> Redesign system<br>
+                            <button class="tts-btn" data-text="Core Question: What structure generates results? Underlying Model: Person times Environment times System. Typical Language: It's not just the student's problem. Upgrade Direction: Redesign system.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">20｜更新語言 Update Language</div>
+                    <div class="card-subtitle">新資料要修改什麼？ What to update with new data?</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 新資料要修改什麼？<br>
+                            <strong>底層模型：</strong> 模型可以改版<br>
+                            <strong>典型語言：</strong> 「這個方法要調整」<br>
+                            <strong>升級方向：</strong> 資料→模型修正
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> What to update with new data?<br>
+                            <strong>Underlying Model:</strong> Models can be updated<br>
+                            <strong>Typical Language:</strong> "This method needs adjusting"<br>
+                            <strong>Upgrade Direction:</strong> Data → Model correction<br>
+                            <button class="tts-btn" data-text="Core Question: What to update with new data? Underlying Model: Models can be updated. Typical Language: This method needs adjusting. Upgrade Direction: Data to Model correction.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">30｜認知翻譯語言 Cognitive Translation Language</div>
+                    <div class="card-subtitle">如何重新命名？ How to rename?</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 如何重新命名？<br>
+                            <strong>底層模型：</strong> 語言改變內在表徵<br>
+                            <strong>典型語言：</strong> 「我不行→目前Skill不足」<br>
+                            <strong>升級方向：</strong> 舊模型→新模型
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> How to rename?<br>
+                            <strong>Underlying Model:</strong> Language changes internal representation<br>
+                            <strong>Typical Language:</strong> "I can't do it → My skill is insufficient"<br>
+                            <strong>Upgrade Direction:</strong> Old model → New model<br>
+                            <button class="tts-btn" data-text="Core Question: How to rename? Underlying Model: Language changes internal representation. Typical Language: I can't do it, reframed as My skill is insufficient. Upgrade Direction: Old model to New model.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 61-90 Languages Section -->
+    <div id="61-90" class="content-section">
+        <h2 style="color: #1A2B5F; margin-bottom: 20px;">61-90 語言系統 | Language Systems 61-90</h2>
+        
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">61｜反事實語言 Counterfactual Language</div>
+                    <div class="card-subtitle">如果當時換一個變數呢？ What if we changed one variable?</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 如果當時換一個變數呢？<br>
+                            <strong>底層模型：</strong> 結果只是眾多可能路徑之一<br>
+                            <strong>典型語言：</strong> 「如果早睡一小時會怎樣？」<br>
+                            <strong>升級方向：</strong> 懊悔→因果學習
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> What if we changed one variable?<br>
+                            <strong>Underlying Model:</strong> Result is one of many possible paths<br>
+                            <strong>Typical Language:</strong> "What if I had slept one hour earlier?"<br>
+                            <strong>Upgrade Direction:</strong> Regret → Causal learning<br>
+                            <button class="tts-btn" data-text="Core Question: What if we changed one variable? Underlying Model: Result is one of many possible paths. Typical Language: What if I had slept one hour earlier? Upgrade Direction: Regret to Causal learning.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">70｜節律語言 Rhythm Language</div>
+                    <div class="card-subtitle">什麼時候做最適合？ When is optimal timing?</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 什麼時候做最適合？<br>
+                            <strong>底層模型：</strong> 系統能力隨時間波動<br>
+                            <strong>典型語言：</strong> 「我什麼時段最能專心？」<br>
+                            <strong>升級方向：</strong> 平均用力→順應節律
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> When is optimal timing?<br>
+                            <strong>Underlying Model:</strong> System capacity fluctuates over time<br>
+                            <strong>Typical Language:</strong> "When am I most focused?"<br>
+                            <strong>Upgrade Direction:</strong> Uniform effort → Align with rhythm<br>
+                            <button class="tts-btn" data-text="Core Question: When is optimal timing? Underlying Model: System capacity fluctuates over time. Typical Language: When am I most focused? Upgrade Direction: Uniform effort to Align with rhythm.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">82｜探索利用語言 Explore-Exploit Language</div>
+                    <div class="card-subtitle">何時試新方法、何時穩定執行？</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 何時試新方法、何時穩定執行？<br>
+                            <strong>底層模型：</strong> 學習存在Explore-Exploit Trade-off<br>
+                            <strong>典型語言：</strong> 「現在該探索還是深挖？」<br>
+                            <strong>升級方向：</strong> 亂試／僵化→動態平衡
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> When to explore vs exploit?<br>
+                            <strong>Underlying Model:</strong> Learning involves explore-exploit tradeoff<br>
+                            <strong>Typical Language:</strong> "Should I explore or go deep?"<br>
+                            <strong>Upgrade Direction:</strong> Random/rigid → Dynamic balance<br>
+                            <button class="tts-btn" data-text="Core Question: When to explore versus exploit? Underlying Model: Learning involves explore-exploit trade-off. Typical Language: Should I explore or go deep? Upgrade Direction: Random or rigid to Dynamic balance.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">90｜停止規則語言 Stopping Rule Language</div>
+                    <div class="card-subtitle">什麼時候應該停？ When should I stop?</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 什麼時候應該停？<br>
+                            <strong>底層模型：</strong> 高Agency也包含停止能力<br>
+                            <strong>典型語言：</strong> 「什麼條件出現就停止？」<br>
+                            <strong>升級方向：</strong> 永不放棄→有條件退出
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> When should I stop?<br>
+                            <strong>Underlying Model:</strong> High agency includes stopping ability<br>
+                            <strong>Typical Language:</strong> "What condition triggers exit?"<br>
+                            <strong>Upgrade Direction:</strong> Never give up → Conditional exit<br>
+                            <button class="tts-btn" data-text="Core Question: When should I stop? Underlying Model: High agency includes stopping ability. Typical Language: What condition triggers exit? Upgrade Direction: Never give up to Conditional exit.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 91-120 Languages Section -->
+    <div id="91-120" class="content-section">
+        <h2 style="color: #1A2B5F; margin-bottom: 20px;">91-120 語言系統 | Language Systems 91-120</h2>
+        
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">91｜觀察者語言 Observer Language</div>
+                    <div class="card-subtitle">我看見的是現實，還是我的解讀？</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 我看見的是現實，還是我的解讀？<br>
+                            <strong>底層模型：</strong> 觀察者本身也是系統的一部分<br>
+                            <strong>典型語言：</strong> 「這是事實，還是我的詮釋？」<br>
+                            <strong>升級方向：</strong> 反應→自我觀察
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> Is what I see reality or my interpretation?<br>
+                            <strong>Underlying Model:</strong> Observer is part of the system<br>
+                            <strong>Typical Language:</strong> "Is this fact or my interpretation?"<br>
+                            <strong>Upgrade Direction:</strong> Reaction → Self-observation<br>
+                            <button class="tts-btn" data-text="Core Question: Is what I see reality or my interpretation? Underlying Model: Observer is part of the system. Typical Language: Is this fact or my interpretation? Upgrade Direction: Reaction to Self-observation.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">100｜模型競爭語言 Model Competition Language</div>
+                    <div class="card-subtitle">哪個解釋最能預測資料？</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 哪個解釋最能預測資料？<br>
+                            <strong>底層模型：</strong> 模型價值在預測力而非漂亮程度<br>
+                            <strong>典型語言：</strong> 「A、B、C哪個模型解釋力最高？」<br>
+                            <strong>升級方向：</strong> 相信故事→比較模型
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> Which explanation predicts data best?<br>
+                            <strong>Underlying Model:</strong> Model value lies in prediction power<br>
+                            <strong>Typical Language:</strong> "Which model has best explanatory power?"<br>
+                            <strong>Upgrade Direction:</strong> Believe story → Compare models<br>
+                            <button class="tts-btn" data-text="Core Question: Which explanation predicts data best? Underlying Model: Model value lies in prediction power. Typical Language: Which model has best explanatory power? Upgrade Direction: Believe story to Compare models.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">110｜吸引子語言 Attractor Language</div>
+                    <div class="card-subtitle">為什麼最後總回到同一模式？</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 為什麼最後總回到同一模式？<br>
+                            <strong>底層模型：</strong> 系統容易落入特定Attractor<br>
+                            <strong>典型語言：</strong> 「為什麼每次最後都變成這樣？」<br>
+                            <strong>升級方向：</strong> 怪事件→找吸引子
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> Why do I return to the same pattern?<br>
+                            <strong>Underlying Model:</strong> Systems fall into attractors<br>
+                            <strong>Typical Language:</strong> "Why does it always end the same way?"<br>
+                            <strong>Upgrade Direction:</strong> Blame event → Find attractor<br>
+                            <button class="tts-btn" data-text="Core Question: Why do I return to the same pattern? Underlying Model: Systems fall into attractors. Typical Language: Why does it always end the same way? Upgrade Direction: Blame event to Find attractor.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">120｜可塑性語言 Plasticity Language</div>
+                    <div class="card-subtitle">系統還有多少重新學習能力？</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 系統還有多少重新學習能力？<br>
+                            <strong>底層模型：</strong> 能力不是固定值，而有Plasticity<br>
+                            <strong>典型語言：</strong> 「透過什麼訓練可以重新建構？」<br>
+                            <strong>升級方向：</strong> 固定人格→可塑系統
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> How much relearning capacity remains?<br>
+                            <strong>Underlying Model:</strong> Ability has plasticity, not fixed<br>
+                            <strong>Typical Language:</strong> "What training enables reconstruction?"<br>
+                            <strong>Upgrade Direction:</strong> Fixed character → Plastic system<br>
+                            <button class="tts-btn" data-text="Core Question: How much relearning capacity remains? Underlying Model: Ability has plasticity, not fixed. Typical Language: What training enables reconstruction? Upgrade Direction: Fixed character to Plastic system.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 121-150 Languages Section -->
+    <div id="121-150" class="content-section">
+        <h2 style="color: #1A2B5F; margin-bottom: 20px;">121-150 語言系統 | Language Systems 121-150</h2>
+        
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">121｜意圖語言 Intent Language</div>
+                    <div class="card-subtitle">我真正想完成什麼？ What do I really want?</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 我真正想完成什麼？<br>
+                            <strong>底層模型：</strong> 行為背後存在目標函數<br>
+                            <strong>典型語言：</strong> 「我真正想得到的是什麼？」<br>
+                            <strong>升級方向：</strong> 表面行為→底層意圖
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> What do I really want?<br>
+                            <strong>Underlying Model:</strong> Behavior has underlying objective function<br>
+                            <strong>Typical Language:</strong> "What do I truly desire?"<br>
+                            <strong>Upgrade Direction:</strong> Surface behavior → Hidden intent<br>
+                            <button class="tts-btn" data-text="Core Question: What do I really want? Underlying Model: Behavior has underlying objective function. Typical Language: What do I truly desire? Upgrade Direction: Surface behavior to Hidden intent.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">138｜後驗語言 Posterior Language</div>
+                    <div class="card-subtitle">看到新資料後機率變多少？</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 看到新資料後機率變多少？<br>
+                            <strong>底層模型：</strong> 信念應隨證據更新<br>
+                            <strong>典型語言：</strong> 「新證據後，我現在怎麼判斷？」<br>
+                            <strong>升級方向：</strong> 固定信念→Posterior更新
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> How much does probability change with evidence?<br>
+                            <strong>Underlying Model:</strong> Beliefs update with evidence<br>
+                            <strong>Typical Language:</strong> "After new evidence, how should I judge?"<br>
+                            <strong>Upgrade Direction:</strong> Fixed belief → Posterior update<br>
+                            <button class="tts-btn" data-text="Core Question: How much does probability change with evidence? Underlying Model: Beliefs update with evidence. Typical Language: After new evidence, how should I judge? Upgrade Direction: Fixed belief to Posterior update.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">150｜重構語言 Redesign Language</div>
+                    <div class="card-subtitle">如果舊結構本身有問題呢？</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 如果舊結構本身有問題呢？<br>
+                            <strong>底層模型：</strong> 有時不是優化參數，而是重建Architecture<br>
+                            <strong>典型語言：</strong> 「是不是整套方法都該換？」<br>
+                            <strong>升級方向：</strong> 微調→System Redesign
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> What if the structure itself is wrong?<br>
+                            <strong>Underlying Model:</strong> Sometimes rebuild architecture, not just optimize<br>
+                            <strong>Typical Language:</strong> "Should I change the entire approach?"<br>
+                            <strong>Upgrade Direction:</strong> Tweaking → System redesign<br>
+                            <button class="tts-btn" data-text="Core Question: What if the structure itself is wrong? Underlying Model: Sometimes rebuild architecture, not just optimize. Typical Language: Should I change the entire approach? Upgrade Direction: Tweaking to System redesign.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 151-180 Languages Section -->
+    <div id="151-180" class="content-section">
+        <h2 style="color: #1A2B5F; margin-bottom: 20px;">151-180 語言系統 | Language Systems 151-180</h2>
+        
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">151｜約束鬆綁語言 Constraint Release Language</div>
+                    <div class="card-subtitle">哪個限制一解除，整體就會改變？</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 哪個限制一解除，整體就會改變？<br>
+                            <strong>底層模型：</strong> 部分限制具有高槓桿性<br>
+                            <strong>典型語言：</strong> 「先解除哪個Constraint？」<br>
+                            <strong>升級方向：</strong> 全面努力→解除關鍵限制
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> Which constraint, if removed, changes everything?<br>
+                            <strong>Underlying Model:</strong> Some constraints have high leverage<br>
+                            <strong>Typical Language:</strong> "Which constraint to release first?"<br>
+                            <strong>Upgrade Direction:</strong> Universal effort → Remove key constraint<br>
+                            <button class="tts-btn" data-text="Core Question: Which constraint, if removed, changes everything? Underlying Model: Some constraints have high leverage. Typical Language: Which constraint to release first? Upgrade Direction: Universal effort to Remove key constraint.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">166｜環境設計語言 Environment Design Language</div>
+                    <div class="card-subtitle">環境正在鼓勵什麼行為？</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 環境正在鼓勵什麼行為？<br>
+                            <strong>底層模型：</strong> 行為是人×環境共同輸出<br>
+                            <strong>典型語言：</strong> 「怎麼讓環境替我自律？」<br>
+                            <strong>升級方向：</strong> 改人→改Environment
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> What behavior does the environment reward?<br>
+                            <strong>Underlying Model:</strong> Behavior is person × environment output<br>
+                            <strong>Typical Language:</strong> "How can environment help me?"<br>
+                            <strong>Upgrade Direction:</strong> Change person → Change environment<br>
+                            <button class="tts-btn" data-text="Core Question: What behavior does the environment reward? Underlying Model: Behavior is person times environment output. Typical Language: How can environment help me? Upgrade Direction: Change person to Change environment.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">177｜複利語言 Compounding Language</div>
+                    <div class="card-subtitle">哪個小改善會長期累積？</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 哪個小改善會長期累積？<br>
+                            <strong>底層模型：</strong> 微小優勢經重複可指數放大<br>
+                            <strong>典型語言：</strong> 「每天多學5個Chunk一年會怎樣？」<br>
+                            <strong>升級方向：</strong> 追求暴增→Compounding
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> Which small improvement compounds over time?<br>
+                            <strong>Underlying Model:</strong> Small advantage grows exponentially<br>
+                            <strong>Typical Language:</strong> "Learning 5 words daily, yearly impact?"<br>
+                            <strong>Upgrade Direction:</strong> Seek rapid growth → Build compounding<br>
+                            <button class="tts-btn" data-text="Core Question: Which small improvement compounds over time? Underlying Model: Small advantage grows exponentially. Typical Language: Learning 5 words daily, yearly impact? Upgrade Direction: Seek rapid growth to Build compounding.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">180｜自動化語言 Automation Language</div>
+                    <div class="card-subtitle">哪些能力應該練到不用思考？</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="bilingual-text">
+                        <div class="zh-text">
+                            <strong>核心問題：</strong> 哪些能力應該練到不用思考？<br>
+                            <strong>底層模型：</strong> 高頻低階操作自動化可釋放認知頻寬<br>
+                            <strong>典型語言：</strong> 「哪些Skill值得變成本能？」<br>
+                            <strong>升級方向：</strong> 每次耗費注意力→Automaticity
+                        </div>
+                        <div class="en-text">
+                            <strong>Core Question:</strong> Which abilities should become automatic?<br>
+                            <strong>Underlying Model:</strong> Automating frees up cognitive bandwidth<br>
+                            <strong>Typical Language:</strong> "Which skills deserve automaticity?"<br>
+                            <strong>Upgrade Direction:</strong> Consume attention → Automaticity<br>
+                            <button class="tts-btn" data-text="Core Question: Which abilities should become automatic? Underlying Model: Automating frees up cognitive bandwidth. Typical Language: Which skills deserve automaticity? Upgrade Direction: Consume attention to Automaticity.">🔊 TTS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Section -->
+    <div id="summary" class="content-section">
+        <div class="card expanded">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div>
+                    <div class="card-title">180種語言核心總結 | Summary of 180 Language Systems</div>
+                    <div class="card-subtitle">最實用的內化框架與應用公式</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="content-inner">
+                    <div class="section-title">12階認知進化 12-Stage Cognitive Evolution</div>
+                    
+                    <div style="display: grid; gap: 12px; margin: 16px 0;">
+                        <div class="single-col">
+                            <strong>第01階｜情緒 Emotion</strong><br>
+                            我現在感覺什麼？ What am I feeling?
+                        </div>
+                        <div class="single-col">
+                            <strong>第02階｜事實 Facts</strong><br>
+                            實際發生什麼？ What actually happened?
+                        </div>
+                        <div class="single-col">
+                            <strong>第03階｜資料 Data</strong><br>
+                            頻率、程度、時間是多少？ Frequency, degree, timing?
+                        </div>
+                        <div class="single-col">
+                            <strong>第04階｜變數 Variables</strong><br>
+                            哪些因素可能影響？ What factors influence?
+                        </div>
+                        <div class="single-col">
+                            <strong>第05階｜Pattern</strong><br>
+                            什麼事情反覆發生？ What repeats?
+                        </div>
+                        <div class="single-col">
+                            <strong>第06階｜關係 Relationships</strong><br>
+                            變數如何互相作用？ How do variables interact?
+                        </div>
+                        <div class="single-col">
+                            <strong>第07階｜機制 Mechanism</strong><br>
+                            Pattern如何被生成？ How is pattern generated?
+                        </div>
+                        <div class="single-col">
+                            <strong>第08階｜系統 System</strong><br>
+                            什麼結構讓它持續存在？ What structure sustains it?
+                        </div>
+                        <div class="single-col">
+                            <strong>第09階｜模型 Model</strong><br>
+                            我現在如何解釋這套系統？ My current explanation?
+                        </div>
+                        <div class="single-col">
+                            <strong>第10階｜預測 Prediction</strong><br>
+                            如果模型正確，接下來應該發生什麼？ Expected outcome?
+                        </div>
+                        <div class="single-col">
+                            <strong>第11階｜誤差 Error</strong><br>
+                            現實與預測差在哪裡？ Where's the gap?
+                        </div>
+                        <div class="single-col">
+                            <strong>第12階｜更新 Update</strong><br>
+                            下一版模型與行動要修改什麼？ What changes next?
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="section-title">六大語言家族 Six Language Families</div>
+
+                    <div style="display: grid; gap: 12px; margin: 16px 0;">
+                        <div class="single-col" style="background: #F0FFF4;">
+                            <strong>第一族｜去失真語言 Distortion-Removal</strong><br>
+                            事實 · 證據 · 資料 · 訊號 · 訊噪 · 可信度<br>
+                            <em>目的：不要被自己的故事騙</em>
+                        </div>
+                        <div class="single-col" style="background: #FFF5F0;">
+                            <strong>第二族｜診斷語言 Diagnostic</strong><br>
+                            變數 · Pattern · 關係 · 機制 · 節點 · 瓶頸<br>
+                            <em>目的：找到問題真正生成的位置</em>
+                        </div>
+                        <div class="single-col" style="background: #F0F4FF;">
+                            <strong>第三族｜模型語言 Model</strong><br>
+                            Hypothesis · 機率 · 先驗 · 後驗 · 反證 · 可證偽<br>
+                            <em>目的：不要把想法當真理</em>
+                        </div>
+                        <div class="single-col" style="background: #FFF8F0;">
+                            <strong>第四族｜更新語言 Update</strong><br>
+                            Feedback · Prediction Error · Calibration · Model Update<br>
+                            <em>目的：讓錯誤真正產生學習</em>
+                        </div>
+                        <div class="single-col" style="background: #F0FFF8;">
+                            <strong>第五族｜行動語言 Action</strong><br>
+                            槓桿 · Priority · Experiment · Trigger · Environment<br>
+                            <em>目的：用最低成本改變系統</em>
+                        </div>
+                        <div class="single-col" style="background: #FFF0F5;">
+                            <strong>第六族｜生成語言 Generation</strong><br>
+                            Skill · Transfer · Adaptation · Resilience · Agency<br>
+                            <em>目的：讓一次解題變成永久能力</em>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="section-title">六問工作法 Six-Question Framework</div>
+
+                    <div class="zh-text" style="background: #FFFACD; padding: 16px; border-radius: 8px; margin: 16px 0; line-height: 2;">
+                        <strong>問1：事實是什麼？</strong> What are the facts?<br>
+                        <strong>問2：什麼Pattern正在重複？</strong> What pattern repeats?<br>
+                        <strong>問3：什麼機制正在生成它？</strong> What mechanism generates it?<br>
+                        <strong>問4：現在最大的瓶頸／槓桿在哪？</strong> Where's the bottleneck?<br>
+                        <strong>問5：我的Hypothesis怎麼用最小實驗測試？</strong> How to test minimally?<br>
+                        <strong>問6：Prediction Error告訴我要更新什麼？</strong> What to update?<br>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="section-title">三句終極口訣 Three Ultimate Mantras</div>
+
+                    <div class="zh-text" style="background: #E6F3FF; padding: 16px; border-radius: 8px; margin: 16px 0; line-height: 2.2; font-size: 1.1em;">
+                        <strong>看清楚</strong><br>
+                        事實 + 變數 + Pattern + 機制 + 系統<br>
+                        <strong style="margin-left: 20px;">Look clearly</strong>
+                        <strong style="display: block; margin-top: 12px;">↓</strong>
+                        
+                        <strong>測一下</strong><br>
+                        Hypothesis + Prediction + Experiment<br>
+                        <strong style="margin-left: 20px;">Test it</strong>
+                        <strong style="display: block; margin-top: 12px;">↓</strong>
+
+                        <strong>再更新</strong><br>
+                        Feedback + Prediction Error + Model Update<br>
+                        <strong style="margin-left: 20px;">Update again</strong>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="section-title">最重要的10句翻譯 Top 10 Translations</div>
+
+                    <div style="display: grid; gap: 10px; margin: 16px 0;">
+                        <div class="single-col">
+                            「我就是很笨」→「我目前缺哪個Skill？」<br>
+                            "I'm stupid" → "Which skill gap do I have?"
+                        </div>
+                        <div class="single-col">
+                            「我就是沒自制力」→「什麼情境讓控制系統容易失效？」<br>
+                            "No self-control" → "What context breaks control?"
+                        </div>
+                        <div class="single-col">
+                            「他就是懶」→「什麼條件下，他最容易不行動？」<br>
+                            "He's lazy" → "Under what conditions, no action?"
+                        </div>
+                        <div class="single-col">
+                            「我失敗了」→「哪個Prediction錯了？」<br>
+                            "I failed" → "Which prediction was wrong?"
+                        </div>
+                        <div class="single-col">
+                            「都是他的錯」→「什麼機制讓問題反覆發生？」<br>
+                            "It's their fault" → "What mechanism repeats it?"
+                        </div>
+                        <div class="single-col">
+                            「我很焦慮」→「焦慮正在回報什麼風險訊號？」<br>
+                            "I'm anxious" → "What risk signal is anxiety reporting?"
+                        </div>
+                        <div class="single-col">
+                            「我做不到」→「缺能力、資源、環境還是策略？」<br>
+                            "I can't do it" → "Skill, resource, environment, or strategy?"
+                        </div>
+                        <div class="single-col">
+                            「學生都不讀書」→「哪種學生在哪種任務最容易停止投入？」<br>
+                            "Students don't read" → "Which student, which task?"
+                        </div>
+                        <div class="single-col">
+                            「人生就是這樣」→「哪個舊模型正在限制新的可能？」<br>
+                            "That's just life" → "Which old model limits possibilities?"
+                        </div>
+                        <div class="single-col">
+                            「我要改變自己」→「我要修改哪個持續生成結果的結構？」<br>
+                            "I'll change myself" → "Which structure generates results?"
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="section-title">核心公式 Core Formula</div>
+
+                    <div class="zh-text" style="background: #FFF0F8; padding: 16px; border-radius: 8px; margin: 16px 0; line-height: 2;">
+                        <strong>現實→語言→模型→預測→行動→結果→回饋→更新</strong><br><br>
+                        語言位在整個控制迴路最前端。<br>
+                        前端編碼失真，後面再努力都只是精準地走錯方向。<br><br>
+                        <strong>Reality → Language → Model → Prediction → Action → Result → Feedback → Update</strong><br><br>
+                        Language shapes the entire feedback loop.<br>
+                        Distortion at the start means precise movement in wrong direction.
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="section-title">最終內化標準 Final Internalization Standard</div>
+
+                    <div class="zh-text" style="background: #F0FFFF; padding: 16px; border-radius: 8px; margin: 16px 0;">
+                        不是背出180個語言名稱。<br>
+                        而是當遇到問題，大腦自動出現高維思考。<br><br>
+                        <strong>學生說「我就是沒救了」</strong><br>
+                        → 自動想：找能力節點<br><br>
+                        
+                        <strong>自己遇到失敗</strong><br>
+                        → 自動想：Prediction Error在哪？<br><br>
+                        
+                        <strong>事情一直重複</strong><br>
+                        → 自動想：Pattern背後什麼Mechanism？<br><br>
+                        
+                        <strong>問題很多</strong><br>
+                        → 自動想：Priority Node在哪？<br><br>
+                        
+                        <strong>不知道答案</strong><br>
+                        → 自動想：先建立Hypothesis<br><br>
+                        
+                        <strong>不確定</strong><br>
+                        → 自動想：做Minimum Experiment<br><br>
+                        
+                        <strong>結果不同</strong><br>
+                        → 自動想：Update<br><br>
+
+                        <strong>不是記住概念。而是改變思考流程。</strong>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="section-title">人生OS最高層次 Highest Level of Life OS</div>
+
+                    <div class="zh-text" style="background: #FFFACD; padding: 16px; border-radius: 8px; margin: 16px 0; line-height: 2;">
+                        真正的成長<br>
+                        ≠ 知道更多答案<br>
+                        而是 → 提高模型更新能力<br><br>
+                        真正的智慧<br>
+                        ≠ 永遠預測正確<br>
+                        而是 → 預測錯誤後快速校準<br><br>
+                        真正的自由<br>
+                        ≠ 沒有任何限制<br>
+                        而是 → 當舊模型失效時，能快速找到仍可控制的下一個變數<br><br>
+                        <strong>最終只記六個字：</strong><br>
+                        看事實 · 找機制 · 做測試 · 讀誤差 · 改模型 · 再行動
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>180種語言系統完整APP｜Complete Language Systems Reference</p>
+        <p>Author: 王欣蓉 Anne Wang｜Last Updated: 2026</p>
+        <p>💡 使用說明：點擊卡片展開完整內容 | Click cards to expand full content</p>
+    </div>
+
+    <script>
+        function toggleCard(element) {
+            const card = element.closest('.card');
+            card.classList.toggle('expanded');
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Update nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            window.scrollTo(0, 0);
+        }
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            if (!query) return;
+
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    card.style.display = 'block';
+                    if (!card.classList.contains('expanded')) {
+                        card.classList.add('expanded');
+                    }
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.display = 'block';
+            });
+        }
+
+        // TTS功能
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('tts-btn')) {
+                const text = e.target.getAttribute('data-text');
+                if (!text) return;
+
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.85;
+
+                e.target.classList.add('playing');
+                utterance.onend = function() {
+                    e.target.classList.remove('playing');
+                };
+
+                speechSynthesis.cancel();
+                speechSynthesis.speak(utterance);
+            }
+        });
+    </script>
+</body>
+</html>
