@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基督信仰與靈性 | Christian Faith & Spirituality</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 微軟正黑體, sans-serif;
+            background: white;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: #1A2B5F;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 4px solid #C9960C;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Microsoft JhengHei', 微軟正黑體, sans-serif;
+        }
+
+        .tab-btn:hover {
+            background: #e8e8e8;
+            border-color: #C9960C;
+        }
+
+        .tab-btn.active {
+            background: #1A2B5F;
+            color: white;
+            border-color: #1A2B5F;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            margin: 15px 0;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            border-color: #C9960C;
+            box-shadow: 0 4px 12px rgba(201, 150, 12, 0.1);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #0A7A72 0%, #1A2B5F 100%);
+            color: white;
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .card-header:hover {
+            background: linear-gradient(135deg, #086658 0%, #0f1f4f 100%);
+        }
+
+        .card-toggle {
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+
+        .card-toggle.open {
+            transform: rotate(180deg);
+        }
+
+        .card-content {
+            display: none;
+            padding: 20px;
+            background: #fafafa;
+        }
+
+        .card-content.open {
+            display: block;
+        }
+
+        .bilingual-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 15px 0;
+            align-items: start;
+        }
+
+        .language-column {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #C9960C;
+        }
+
+        .language-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #C9960C;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .zh-column {
+            border-left-color: #0A7A72;
+        }
+
+        .zh-column .language-label {
+            color: #0A7A72;
+        }
+
+        .en-column {
+            border-left-color: #C9960C;
+        }
+
+        .text-content {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #333;
+        }
+
+        .tts-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #C9960C;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+            transition: all 0.2s;
+            font-family: 'Microsoft JhengHei', 微軟正黑體, sans-serif;
+        }
+
+        .tts-btn:hover {
+            background: #b87d0a;
+            transform: scale(1.05);
+        }
+
+        .tts-btn.playing {
+            background: #0A7A72;
+        }
+
+        .tts-btn::before {
+            content: '🔊';
+            font-size: 14px;
+        }
+
+        .phrase-item {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #C9960C;
+        }
+
+        .phrase-title {
+            font-weight: 700;
+            color: #1A2B5F;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .phrase-en {
+            color: #C9960C;
+            font-weight: 600;
+            font-size: 15px;
+            margin: 8px 0;
+        }
+
+        .phrase-zh {
+            color: #0A7A72;
+            font-weight: 600;
+            font-size: 15px;
+            margin: 8px 0;
+        }
+
+        .phrase-explain {
+            color: #555;
+            font-size: 14px;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #eee;
+        }
+
+        .thought-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+            padding: 12px;
+            background: white;
+            border-radius: 6px;
+            border-left: 4px solid #0A7A72;
+        }
+
+        .thought-zh {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .thought-en {
+            color: #C9960C;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1A2B5F;
+            margin: 20px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #C9960C;
+        }
+
+        .philosophy-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 6px solid #0A7A72;
+        }
+
+        .philosophy-section .section-label {
+            display: inline-block;
+            background: #1A2B5F;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .philosophy-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .philosophy-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .philosophy-name {
+            font-weight: 700;
+            color: #1A2B5F;
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .philosophy-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .meta-info {
+            font-size: 12px;
+            color: #999;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, #1A2B5F 0%, #0A7A72 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 768px) {
+            .bilingual-section,
+            .philosophy-list {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .card-header {
+                font-size: 16px;
+            }
+
+            .text-content {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⛪ 基督信仰與靈性</h1>
+        <p>Christian Faith & Spirituality | 王欣蓉 Anne Wang</p>
+    </div>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('philosophy')">哲學流派 | Philosophy</button>
+            <button class="tab-btn" onclick="switchTab('phrases')">英文短語 | Phrases</button>
+            <button class="tab-btn" onclick="switchTab('thoughts')">信仰思維 | Faith Thoughts</button>
+        </div>
+
+        <!-- TAB 1: Philosophy -->
+        <div id="philosophy" class="tab-content active">
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    🟥 形而上學 | Metaphysics - What is the world?
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="philosophy-list">
+                        <div class="philosophy-item">
+                            <div class="philosophy-name">本質論 | Essentialism</div>
+                            <div class="philosophy-desc">
+                                <strong>Philosophy:</strong> 亞里士多德 / Aristotle<br>
+                                <strong>Method:</strong> 找本質 / Find essence<br>
+                                <strong>Impact:</strong> 建立科學分類 / Establish scientific classification<br>
+                                <strong>Application:</strong> 看核心 / Look at core
+                            </div>
+                        </div>
+                        <div class="philosophy-item">
+                            <div class="philosophy-name">辯證法 | Dialectics</div>
+                            <div class="philosophy-desc">
+                                <strong>Philosophy:</strong> 黑格爾 / Hegel<br>
+                                <strong>Method:</strong> 對立推進 / Advance through opposition<br>
+                                <strong>Impact:</strong> 思想革命 / Intellectual revolution<br>
+                                <strong>Application:</strong> 衝突成長 / Growth through conflict
+                            </div>
+                        </div>
+                        <div class="philosophy-item">
+                            <div class="philosophy-name">存在主義 | Existentialism</div>
+                            <div class="philosophy-desc">
+                                <strong>Philosophy:</strong> 海德格爾 / Heidegger<br>
+                                <strong>Method:</strong> 面對存在 / Face existence<br>
+                                <strong>Impact:</strong> 個體覺醒 / Individual awakening<br>
+                                <strong>Application:</strong> 活當下 / Live in the present
+                            </div>
+                        </div>
+                        <div class="philosophy-item">
+                            <div class="philosophy-name">過程哲學 | Process Philosophy</div>
+                            <div class="philosophy-desc">
+                                <strong>Philosophy:</strong> 懷特海 / Whitehead<br>
+                                <strong>Method:</strong> 世界流動 / World flows<br>
+                                <strong>Impact:</strong> 系統思維 / Systems thinking<br>
+                                <strong>Application:</strong> 接受變化 / Accept change
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    🟧 認識論 | Epistemology - How do we know?
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="philosophy-list">
+                        <div class="philosophy-item">
+                            <div class="philosophy-name">理性主義 | Rationalism</div>
+                            <div class="philosophy-desc">
+                                <strong>Philosopher:</strong> 笛卡爾 / Descartes<br>
+                                <strong>Core:</strong> 理性為主 / Reason is primary<br>
+                                <strong>Impact:</strong> 科學方法 / Scientific method<br>
+                                <strong>Use:</strong> 先懷疑 / Start with doubt
+                            </div>
+                        </div>
+                        <div class="philosophy-item">
+                            <div class="philosophy-name">經驗主義 | Empiricism</div>
+                            <div class="philosophy-desc">
+                                <strong>Philosopher:</strong> 洛克 / Locke<br>
+                                <strong>Core:</strong> 經驗為主 / Experience is primary<br>
+                                <strong>Impact:</strong> 教育心理 / Educational psychology<br>
+                                <strong>Use:</strong> 做中學 / Learn by doing
+                            </div>
+                        </div>
+                        <div class="philosophy-item">
+                            <div class="philosophy-name">批判哲學 | Critical Philosophy</div>
+                            <div class="philosophy-desc">
+                                <strong>Philosopher:</strong> 康德 / Kant<br>
+                                <strong>Core:</strong> 理性+經驗 / Reason + Experience<br>
+                                <strong>Impact:</strong> 綜合思考 / Synthetic thinking<br>
+                                <strong>Use:</strong> 多角度 / Multiple perspectives
+                            </div>
+                        </div>
+                        <div class="philosophy-item">
+                            <div class="philosophy-name">懷疑論 | Skepticism</div>
+                            <div class="philosophy-desc">
+                                <strong>Philosopher:</strong> 休謨 / Hume<br>
+                                <strong>Core:</strong> 質疑因果 / Question causality<br>
+                                <strong>Impact:</strong> 批判精神 / Critical spirit<br>
+                                <strong>Use:</strong> 不盲信 / Don't believe blindly
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    🟨 倫理學 | Ethics - How should we live?
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="philosophy-list">
+                        <div class="philosophy-item">
+                            <div class="philosophy-name">德行倫理 | Virtue Ethics</div>
+                            <div class="philosophy-desc">
+                                <strong>Philosopher:</strong> 亞里士多德 / Aristotle<br>
+                                <strong>Core:</strong> 中庸 / The mean<br>
+                                <strong>Impact:</strong> 品格教育 / Character education<br>
+                                <strong>Use:</strong> 不極端 / Avoid extremes
+                            </div>
+                        </div>
+                        <div class="philosophy-item">
+                            <div class="philosophy-name">義務論 | Deontology</div>
+                            <div class="philosophy-desc">
+                                <strong>Philosopher:</strong> 康德 / Kant<br>
+                                <strong>Core:</strong> 原則 / Principles<br>
+                                <strong>Impact:</strong> 法律秩序 / Legal order<br>
+                                <strong>Use:</strong> 守底線 / Keep boundaries
+                            </div>
+                        </div>
+                        <div class="philosophy-item">
+                            <div class="philosophy-name">功利主義 | Utilitarianism</div>
+                            <div class="philosophy-desc">
+                                <strong>Philosopher:</strong> 密爾 / Mill<br>
+                                <strong>Core:</strong> 最大幸福 / Greatest happiness<br>
+                                <strong>Impact:</strong> 政策分配 / Policy distribution<br>
+                                <strong>Use:</strong> 看結果 / Look at results
+                            </div>
+                        </div>
+                        <div class="philosophy-item">
+                            <div class="philosophy-name">正義論 | Justice Theory</div>
+                            <div class="philosophy-desc">
+                                <strong>Philosopher:</strong> 羅爾斯 / Rawls<br>
+                                <strong>Core:</strong> 公平優先 / Fairness first<br>
+                                <strong>Impact:</strong> 福利制度 / Welfare system<br>
+                                <strong>Use:</strong> 顧弱者 / Care for the weak
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    🟩 政治哲學 | Political Philosophy - How does society work?
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="philosophy-list">
+                        <div class="philosophy-item">
+                            <div class="philosophy-name">理想國 | Ideal State</div>
+                            <div class="philosophy-desc">
+                                <strong>Philosopher:</strong> 柏拉圖 / Plato<br>
+                                <strong>Core:</strong> 菁英治理 / Meritocratic governance<br>
+                                <strong>Impact:</strong> 教育制度 / Educational system<br>
+                                <strong>Use:</strong> 能力導向 / Ability-based
+                            </div>
+                        </div>
+                        <div class="philosophy-item">
+                            <div class="philosophy-name">社會契約 | Social Contract</div>
+                            <div class="philosophy-desc">
+                                <strong>Philosopher:</strong> 霍布斯 / Hobbes<br>
+                                <strong>Core:</strong> 秩序優先 / Order first<br>
+                                <strong>Impact:</strong> 國家形成 / State formation<br>
+                                <strong>Use:</strong> 守規則 / Follow rules
+                            </div>
+                        </div>
+                        <div class="philosophy-item">
+                            <div class="philosophy-name">自由主義 | Liberalism</div>
+                            <div class="philosophy-desc">
+                                <strong>Philosopher:</strong> 洛克 / Locke<br>
+                                <strong>Core:</strong> 人權 / Human rights<br>
+                                <strong>Impact:</strong> 民主制度 / Democratic system<br>
+                                <strong>Use:</strong> 尊重個體 / Respect individuals
+                            </div>
+                        </div>
+                        <div class="philosophy-item">
+                            <div class="philosophy-name">馬克思主義 | Marxism</div>
+                            <div class="philosophy-desc">
+                                <strong>Philosopher:</strong> 馬克思 / Marx<br>
+                                <strong>Core:</strong> 結構決定 / Structure determines<br>
+                                <strong>Impact:</strong> 社會改革 / Social reform<br>
+                                <strong>Use:</strong> 看系統 / See systems
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-box">
+                🧠 <strong>超濃縮背誦版 | Ultra-Condensed Summary (10 seconds)</strong><br><br>
+                <span data-speak="Form Metaphysics equals world. Epistemology equals knowing. Ethics equals how to live. Politics equals how to divide. Logic equals how to think. Language equals how to speak. Mind equals who am I. Science equals how to prove. Religion equals why live.">
+                形而上＝世界 | Metaphysics = World<br>
+                認識論＝知道 | Epistemology = Knowing<br>
+                倫理＝怎麼活 | Ethics = How to live<br>
+                政治＝怎麼分 | Politics = How to divide<br>
+                邏輯＝怎麼想 | Logic = How to think<br>
+                語言＝怎麼說 | Language = How to speak<br>
+                心靈＝我是誰 | Mind = Who am I<br>
+                科學＝怎麼證 | Science = How to prove<br>
+                宗教＝為何活 | Religion = Why live
+                </span>
+                <button class="tts-btn" data-tts-target="Form Metaphysics equals world. Epistemology equals knowing. Ethics equals how to live. Politics equals how to divide. Logic equals how to think. Language equals how to speak. Mind equals who am I. Science equals how to prove. Religion equals why live.">Speak Summary</button>
+            </div>
+        </div>
+
+        <!-- TAB 2: English Phrases -->
+        <div id="phrases" class="tab-content">
+            <div class="section-title">🌍 GSAT 必背英文短語集 | Essential English Phrases</div>
+            <div id="phrases-container"></div>
+        </div>
+
+        <!-- TAB 3: Faith Thoughts -->
+        <div id="thoughts" class="tab-content">
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    🔴 因果思維 | Causality Thinking (1-40)
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content" id="causality-thoughts"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    🔵 系統思維 | Systems Thinking (41-80)
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content" id="systems-thoughts"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    🟣 高維結構思維 | High-Dimensional Thinking (81-120)
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content" id="highdim-thoughts"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="application/json" id="phrases-data">
+{
+  "phrases": [
+    {"num": 1, "zh": "除了......之外", "en": "away from, aside from, on top of, other than, in addition to, as well as, except for, except, but", "explain": "除了／另外還有 = in addition to"},
+    {"num": 2, "zh": "靠自己、獨自", "en": "by oneself, on one's own, alone, for oneself", "explain": "自己一個人做 = do it alone"},
+    {"num": 3, "zh": "擁有", "en": "be in possession of, be possessed of, possess, take possession of", "explain": "有、擁有 = have, possess"},
+    {"num": 4, "zh": "照顧", "en": "look after, take care of, care for, deal with, attend to", "explain": "照顧／處理 = care for, handle"},
+    {"num": 5, "zh": "把A視為B", "en": "look on/upon A as B, think of A as B, view A as B, see A as B, regard A as B, consider A as B", "explain": "把......看成...... = regard as"},
+    {"num": 6, "zh": "阻止、禁止", "en": "ban, prohibit, restrict, restrain sb from doing sth; prevent, stop sb from doing sth; keep sb from doing sth", "explain": "阻止某人做某事 = prevent from"},
+    {"num": 7, "zh": "喜歡", "en": "have a liking for, like, love, enjoy, be fond of", "explain": "喜歡 = like, enjoy"},
+    {"num": 8, "zh": "老實說", "en": "to be frank with you, frankly speaking, to tell you the truth, to be honest with you", "explain": "說真的／坦白說 = to be frank"},
+    {"num": 9, "zh": "感到輕鬆／不安", "en": "feel at ease, feel relaxed; not feel at ease, feel uneasy", "explain": "自在／不自在 = feel at ease / uneasy"},
+    {"num": 10, "zh": "小心、注意", "en": "look out for, watch out for", "explain": "留意、小心 = watch out for"},
+    {"num": 11, "zh": "決不、絕不", "en": "by no means, not...by any means, not...at all, not...in the least, not...in the slightest, under no circumstances", "explain": "完全不、絕對不 = by no means"},
+    {"num": 12, "zh": "突然大哭／大笑", "en": "burst into tears, burst out crying; burst into laughter, burst out laughing", "explain": "突然哭起來／笑起來 = burst into tears"},
+    {"num": 13, "zh": "免費", "en": "for nothing, for free, free, without payment", "explain": "免費 = for free"},
+    {"num": 14, "zh": "目前", "en": "for the time being, for the present", "explain": "暫時、目前 = for the time being"},
+    {"num": 15, "zh": "務必確定......", "en": "see to it that + clause, make sure that + clause, ensure that + clause", "explain": "一定要確認...... = make sure"},
+    {"num": 16, "zh": "因......而累／對......厭倦", "en": "be tired from + N/V-ing (tired of fatigue); be tired of + N/V-ing (tired of boredom)", "explain": "from=累到; of=厭煩 = tired from/of"},
+    {"num": 17, "zh": "看不起某人", "en": "look down on/upon, despise, scorn, disdain", "explain": "瞧不起 = look down on"},
+    {"num": 18, "zh": "敬佩某人", "en": "look up to sb, respect sb, hold sb in high esteem", "explain": "尊敬、仰慕 = look up to"},
+    {"num": 19, "zh": "補償", "en": "make up for, compensate for", "explain": "彌補 = make up for"},
+    {"num": 20, "zh": "通往......之路／......的關鍵", "en": "the road to + N, the key to + N", "explain": "通往......的方法／關鍵 = the key to"}
+  ]
+}
+    </script>
+
+    <script type="application/json" id="thoughts-data">
+{
+  "causality": [
+    {"zh": "事情發生都有原因", "en": "Everything has a cause"},
+    {"zh": "結果來自原因", "en": "Results come from causes"},
+    {"zh": "問題一定有來源", "en": "Problems have sources"},
+    {"zh": "找到原因才能解決", "en": "Find the cause to solve"},
+    {"zh": "錯誤會帶來後果", "en": "Mistakes bring consequences"},
+    {"zh": "現在是過去造成", "en": "Now is shaped by the past"},
+    {"zh": "行為決定結果", "en": "Actions decide results"},
+    {"zh": "不改原因就會重來", "en": "Same cause, same result"},
+    {"zh": "先問為什麼", "en": "Ask why first"},
+    {"zh": "找誰造成問題", "en": "Find who caused it"},
+    {"zh": "每個結果都有代價", "en": "Every result has a cost"},
+    {"zh": "選擇帶來後果", "en": "Choices create outcomes"},
+    {"zh": "失敗有原因", "en": "Failure has reasons"},
+    {"zh": "成功不是偶然", "en": "Success is not random"},
+    {"zh": "運氣也是原因之一", "en": "Luck is also a factor"},
+    {"zh": "重複發生有原因", "en": "Repetition has a cause"},
+    {"zh": "錯誤需要修正", "en": "Mistakes need fixing"},
+    {"zh": "改變從原因開始", "en": "Change starts from cause"},
+    {"zh": "不要只看表面", "en": "Don't just see surface"},
+    {"zh": "原因決定方向", "en": "Cause shapes direction"},
+    {"zh": "解釋事情很重要", "en": "Explaining matters"},
+    {"zh": "先搞懂再行動", "en": "Understand before acting"},
+    {"zh": "沒有無緣無故", "en": "Nothing happens randomly"},
+    {"zh": "結果會累積", "en": "Results accumulate"},
+    {"zh": "原因不改會放大", "en": "Causes amplify"},
+    {"zh": "習慣產生結果", "en": "Habits create results"},
+    {"zh": "你種什麼得什麼", "en": "You reap what you sow"},
+    {"zh": "現在是選擇結果", "en": "Now is your past choice"},
+    {"zh": "錯誤不可忽略", "en": "Don't ignore mistakes"},
+    {"zh": "原因要被看見", "en": "Causes must be seen"},
+    {"zh": "找到根本原因", "en": "Find root cause"},
+    {"zh": "不要只怪結果", "en": "Don't blame outcomes"},
+    {"zh": "改變要從源頭", "en": "Change starts at source"},
+    {"zh": "分析是關鍵", "en": "Analysis is key"},
+    {"zh": "理解原因才穩", "en": "Understanding stabilizes"},
+    {"zh": "避免重複錯誤", "en": "Avoid repeating mistakes"},
+    {"zh": "結果不是重點", "en": "Cause matters more"},
+    {"zh": "看懂因果", "en": "Understand causality"},
+    {"zh": "因果決定現實", "en": "Causality shapes reality"},
+    {"zh": "低維只看結果", "en": "Low level sees results"}
+  ],
+  "systems": [
+    {"zh": "事情是連動的", "en": "Everything is connected"},
+    {"zh": "看整體不看單點", "en": "See whole, not parts"},
+    {"zh": "系統會自我影響", "en": "Systems self-influence"},
+    {"zh": "問題來自互動", "en": "Problems come from interaction"},
+    {"zh": "看流程不是事件", "en": "See process, not event"},
+    {"zh": "回饋決定走向", "en": "Feedback shapes direction"},
+    {"zh": "一改全動", "en": "Change one, affect all"},
+    {"zh": "找關聯比找原因重要", "en": "Connection over cause"},
+    {"zh": "系統會平衡", "en": "Systems seek balance"},
+    {"zh": "過度會反彈", "en": "Excess creates backlash"},
+    {"zh": "流動比靜止重要", "en": "Flow matters more"},
+    {"zh": "不是單點問題", "en": "Not a single issue"},
+    {"zh": "看長期影響", "en": "See long-term impact"},
+    {"zh": "短期解會有代價", "en": "Short fixes cost"},
+    {"zh": "調整比修理重要", "en": "Adjust over fix"},
+    {"zh": "找槓桿點", "en": "Find leverage points"},
+    {"zh": "少做但做對", "en": "Do less, do right"},
+    {"zh": "系統決定行為", "en": "System drives behavior"},
+    {"zh": "環境影響人", "en": "Environment shapes people"},
+    {"zh": "關係比能力重要", "en": "Relations over ability"},
+    {"zh": "互動產生結果", "en": "Interaction creates results"},
+    {"zh": "看整體效率", "en": "See total efficiency"},
+    {"zh": "局部好不等於整體好", "en": "Local ≠ global"},
+    {"zh": "問題是訊號", "en": "Problems are signals"},
+    {"zh": "系統會放大問題", "en": "Systems amplify issues"},
+    {"zh": "不要對抗系統", "en": "Don't fight systems"},
+    {"zh": "要順著運作", "en": "Work with the system"},
+    {"zh": "優化流程", "en": "Optimize flow"},
+    {"zh": "設計系統", "en": "Design systems"},
+    {"zh": "建立結構", "en": "Build structure"},
+    {"zh": "讓事情自動運作", "en": "Automate systems"},
+    {"zh": "減少摩擦", "en": "Reduce friction"},
+    {"zh": "提高效率", "en": "Increase efficiency"},
+    {"zh": "改系統比改人快", "en": "Change system, not people"},
+    {"zh": "重點在連動", "en": "Focus on linkage"},
+    {"zh": "穩定來自平衡", "en": "Stability from balance"},
+    {"zh": "不是單點努力", "en": "Not isolated effort"},
+    {"zh": "中維看關係", "en": "Mid level sees connections"},
+    {"zh": "系統決定結果", "en": "System decides outcomes"}
+  ],
+  "highdim": [
+    {"zh": "世界是你投射", "en": "World reflects you"},
+    {"zh": "你在哪裡看，你就活在哪裡", "en": "You live where you see"},
+    {"zh": "一切都是映照", "en": "Everything is reflection"},
+    {"zh": "問題是訊息", "en": "Problems are messages"},
+    {"zh": "痛苦是提醒", "en": "Pain is a signal"},
+    {"zh": "不是發生在你身上，是為你發生", "en": "Not happening to you, but for you"},
+    {"zh": "你是創造者", "en": "You are the creator"},
+    {"zh": "身份決定命運", "en": "Identity shapes destiny"},
+    {"zh": "你成為什麼，決定你得到什麼", "en": "You become what you receive"},
+    {"zh": "意識決定現實", "en": "Consciousness shapes reality"},
+    {"zh": "不是世界限制你，你在限制自己", "en": "You limit yourself"},
+    {"zh": "你怎麼看，世界就怎麼回應", "en": "World responds to perception"},
+    {"zh": "換位＝換命", "en": "Shift view, shift life"},
+    {"zh": "內在決定外在", "en": "Inner shapes outer"},
+    {"zh": "一切從你開始", "en": "Everything starts from you"},
+    {"zh": "不是努力，是對齊", "en": "Not effort, but alignment"},
+    {"zh": "順勢而行", "en": "Go with the flow"},
+    {"zh": "放下控制", "en": "Let go control"},
+    {"zh": "允許發生", "en": "Allow things"},
+    {"zh": "接受就是力量", "en": "Acceptance is power"},
+    {"zh": "你就是答案", "en": "You are the answer"},
+    {"zh": "你已經足夠", "en": "You are enough"},
+    {"zh": "世界不是敵人", "en": "World is not enemy"},
+    {"zh": "一切都在幫你", "en": "Everything serves you"},
+    {"zh": "覺察改變一切", "en": "Awareness changes all"},
+    {"zh": "你不是角色，你是創造者", "en": "You are the creator"},
+    {"zh": "靈魂在選擇", "en": "Soul chooses"},
+    {"zh": "每件事都有意義", "en": "Everything has meaning"},
+    {"zh": "困難是升級", "en": "Challenges upgrade you"},
+    {"zh": "你在經歷自己", "en": "You experience yourself"},
+    {"zh": "你在哪一層，世界就在哪一層", "en": "Your level shapes world"},
+    {"zh": "你看到什麼，你就成為什麼", "en": "You become what you see"},
+    {"zh": "高維看本質", "en": "High level sees essence"},
+    {"zh": "不是改世界，是改自己", "en": "Change yourself"},
+    {"zh": "你就是系統", "en": "You are the system"},
+    {"zh": "你就是答案", "en": "You are the answer"},
+    {"zh": "存在本身就是意義", "en": "Being is meaning"},
+    {"zh": "活出你是誰", "en": "Live who you are"},
+    {"zh": "高維不是做，是成為", "en": "High level is becoming"}
+  ]
+}
+    </script>
+
+    <script>
+        // Initialize TTS Engine
+        const utterances = {};
+        
+        function speakText(text, lang = 'en-US') {
+            if (utterances[text]) {
+                if (speechSynthesis.speaking) {
+                    speechSynthesis.cancel();
+                }
+                speechSynthesis.speak(utterances[text]);
+            } else {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = lang;
+                utterance.rate = lang === 'en-US' ? 0.9 : 0.85;
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                utterances[text] = utterance;
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Card toggle
+        function toggleCard(header) {
+            const content = header.nextElementSibling;
+            const toggle = header.querySelector('.card-toggle');
+            
+            content.classList.toggle('open');
+            toggle.classList.toggle('open');
+        }
+
+        // Initialize Phrases
+        function initializePhrases() {
+            const data = JSON.parse(document.getElementById('phrases-data').textContent);
+            const container = document.getElementById('phrases-container');
+            
+            data.phrases.forEach(phrase => {
+                const item = document.createElement('div');
+                item.className = 'phrase-item';
+                item.innerHTML = `
+                    <div class="phrase-title">${phrase.num}. ${phrase.zh}</div>
+                    <div class="phrase-en" data-speak="${phrase.en}">
+                        ${phrase.en}
+                        <button class="tts-btn" onclick="speakText('${phrase.en}', 'en-US')">Speak</button>
+                    </div>
+                    <div class="phrase-explain">白話：${phrase.explain}</div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // Initialize Thoughts
+        function initializeThoughts() {
+            const data = JSON.parse(document.getElementById('thoughts-data').textContent);
+            
+            // Causality
+            const causalityContainer = document.getElementById('causality-thoughts');
+            data.causality.forEach((thought, i) => {
+                const item = document.createElement('div');
+                item.className = 'thought-item';
+                item.innerHTML = `
+                    <div class="thought-zh">${i+1}. ${thought.zh}</div>
+                    <div class="thought-en" data-speak="${thought.en}">
+                        ${thought.en}
+                        <button class="tts-btn" onclick="speakText('${thought.en}', 'en-US')">Speak</button>
+                    </div>
+                `;
+                causalityContainer.appendChild(item);
+            });
+
+            // Systems
+            const systemsContainer = document.getElementById('systems-thoughts');
+            data.systems.forEach((thought, i) => {
+                const item = document.createElement('div');
+                item.className = 'thought-item';
+                item.innerHTML = `
+                    <div class="thought-zh">${i+41}. ${thought.zh}</div>
+                    <div class="thought-en" data-speak="${thought.en}">
+                        ${thought.en}
+                        <button class="tts-btn" onclick="speakText('${thought.en}', 'en-US')">Speak</button>
+                    </div>
+                `;
+                systemsContainer.appendChild(item);
+            });
+
+            // High-Dimensional
+            const highdimContainer = document.getElementById('highdim-thoughts');
+            data.highdim.forEach((thought, i) => {
+                const item = document.createElement('div');
+                item.className = 'thought-item';
+                item.innerHTML = `
+                    <div class="thought-zh">${i+81}. ${thought.zh}</div>
+                    <div class="thought-en" data-speak="${thought.en}">
+                        ${thought.en}
+                        <button class="tts-btn" onclick="speakText('${thought.en}', 'en-US')">Speak</button>
+                    </div>
+                `;
+                highdimContainer.appendChild(item);
+            });
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePhrases();
+            initializeThoughts();
+        });
+    </script>
+</body>
+</html>
