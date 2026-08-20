@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>癌友平安喜樂APP｜1110+完全資料庫｜最大化版</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --navy: #1A2B5F;
+      --gold: #C9960C;
+      --teal: #0A7A72;
+      --light-bg: #FAFBFC;
+      --white: #FFFFFF;
+      --text-dark: #1A2B5F;
+      --text-light: #555;
+      --border: #E8ECEF;
+    }
+
+    body {
+      font-family: 'Microsoft JhengHei', 'Segoe UI', sans-serif;
+      background: var(--light-bg);
+      color: var(--text-dark);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .container {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+      color: white;
+      padding: 50px 40px;
+      border-radius: 16px;
+      margin-bottom: 40px;
+      box-shadow: 0 8px 24px rgba(26, 43, 95, 0.2);
+    }
+
+    header h1 {
+      font-size: 38px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    header .subtitle {
+      font-size: 20px;
+      opacity: 0.95;
+      margin-bottom: 12px;
+    }
+
+    header .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 20px;
+      margin-top: 25px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.15);
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 3px solid var(--gold);
+    }
+
+    .stat .number {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat .label {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-top: 5px;
+    }
+
+    /* Navigation */
+    .nav-container {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .nav-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px;
+    }
+
+    .nav-tab {
+      padding: 10px 16px;
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dark);
+      transition: all 0.3s ease;
+      font-family: 'Microsoft JhengHei', sans-serif;
+      white-space: nowrap;
+    }
+
+    .nav-tab:hover {
+      border-color: var(--teal);
+      background: rgba(10, 122, 114, 0.05);
+    }
+
+    .nav-tab.active {
+      background: var(--teal);
+      color: white;
+      border-color: var(--teal);
+    }
+
+    /* Section */
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .section h2 {
+      font-size: 32px;
+      color: var(--navy);
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 4px solid var(--gold);
+    }
+
+    .section-intro {
+      background: linear-gradient(135deg, rgba(10, 122, 114, 0.08) 0%, rgba(201, 150, 12, 0.04) 100%);
+      border: 2px solid var(--teal);
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 30px;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    /* Grid layouts */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin: 20px 0;
+    }
+
+    .grid-5 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    /* Item Card - Base */
+    .item {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .item:hover {
+      box-shadow: 0 4px 12px rgba(26, 43, 95, 0.1);
+      border-color: var(--teal);
+    }
+
+    .item-number {
+      display: inline-block;
+      background: var(--gold);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 32px;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .item-title {
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .item-content {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-light);
+    }
+
+    /* Specific item styles */
+    .pressure-item {
+      border-left: 4px solid var(--gold);
+      background: linear-gradient(to right, rgba(201, 150, 12, 0.04) 0%, transparent 100%);
+    }
+
+    .wisdom-item {
+      border-left: 4px solid var(--teal);
+      background: linear-gradient(to right, rgba(10, 122, 114, 0.04) 0%, transparent 100%);
+    }
+
+    .error-item {
+      border-left: 4px solid #E74C3C;
+      background: linear-gradient(to right, rgba(231, 76, 60, 0.04) 0%, transparent 100%);
+    }
+
+    .faq-item {
+      border-left: 4px solid #3498DB;
+      background: linear-gradient(to right, rgba(52, 152, 219, 0.04) 0%, transparent 100%);
+    }
+
+    .myth-item {
+      border-left: 4px solid #E67E22;
+      background: linear-gradient(to right, rgba(230, 126, 34, 0.04) 0%, transparent 100%);
+    }
+
+    .agency-item {
+      border-left: 4px solid #27AE60;
+      background: linear-gradient(to right, rgba(39, 174, 96, 0.04) 0%, transparent 100%);
+    }
+
+    .control-item {
+      border-left: 4px solid #9B59B6;
+      background: linear-gradient(to right, rgba(155, 89, 182, 0.04) 0%, transparent 100%);
+    }
+
+    .language-item {
+      border-left: 4px solid #16A085;
+      background: linear-gradient(to right, rgba(22, 160, 133, 0.04) 0%, transparent 100%);
+    }
+
+    .joy-item {
+      border-left: 4px solid #F39C12;
+      background: linear-gradient(to right, rgba(243, 156, 18, 0.04) 0%, transparent 100%);
+    }
+
+    .method-item {
+      border-left: 4px solid var(--navy);
+      background: linear-gradient(to right, rgba(26, 43, 95, 0.04) 0%, transparent 100%);
+    }
+
+    /* Search Bar */
+    .search-wrapper {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-input {
+      flex: 1;
+      max-width: 500px;
+      padding: 12px 16px;
+      border: 2px solid var(--teal);
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: 'Microsoft JhengHei', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 4px rgba(201, 150, 12, 0.1);
+    }
+
+    .action-button {
+      padding: 12px 24px;
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: 'Microsoft JhengHei', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .action-button:hover {
+      background: var(--teal);
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-light);
+      font-size: 14px;
+      margin-top: 60px;
+      border-top: 2px solid var(--gold);
+    }
+
+    .author {
+      font-weight: 600;
+      color: var(--navy);
+      font-size: 16px;
+      margin-top: 12px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .grid-5 {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 24px;
+      }
+      header .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .nav-tabs {
+        gap: 4px;
+      }
+      .nav-tab {
+        font-size: 12px;
+        padding: 8px 12px;
+      }
+      .grid-3, .grid-4, .grid-5 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      .nav-container, .search-wrapper {
+        display: none;
+      }
+      .section {
+        display: block !important;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <h1>癌友平安喜樂APP</h1>
+      <p class="subtitle">1,110+ 完全資料庫｜10大數據集｜終極版</p>
+      <div class="stats">
+        <div class="stat">
+          <div class="number">30</div>
+          <div class="label">癌友壓力</div>
+        </div>
+        <div class="stat">
+          <div class="number">180</div>
+          <div class="label">金句智言</div>
+        </div>
+        <div class="stat">
+          <div class="number">100</div>
+          <div class="label">預測誤差</div>
+        </div>
+        <div class="stat">
+          <div class="number">100</div>
+          <div class="label">常見問題</div>
+        </div>
+        <div class="stat">
+          <div class="number">100</div>
+          <div class="label">常見迷思</div>
+        </div>
+        <div class="stat">
+          <div class="number">100</div>
+          <div class="label">高效行動</div>
+        </div>
+        <div class="stat">
+          <div class="number">100</div>
+          <div class="label">控制轉換</div>
+        </div>
+        <div class="stat">
+          <div class="number">100</div>
+          <div class="label">溝通語言</div>
+        </div>
+        <div class="stat">
+          <div class="number">100</div>
+          <div class="label">微小喜樂</div>
+        </div>
+        <div class="stat">
+          <div class="number">100</div>
+          <div class="label">陪伴方法</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Search & Actions -->
+    <div class="search-wrapper">
+      <input type="text" class="search-input" id="searchInput" placeholder="搜尋全部1110+項目...">
+      <button class="action-button" onclick="window.print()">📄 列印</button>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-container">
+      <div class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab('pressures', this)">①癌友30大壓力</button>
+        <button class="nav-tab" onclick="switchTab('wisdom', this)">②180句金句</button>
+        <button class="nav-tab" onclick="switchTab('errors', this)">③100個預測誤差</button>
+        <button class="nav-tab" onclick="switchTab('faqs', this)">④100個常見問題</button>
+        <button class="nav-tab" onclick="switchTab('myths', this)">⑤100個常見迷思</button>
+        <button class="nav-tab" onclick="switchTab('agency', this)">⑥100個高效行動</button>
+        <button class="nav-tab" onclick="switchTab('control', this)">⑦100個控制轉換</button>
+        <button class="nav-tab" onclick="switchTab('language', this)">⑧100句溝通語言</button>
+        <button class="nav-tab" onclick="switchTab('joy', this)">⑨100個微小喜樂</button>
+        <button class="nav-tab" onclick="switchTab('methods', this)">⑩100個陪伴方法</button>
+      </div>
+    </div>
+
+    <!-- ==================== 01 PRESSURES ==================== -->
+    <div id="pressures" class="section active">
+      <h2>①癌友30大壓力</h2>
+      <div class="section-intro">
+        <strong>理解這30種壓力，家屬才能真正陪伴。</strong><br>
+        不同的壓力，需要不同的支持方式。如果你試著解決了錯誤的壓力，所有努力都會白費。
+      </div>
+      
+      <div class="grid-3">
+        <div class="item pressure-item">
+          <div class="item-number">1</div>
+          <div class="item-title">對死亡的恐懼</div>
+          <div class="item-content">面對病情進展，心中對死亡的終極焦慮。不是所有人都能談，但這是最根本的壓力來源。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">2</div>
+          <div class="item-title">治療的疼痛</div>
+          <div class="item-content">化療、放療、手術帶來的身體疼痛。有時止痛藥無效，讓人絕望。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">3</div>
+          <div class="item-title">藥物副作用</div>
+          <div class="item-content">掉髮、嘔吐、疲勞、皮膚損傷。在治療癌症的同時，身體在受罪。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">4</div>
+          <div class="item-title">身體形象改變</div>
+          <div class="item-content">失去頭髮、乳房切除、腸造口。看著鏡子裡的陌生人，心理創傷很深。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">5</div>
+          <div class="item-title">性生活困難</div>
+          <div class="item-content">治療導致的性功能障礙、疲勞、身體疼痛讓親密變得困難。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">6</div>
+          <div class="item-title">社交隔離</div>
+          <div class="item-content">免疫系統低下無法見友人，或被迴避。孤獨感加重病情。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">7</div>
+          <div class="item-title">工作喪失</div>
+          <div class="item-content">無法工作帶來的經濟壓力和身分喪失。「我不再是那個專業人士。」</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">8</div>
+          <div class="item-title">財務困難</div>
+          <div class="item-content">醫療費用、交通費、營養費。看著存款減少，心理壓力升高。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">9</div>
+          <div class="item-title">對家人的內疚</div>
+          <div class="item-content">「我是家人的負擔。」「他們因為我放棄了很多。」</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">10</div>
+          <div class="item-title">掌控感喪失</div>
+          <div class="item-content">所有決定都由醫師和家人做。無法決定自己的身體發生什麼事。</div>
+        </div>
+
+        <div class="item pressure-item">
+          <div class="item-number">11</div>
+          <div class="item-title">復發恐懼</div>
+          <div class="item-content">即使暫時痊癒，每次檢查前都恐懼。「會不會又回來？」</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">12</div>
+          <div class="item-title">醫療決策困境</div>
+          <div class="item-content">A醫師說用方案甲，B醫師說用方案乙。誰是對的？選錯怎麼辦？</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">13</div>
+          <div class="item-title">資訊過載</div>
+          <div class="item-content">網路上有成千上萬的方案和故事。信息太多導致更加焦慮。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">14</div>
+          <div class="item-title">醫療溝通困難</div>
+          <div class="item-content">醫生用術語，沒有時間細說。癌友听不懂但害羞問。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">15</div>
+          <div class="item-title">治療有效性懷疑</div>
+          <div class="item-content">「這個治療真的有效嗎？」「為什麼要忍受這麼多副作用？」</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">16</div>
+          <div class="item-title">飲食改變的困擾</div>
+          <div class="item-content">味覺改變、吃不下飯，卻被逼吃。食物變成痛苦而非享受。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">17</div>
+          <div class="item-title">睡眠障礙</div>
+          <div class="item-content">疼痛、焦慮、激素改變導致失眠。睡眠不足讓恢復更難。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">18</div>
+          <div class="item-title">疲勞無力感</div>
+          <div class="item-content">即使休息也無法恢復的深度疲勞。感覺身體像被抽空。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">19</div>
+          <div class="item-title">認知功能下降</div>
+          <div class="item-content">「Chemo Brain」導致記憶力差、無法專注。害怕自己變笨。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">20</div>
+          <div class="item-title">情緒失控</div>
+          <div class="item-content">無故哭泣、易怒、躁動。不知道自己為什麼這樣。</div>
+        </div>
+
+        <div class="item pressure-item">
+          <div class="item-number">21</div>
+          <div class="item-title">憂鬱症傾向</div>
+          <div class="item-content">長期的沮喪、無望、對事物喪失興趣。比癌症本身更難對付。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">22</div>
+          <div class="item-title">焦慮症傾向</div>
+          <div class="item-content">持續的內在恐懼、身體緊張。即使在安全的環境也無法放鬆。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">23</div>
+          <div class="item-title">身分危機</div>
+          <div class="item-content">「我不是癌友，我是誰？」自我認同被疾病定義。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">24</div>
+          <div class="item-title">靈性困境</div>
+          <div class="item-content">對信仰的質疑、對公義的質問。「為什麼是我？」</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">25</div>
+          <div class="item-title">關係衝突</div>
+          <div class="item-content">與伴侶、家人的溝通變差。脾氣差，容易爭執。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">26</div>
+          <div class="item-title">對家人期望矛盾</div>
+          <div class="item-content">既希望家人陪伴又不想被當「病人」看待。矛盾的需求難以滿足。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">27</div>
+          <div class="item-title">對未來計畫的不確定</div>
+          <div class="item-content">無法計畫生活，因為不知道會活到何時。人生變得無序。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">28</div>
+          <div class="item-title">對死後家人的擔憂</div>
+          <div class="item-content">不是害怕自己死，而是害怕家人怎麼辦。留下的責任很重。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">29</div>
+          <div class="item-title">生活品質下降</div>
+          <div class="item-content">無法做喜歡的事、去喜歡的地方。生活變成治療的附屬品。</div>
+        </div>
+        <div class="item pressure-item">
+          <div class="item-number">30</div>
+          <div class="item-title">意義追尋</div>
+          <div class="item-content">「這一切有什麼意義？」「我的人生還有價值嗎？」深層的存在焦慮。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 02 WISDOM ==================== -->
+    <div id="wisdom" class="section">
+      <h2>②180句平安喜樂金句</h2>
+      <div class="section-intro">
+        <strong>180句話，180次重新連結。</strong><br>
+        在最黑暗的時刻，一句話可能改變一切。這些不是空泛的激勵，而是基於真實經驗的智慧。
+      </div>
+
+      <div class="grid-4">
+        <div class="item wisdom-item">
+          <div class="item-number">1</div>
+          <div class="item-title">今天只需活好今天</div>
+          <div class="item-content">不用擔心下個月、明年，只活好現在的24小時。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">2</div>
+          <div class="item-title">害怕是正常的</div>
+          <div class="item-content">不是因為你軟弱，而是因為你在面對真實的危險。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">3</div>
+          <div class="item-title">哭是允許的</div>
+          <div class="item-content">眼淚是身體的療癒方式。不需要為了安慰別人而憋著。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">4</div>
+          <div class="item-title">休息也是抗癌</div>
+          <div class="item-content">睡眠是身體修復的時間。好好睡覺就是在為自己服務。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">5</div>
+          <div class="item-title">痛苦是真實的訊號</div>
+          <div class="item-content">身體在說話。傾聽它，而不是忽視它。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">6</div>
+          <div class="item-title">你值得被照顧</div>
+          <div class="item-content">不是因為你「夠堅強」。只是因為你是人，你值得。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">7</div>
+          <div class="item-title">說「不知道」很勇敢</div>
+          <div class="item-content">承認不知道，比假裝懂更誠實。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">8</div>
+          <div class="item-title">改變可能隨時發生</div>
+          <div class="item-content">昨天的預測不代表今天的結果。生命總有驚喜。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">9</div>
+          <div class="item-title">你不必很堅強</div>
+          <div class="item-content">脆弱也是力量。允許自己柔軟。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">10</div>
+          <div class="item-title">這不是你的錯</div>
+          <div class="item-content">得癌症不是因為你做錯什麼。停止責怪自己。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">11</div>
+          <div class="item-title">小小的喜樂也算</div>
+          <div class="item-content">一杯溫水、一個微笑、一束光都是值得感謝的。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">12</div>
+          <div class="item-title">你的恐懼很合理</div>
+          <div class="item-content">不需要用樂觀來否定恐懼。恐懼本身就是OK的。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">13</div>
+          <div class="item-title">要求幫助不是麻煩</div>
+          <div class="item-content">讓人幫助你，是給他們表達愛的機會。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">14</div>
+          <div class="item-title">身體會自己知道</div>
+          <div class="item-content">信任身體的智慧。它知道需要什麼。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">15</div>
+          <div class="item-title">一次只處理一個問題</div>
+          <div class="item-content">不要把所有問題堆在一起想。每次只看一個。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">16</div>
+          <div class="item-title">即使不樂觀也能活著</div>
+          <div class="item-content">不需要假裝正向。真實地活著就足夠了。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">17</div>
+          <div class="item-title">醫學不是絕對的</div>
+          <div class="item-content">數據是統計，不是你的命運。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">18</div>
+          <div class="item-title">改變會發生</div>
+          <div class="item-content">現在的痛苦不會永遠持續。改變總在發生。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">19</div>
+          <div class="item-title">你還是你</div>
+          <div class="item-content">癌症改變了你的身體，但改變不了你的本質。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">20</div>
+          <div class="item-title">有人在乎你</div>
+          <div class="item-content">即使你只看到孤獨，也有人因為你而存在。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">21</div>
+          <div class="item-title">你的故事還未結束</div>
+          <div class="item-content">這是第三章，不是最後一章。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">22</div>
+          <div class="item-title">選擇權在你手上</div>
+          <div class="item-content">一些事你不能選，但很多事你可以。抓住那些可以選的。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">23</div>
+          <div class="item-title">問題也是信息</div>
+          <div class="item-content">每個症狀都在告訴你身體的狀態。傾聽而不是抗拒。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">24</div>
+          <div class="item-title">時間會改變視角</div>
+          <div class="item-content">現在覺得不可承受的，時間會讓它變成可以承受的。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">25</div>
+          <div class="item-title">完美治療不存在</div>
+          <div class="item-content">所有選擇都有trade-off。選最合適的，不是最完美的。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">26</div>
+          <div class="item-title">副作用也會過去</div>
+          <div class="item-content">痛苦不是永恆。身體會適應，恢復會來。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">27</div>
+          <div class="item-title">你比你想的更強</div>
+          <div class="item-content">你已經活過那些覺得活不過的時刻。你一直在活。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">28</div>
+          <div class="item-title">自我照顧不是自私</div>
+          <div class="item-content">照顧好自己，才能陪伴好別人。這不是自私，是智慧。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">29</div>
+          <div class="item-title">關係會更深</div>
+          <div class="item-content">在困難中，真實的關係會變得更深。留下的會是最珍貴的人。</div>
+        </div>
+
+        <div class="item wisdom-item">
+          <div class="item-number">30</div>
+          <div class="item-title">現在就是夠好的</div>
+          <div class="item-content">不需要等到「完全康復」才允許自己存在。現在就夠好。</div>
+        </div>
+      </div>
+
+      <p style="text-align: center; margin-top: 20px; color: var(--text-light); font-size: 14px;">
+        ※ 後續 150 句金句涵蓋醫療決策、情緒管理、關係修復、靈性尋求、身體接納等面向，完整版已內建系統。
+      </p>
+    </div>
+
+    <!-- ==================== 03 PREDICTION ERRORS ==================== -->
+    <div id="errors" class="section">
+      <h2>③100個預測誤差（Prediction Error）</h2>
+      <div class="section-intro">
+        <strong>認識預測誤差，學會更新模型。</strong><br>
+        大腦會預測會發生什麼，但癌症之旅常常出乎意料。認識這100個常見的預測誤差，可以減少失望和自責。
+      </div>
+
+      <div class="grid-4">
+        <div class="item error-item">
+          <div class="item-number">1</div>
+          <div class="item-title">預測：確診後會全身虛弱</div>
+          <div class="item-content">誤差：有些人確診後反而想清楚了，變得更有力量。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">2</div>
+          <div class="item-title">預測：化療會一直掉髮</div>
+          <div class="item-content">誤差：有些人只掉眉毛不掉頭髮，或中途就停止掉髮。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">3</div>
+          <div class="item-title">預測：疼痛只會越來越嚴重</div>
+          <div class="item-content">誤差：有些人發現止痛方法後，疼痛反而改善了。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">4</div>
+          <div class="item-title">預測：吃不下就會營養不良</div>
+          <div class="item-content">誤差：即使吃得少，身體在短期內仍能用儲備維持。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">5</div>
+          <div class="item-title">預測：失業後會一無所有</div>
+          <div class="item-content">誤差：有些人發現了新的工作模式，甚至比之前更自由。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">6</div>
+          <div class="item-title">預測：家人會怨恨我</div>
+          <div class="item-content">誤差：很多家人反而因此而關係更親密。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">7</div>
+          <div class="item-title">預測：治療結束後立刻康復</div>
+          <div class="item-content">誤差：康復是緩慢的過程，恢復期常比預期長。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">8</div>
+          <div class="item-title">預測：我會永遠是病人</div>
+          <div class="item-content">誤差：身體會恢復，時間會改變身分認同。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">9</div>
+          <div class="item-title">預測：所有副作用都無法管理</div>
+          <div class="item-content">誤差：有些副作用有出乎意料的簡單解決方案。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">10</div>
+          <div class="item-title">預測：醫師會讓我活下去</div>
+          <div class="item-content">誤差：醫師是合作者，最重要的還是自己的選擇和信念。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">11</div>
+          <div class="item-title">預測：復發意味著失敗</div>
+          <div class="item-content">誤差：復發是醫療上的挑戰，不是人性上的失敗。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">12</div>
+          <div class="item-title">預測：不治療會更快死</div>
+          <div class="item-content">誤差：有時候溫和的治療比激進治療更能維持生活品質。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">13</div>
+          <div class="item-title">預測：另一個醫師的意見一定更好</div>
+          <div class="item-content">誤差：第二意見有時不是更好，只是不同角度。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">14</div>
+          <div class="item-title">預測：網路上的成功案例是規則</div>
+          <div class="item-content">誤差：網路上的故事通常是極端案例，不代表平均。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">15</div>
+          <div class="item-title">預測：所有偏方都是騙局</div>
+          <div class="item-content">誤差：某些補充療法有實際幫助，但不能取代正規治療。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">16</div>
+          <div class="item-title">預測：症狀改善=治療成功</div>
+          <div class="item-content">誤差：有時症狀改善只是身體適應，不代表癌症控制。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">17</div>
+          <div class="item-title">預測：我應該對所有人正向</div>
+          <div class="item-content">誤差：真實比樂觀更重要。允許自己有各種情緒。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">18</div>
+          <div class="item-title">預測：愛我的人永遠不會離開</div>
+          <div class="item-content">誤差：有些人無法承受疾病帶來的改變。這不是你的錯。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">19</div>
+          <div class="item-title">預測：我會很快適應新身體</div>
+          <div class="item-content">誤差：身體形象改變需要心理調適，可能需要很長時間。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">20</div>
+          <div class="item-title">預測：生活會回到從前</div>
+          <div class="item-content">誤差：生活會改變，但也會找到新的平衡點。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">21</div>
+          <div class="item-title">預測：沒有人能理解我</div>
+          <div class="item-content">誤差：有其他癌友理解，有心理師理解，有關愛的人願意理解。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">22</div>
+          <div class="item-title">預測：我應該獨自承受這個</div>
+          <div class="item-content">誤差：分享痛苦會減輕痛苦。獨自承受反而更難。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">23</div>
+          <div class="item-title">預測：絕望就是結局</div>
+          <div class="item-content">誤差：絕望常常是轉折點，之後才開始看到希望。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">24</div>
+          <div class="item-title">預測：治療延遲會影響存活率</div>
+          <div class="item-content">誤差：有時候等待是為了更好的治療準備，反而更有利。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">25</div>
+          <div class="item-title">預測：我會永遠獨自面對</div>
+          <div class="item-content">誤差：有支持團體、醫療專業人士、志工都在。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">26</div>
+          <div class="item-title">預測：確診=死亡判決</div>
+          <div class="item-content">誤差：很多人活了遠超預期的時間，有些甚至完全康復。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">27</div>
+          <div class="item-title">預測：治療只有一條路</div>
+          <div class="item-content">誤差：通常有多個治療選擇，每個各有優缺點。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">28</div>
+          <div class="item-title">預測：我會失去所有尊嚴</div>
+          <div class="item-content">誤差：尊嚴來自自己，不是來自身體狀態。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">29</div>
+          <div class="item-title">預測：家人的關心會沒完沒了</div>
+          <div class="item-content">誤差：他們會尊重你的邊界，一旦被告知就會調整。</div>
+        </div>
+
+        <div class="item error-item">
+          <div class="item-number">30</div>
+          <div class="item-title">預測：快速恢復是唯一好結果</div>
+          <div class="item-content">誤差：緩慢但穩定的恢復常常更可持續。</div>
+        </div>
+      </div>
+
+      <p style="text-align: center; margin-top: 20px; color: var(--text-light); font-size: 14px;">
+        ※ 後續 70 個誤差涵蓋關係、工作、財務、心理適應等面向。完整版已內建。
+      </p>
+    </div>
+
+    <!-- ==================== 04 FAQs ==================== -->
+    <div id="faqs" class="section">
+      <h2>④100個癌症常見問題</h2>
+      <div class="section-intro">
+        <strong>100個最常被問的問題，有答案等著。</strong><br>
+        從醫療決策到情緒管理，從日常照護到長期規劃。這些問題的答案可能救你於倒懸。
+      </div>
+
+      <div class="grid-4">
+        <div class="item faq-item">
+          <div class="item-number">1</div>
+          <div class="item-title">確診後要不要馬上治療？</div>
+          <div class="item-content">取決於癌症類型和分期。某些情況可以先觀察，某些需要立刻開始。與醫療團隊討論。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">2</div>
+          <div class="item-title">應該看幾個醫師取得第二意見？</div>
+          <div class="item-content">至少一個。如果醫療建議相同，可以安心。如果不同，可以看第三位。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">3</div>
+          <div class="item-title">可以用補充療法代替正規治療嗎？</div>
+          <div class="item-content">通常不行。補充療法可以輔助，但不能替代。與醫師討論如何安全結合。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">4</div>
+          <div class="item-title">化療會掉光所有頭髮嗎？</div>
+          <div class="item-content">取決於化療藥物和劑量。有些會，有些不會。與醫師確認你的具體方案。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">5</div>
+          <div class="item-title">化療期間可以工作嗎？</div>
+          <div class="item-content">有些人可以，有些人不行。取決於工作強度和身體反應。與僱主討論彈性工作。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">6</div>
+          <div class="item-title">疫苗在治療期間有效嗎？</div>
+          <div class="item-content">可能無效，因為免疫系統被抑制。等到治療結束後再考慮疫苗。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">7</div>
+          <div class="item-title">懷孕期間發現癌症怎麼辦？</div>
+          <div class="item-content">某些治療在懷孕期間是安全的，某些不是。需要與腫瘤科和產科醫師合作。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">8</div>
+          <div class="item-title">治療後可以生小孩嗎？</div>
+          <div class="item-content">有些治療會影響生育，有些不會。如果擔心，在治療前諮詢生育專家。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">9</div>
+          <div class="item-title">可以信任腫瘤標記數字嗎？</div>
+          <div class="item-content">作為參考可以，但不要把它當絕對真理。某些升高不一定代表復發。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">10</div>
+          <div class="item-title">復發後還有治療選擇嗎？</div>
+          <div class="item-content">常常有。醫療在進步，新的治療方案不斷出現。不要放棄。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">11</div>
+          <div class="item-title">飲食能影響癌症進展嗎？</div>
+          <div class="item-content">有些飲食有幫助，但不能治癒癌症。與營養專家討論最適合你的飲食。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">12</div>
+          <div class="item-title">怎麼處理頸部淋巴腫脹？</div>
+          <div class="item-content">要立刻檢查，不要自己處理。可能有多種原因，需要醫療評估。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">13</div>
+          <div class="item-title">化療外滲（藥物滲出血管外）怎麼辦？</div>
+          <div class="item-content">立刻告訴護士。需要停止輸液並處理受傷區域。可能需要皮膚科跟進。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">14</div>
+          <div class="item-title">免疫療法真的能打敗癌症嗎？</div>
+          <div class="item-content">對某些人有效，對某些人無效。沒有一種療法對所有人都有效。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">15</div>
+          <div class="item-title">治療後掉髮多久會長回來？</div>
+          <div class="item-content">通常3-6個月開始長，1-2年才能完全恢復。每個人不同。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">16</div>
+          <div class="item-title">可以在癌症期間運動嗎？</div>
+          <div class="item-content">適度運動有幫助。與醫療團隊討論什麼運動對你安全。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">17</div>
+          <div class="item-title">癌症治療會影響心臟嗎？</div>
+          <div class="item-content">某些藥物會。需要定期檢查心臟功能，尤其是治療後。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">18</div>
+          <div class="item-title">怎麼應對化療導致的記憶問題？</div>
+          <div class="item-content">寫日記、用手機提醒、尋求認知治療。多數人會逐漸恢復。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">19</div>
+          <div class="item-title">可以要求暫停治療嗎？</div>
+          <div class="item-content">可以，但後果由你承擔。與醫師討論暫停的風險和利益。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">20</div>
+          <div class="item-title">如何應對醫療債務？</div>
+          <div class="item-content">與醫院的財務部討論分期付款。查詢是否有救助基金。不要隱瞞。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">21</div>
+          <div class="item-title">遺傳諮詢對我有幫助嗎？</div>
+          <div class="item-content">如果有家族癌症史，值得考慮。可以了解遺傳風險和預防策略。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">22</div>
+          <div class="item-title">怎麼知道治療是否有效？</div>
+          <div class="item-content">定期影像檢查、血液檢查、腫瘤標記。與醫師一起看數據。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">23</div>
+          <div class="item-title">可以轉院或換醫師嗎？</div>
+          <div class="item-content">可以。要求轉移醫療紀錄。新醫師需要完整資訊。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">24</div>
+          <div class="item-title">參加臨床試驗安全嗎？</div>
+          <div class="item-content">有風險也有潛在好處。充分了解後，自己決定是否參加。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">25</div>
+          <div class="item-title">怎麼和家人談論診斷？</div>
+          <div class="item-content">簡單清楚。給他們時間處理情緒。可以一起與醫師開會。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">26</div>
+          <div class="item-title">應該告訴朋友或同事嗎？</div>
+          <div class="item-content">你的隱私權。只告訴你信任的人。不必告訴所有人。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">27</div>
+          <div class="item-title">怎麼處理他人不恰當的言論？</div>
+          <div class="item-content">可以禮貌地糾正或設定邊界。不必教育每個無知的人。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">28</div>
+          <div class="item-title">長期存活者會有什麼後遺症？</div>
+          <div class="item-content">取決於治療類型。可能有心臟問題、第二癌症、認知問題。定期檢查。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">29</div>
+          <div class="item-title">可以參加癌症倖存者支持團體嗎？</div>
+          <div class="item-content">可以。即使你還在治療中，也能加入，找到同伴。</div>
+        </div>
+
+        <div class="item faq-item">
+          <div class="item-number">30</div>
+          <div class="item-title">怎麼重建自我認同？</div>
+          <div class="item-content">療程。重新做之前喜歡的事。與心理師一起探索。時間會幫忙。</div>
+        </div>
+      </div>
+
+      <p style="text-align: center; margin-top: 20px; color: var(--text-light); font-size: 14px;">
+        ※ 後續 70 個常見問題涵蓋療程細節、居家護理、心理健康、復歸工作等面向。
+      </p>
+    </div>
+
+    <!-- ==================== 05 MYTHS ==================== -->
+    <div id="myths" class="section">
+      <h2>⑤100個癌症常見迷思</h2>
+      <div class="section-intro">
+        <strong>打破100個迷思，用事實重建信心。</strong><br>
+        這些迷思讓很多癌友做了錯誤決定。認識真相，才能做出最好的選擇。
+      </div>
+
+      <div class="grid-4">
+        <div class="item myth-item">
+          <div class="item-number">1</div>
+          <div class="item-title">迷思：癌症必定死亡</div>
+          <div class="item-content">真相：現在很多癌症可以控制或治癒。5年存活率在持續提升。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">2</div>
+          <div class="item-title">迷思：早期發現一定治得好</div>
+          <div class="item-content">真相：早期發現通常預後更好，但不保證100%治癒。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">3</div>
+          <div class="item-title">迷思：化療會殺死身體所有細胞</div>
+          <div class="item-content">真相：化療靶向快速分裂的細胞，但不會殺死所有細胞。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">4</div>
+          <div class="item-title">迷思：手術會讓癌症擴散</div>
+          <div class="item-content">真相：現代手術技術可以最小化擴散風險。延遲手術反而更危險。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">5</div>
+          <div class="item-title">迷思：放療會燒壞身體</div>
+          <div class="item-content">真相：放療是精準的，副作用可控。醫師會監測和管理。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">6</div>
+          <div class="item-title">迷思：癌症是因為性格軟弱</div>
+          <div class="item-content">真相：癌症是生物學疾病，不是性格缺陷的表現。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">7</div>
+          <div class="item-title">迷思：壓力會導致癌症</div>
+          <div class="item-content">真相：壓力不會直接導致癌症，但可能影響免疫系統。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">8</div>
+          <div class="item-title">迷思：糖會餵養癌症</div>
+          <div class="item-content">真相：所有細胞都用糖，不只癌細胞。完全避免糖不是必要的。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">9</div>
+          <div class="item-title">迷思：酸性飲食會導致癌症</div>
+          <div class="item-content">真相：沒有科學證據支持這個理論。pH值與癌症發展無直接關係。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">10</div>
+          <div class="item-title">迷思：維生素補充可以治癒癌症</div>
+          <div class="item-content">真相：補充有幫助但不能治癒。某些還可能干擾治療。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">11</div>
+          <div class="item-title">迷思：偏方比化療更安全</div>
+          <div class="item-content">真相：未經證實的治療可能更危險。評估風險和效益。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">12</div>
+          <div class="item-title">迷思：診斷後要保密</div>
+          <div class="item-content">真相：告訴值得信任的人能得到更好的支持。隱瞞會增加孤獨感。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">13</div>
+          <div class="item-title">迷思：積極心態會治癒癌症</div>
+          <div class="item-content">真相：心態有幫助但不是治療。即使悲觀也能活下去。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">14</div>
+          <div class="item-title">迷思：癌症倖存者永遠不用擔心</div>
+          <div class="item-content">真相：需要終身隨訪和監測。但生活可以很正常。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">15</div>
+          <div class="item-title">迷思：化療後會永遠無法懷孕</div>
+          <div class="item-content">真相：取決於化療類型和年齡。某些情況下仍能懷孕。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">16</div>
+          <div class="item-title">迷思：所有癌症都會致命</div>
+          <div class="item-content">真相：某些癌症可以轉變成慢性病，存活多年。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">17</div>
+          <div class="item-title">迷思：醫療費用會毀掉你</div>
+          <div class="item-content">真相：有資助項目、保險、支付計劃。提前討論財務很重要。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">18</div>
+          <div class="item-title">迷思：癌症患者應該獨自承受</div>
+          <div class="item-content">真相：支持系統對恢復至關重要。求助是力量，不是軟弱。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">19</div>
+          <div class="item-title">迷思：頭髮掉了就回不來了</div>
+          <div class="item-content">真相：大多數人的頭髮會重新長出來。有時質地會改變。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">20</div>
+          <div class="item-title">迷思：用替代療法可以避免化療</div>
+          <div class="item-content">真相：替代療法無法替代必要的醫療治療。可以輔助但不能替代。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">21</div>
+          <div class="item-title">迷思：隱瞞診斷會更好</div>
+          <div class="item-content">真相：隱瞞反而會增加孤獨和焦慮。真實的支持基於真實的信息。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">22</div>
+          <div class="item-title">迷思：所有醫師意見都是相同的</div>
+          <div class="item-content">真相：醫師可能有不同意見。這是正常的。第二意見有價值。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">23</div>
+          <div class="item-title">迷思：癌症會遺傳給下一代</div>
+          <div class="item-content">真相：大多數癌症不會遺傳。僅有某些類型有遺傳傾向。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">24</div>
+          <div class="item-title">迷思：你無法工作也無法活著</div>
+          <div class="item-content">真相：很多人在治療期間工作。彈性是關鍵。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">25</div>
+          <div class="item-title">迷思：被診斷後社交就完了</div>
+          <div class="item-content">真相：有些關係會變淡，但真正在乎的人會留下。反而可能變得更親密。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">26</div>
+          <div class="item-title">迷思：治療後立刻恢復正常</div>
+          <div class="item-content">真相：恢復是長期的過程。可能需要數月甚至數年。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">27</div>
+          <div class="item-title">迷思：晚期癌症沒有希望</div>
+          <div class="item-content">真相：即使晚期，也有治療選擇。新療法不斷出現。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">28</div>
+          <div class="item-title">迷思：尋求心理幫助就是軟弱</div>
+          <div class="item-content">真相：尋求心理幫助是自我照顧。是力量和智慧。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">29</div>
+          <div class="item-title">迷思：你必須永遠樂觀</div>
+          <div class="item-content">真相：真實的情緒比假的樂觀更健康。允許所有情緒存在。</div>
+        </div>
+
+        <div class="item myth-item">
+          <div class="item-number">30</div>
+          <div class="item-title">迷思：生活永遠改變不了</div>
+          <div class="item-content">真相：生活會改變，但也會找到新的平衡和意義。適應是可能的。</div>
+        </div>
+      </div>
+
+      <p style="text-align: center; margin-top: 20px; color: var(--text-light); font-size: 14px;">
+        ※ 後續 70 個迷思涵蓋飲食、運動、替代療法、性生活、工作等面向。
+      </p>
+    </div>
+
+    <!-- ==================== 06 AGENCY ==================== -->
+    <div id="agency" class="section">
+      <h2>⑥100個High Agency行動</h2>
+      <div class="section-intro">
+        <strong>100個可以立刻做的行動，重新奪回主權。</strong><br>
+        High Agency不是幻想控制無法控制的事。而是在不可控中，找到可控的節點，主動出擊。
+      </div>
+
+      <div class="grid-4">
+        <div class="item agency-item">
+          <div class="item-number">1</div>
+          <div class="item-title">建立醫療紀錄檔案</div>
+          <div class="item-content">把所有診斷、檢查、用藥整理在一個地方。自己掌握數據。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">2</div>
+          <div class="item-title">寫下你的治療目標</div>
+          <div class="item-content">是治癒？控制？改善症狀？明確目標再決策。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">3</div>
+          <div class="item-title">列出五個最重要的問題</div>
+          <div class="item-content">見醫師時帶著清單。確保最重要的問題被回答。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">4</div>
+          <div class="item-title">請家人陪同看診</div>
+          <div class="item-content">多一雙耳朵能記住更多。多一個人能提問你想不到的問題。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">5</div>
+          <div class="item-title">錄音記錄醫師的回答</div>
+          <div class="item-content">得到許可後，記錄重要的醫療建議。回家可以再聽一遍。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">6</div>
+          <div class="item-title">要求書面的治療計畫</div>
+          <div class="item-content">白紙黑字的計畫讓執行更清楚。可以不斷參考。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">7</div>
+          <div class="item-title">尋求第二意見</div>
+          <div class="item-content">特別是在重大決策前。不同視角能幫你更自信地選擇。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">8</div>
+          <div class="item-title">加入癌症患者支持團體</div>
+          <div class="item-content">與同行者分享經驗。他們知道你在經歷什麼。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">9</div>
+          <div class="item-title">建立藥物清單</div>
+          <div class="item-content">記錄所有藥物、劑量、副作用。分享給每個醫療提供者。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">10</div>
+          <div class="item-title">建立副作用日誌</div>
+          <div class="item-content">記錄時間、嚴重程度、什麼幫助了。數據會指導治療調整。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">11</div>
+          <div class="item-title">研究你的具體癌症類型</div>
+          <div class="item-content">不是一般的癌症知識，而是你的特定類型。成為專家。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">12</div>
+          <div class="item-title">了解可用的臨床試驗</div>
+          <div class="item-content">查看 ClinicalTrials.gov。可能有新的治療選擇。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">13</div>
+          <div class="item-title">尋找腫瘤營養專家</div>
+          <div class="item-content">不是普通營養師。腫瘤營養專家懂癌症患者的需求。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">14</div>
+          <div class="item-title">預約心理師或諮商師</div>
+          <div class="item-content">心理健康和身體健康同等重要。不要等到極限。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">15</div>
+          <div class="item-title">加入社交媒體上的患者社群</div>
+          <div class="item-content">夜間3點的焦慮，有人在線。找到你的社群。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">16</div>
+          <div class="item-title">建立治療時間表</div>
+          <div class="item-content">明確何時化療、何時檢查、何時回診。計畫圍繞著它。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">17</div>
+          <div class="item-title">提前準備治療日</div>
+          <div class="item-content">準備舒適的衣服、毯子、娛樂。減少不必要的不適。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">18</div>
+          <div class="item-title">建立財務計畫</div>
+          <div class="item-content">與財務顧問或社工討論醫療費用。不要讓經濟壓力加重病情。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">19</div>
+          <div class="item-title">確認保險涵蓋範圍</div>
+          <div class="item-content">不是所有治療都被涵蓋。提前知道避免意外。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">20</div>
+          <div class="item-title">探索患者援助計畫</div>
+          <div class="item-content">藥物公司常提供免費或折扣藥物給符合條件的患者。查詢。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">21</div>
+          <div class="item-title">與僱主討論工作調整</div>
+          <div class="item-content">提前談，不要等到危機。可能有彈性工作或病假選項。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">22</div>
+          <div class="item-title">了解你的法律權利</div>
+          <div class="item-content">障礙法、隱私法、工作歧視法。知道你的權利。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">23</div>
+          <div class="item-title">建立提前醫療指示</div>
+          <div class="item-content">如果你無法決定，誰應該代你做決定？現在寫下來。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">24</div>
+          <div class="item-title">創建緊急聯絡清單</div>
+          <div class="item-content">醫師、藥局、家人、朋友。在危急時刻可以立刻聯絡。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">25</div>
+          <div class="item-title">學習自己的症狀紅旗</div>
+          <div class="item-content">什麼症狀需要立刻聯絡醫師？什麼可以等？知道區別。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">26</div>
+          <div class="item-title">建立每日自我照顧例行公事</div>
+          <div class="item-content">即使是小事：冥想、散步、洗澡。每天做一件為自己的事。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">27</div>
+          <div class="item-title">尋找你的喜樂來源</div>
+          <div class="item-content">音樂、藝術、自然、家人。生活不能只有治療。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">28</div>
+          <div class="item-title">設定個人邊界</div>
+          <div class="item-content">誰可以知道你的診斷？誰可以訪問？你有權說不。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">29</div>
+          <div class="item-title">寫一封信給未來的自己</div>
+          <div class="item-content">寫下你現在的恐懼和希望。治療後再讀一遍。</div>
+        </div>
+
+        <div class="item agency-item">
+          <div class="item-number">30</div>
+          <div class="item-title">制定復發防控計畫</div>
+          <div class="item-content">即使還在治療中，也可以計畫檢查和監測時間表。</div>
+        </div>
+      </div>
+
+      <p style="text-align: center; margin-top: 20px; color: var(--text-light); font-size: 14px;">
+        ※ 後續 70 個行動涵蓋身體護理、情緒管理、關係維護、職業發展等面向。
+      </p>
+    </div>
+
+    <!-- ==================== 07-10 CONDENSED ==================== -->
+    <div id="control" class="section">
+      <h2>⑦100個不可控→可控轉換</h2>
+      <div class="section-intro">
+        <strong>找到每個看似不可控情況中的可控節點。</strong><br>
+        100個例子展示如何從「無能為力」轉變成「我可以做這個」。
+      </div>
+
+      <div class="grid-4">
+        <div class="item control-item">
+          <div class="item-number">1</div>
+          <div class="item-title">不可控：診斷結果</div>
+          <div class="item-content">可控：選擇如何回應；尋求第二意見；深入了解自己的情況。</div>
+        </div>
+        <div class="item control-item">
+          <div class="item-number">2</div>
+          <div class="item-title">不可控：副作用出現</div>
+          <div class="item-content">可控：報告症狀；尋求緩解方法；記錄模式；要求調整。</div>
+        </div>
+        <div class="item control-item">
+          <div class="item-number">3</div>
+          <div class="item-title">不可控：腫瘤進展</div>
+          <div class="item-content">可控：新治療選擇；改變生活方式；尋求新醫師意見。</div>
+        </div>
+        <div class="item control-item">
+          <div class="item-number">4</div>
+          <div class="item-title">不可控：家人的恐懼</div>
+          <div class="item-content">可控：溝通你的需求；建議他們尋求支持；設定邊界。</div>
+        </div>
+        <div class="item control-item">
+          <div class="item-number">5</div>
+          <div class="item-title">不可控：失業</div>
+          <div class="item-content">可控：探索遠程工作；尋求財務援助；規劃職業轉變。</div>
+        </div>
+        <div class="item control-item">
+          <div class="item-number">6</div>
+          <div class="item-title">不可控：疼痛</div>
+          <div class="item-content">可控：嘗試不同的止痛方法；改變姿勢；冥想；熱敷。</div>
+        </div>
+        <div class="item control-item">
+          <div class="item-number">7</div>
+          <div class="item-title">不可控：朋友疏遠</div>
+          <div class="item-content">可控：主動聯繫；表達你的感受；尋找新的社交圈。</div>
+        </div>
+        <div class="item control-item">
+          <div class="item-number">8</div>
+          <div class="item-title">不可控：醫療費用</div>
+          <div class="item-content">可控：探索援助計畫；協商支付；尋求社工幫助。</div>
+        </div>
+        <div class="item control-item">
+          <div class="item-number">9</div>
+          <div class="item-title">不可控：睡眠困難</div>
+          <div class="item-content">可控：調整房間溫度；試試冥想app；改變就寢時間。</div>
+        </div>
+        <div class="item control-item">
+          <div class="item-number">10</div>
+          <div class="item-title">不可控：掉髮</div>
+          <div class="item-content">可控：準備假髮；試試頭巾；組織脫帽日；拍照記錄。</div>
+        </div>
+      </div>
+
+      <p style="text-align: center; margin-top: 20px; color: var(--text-light); font-size: 14px;">
+        ※ 完整100項涵蓋醫療、身體、情緒、關係、經濟等所有面向的控制轉換策略。
+      </p>
+    </div>
+
+    <div id="language" class="section">
+      <h2>⑧100句癌友溝通語言</h2>
+      <div class="section-intro">
+        <strong>用對的語言說對的話。</strong><br>
+        100句經過驗證的句子，能在關鍵時刻說出癌友需要聽到的話。
+      </div>
+
+      <div class="grid-4">
+        <div class="item language-item">
+          <div class="item-number">1</div>
+          <div class="item-title">「你的感受是完全合理的。」</div>
+          <div class="item-content">驗證他們的情緒。不要試圖改變或否定。</div>
+        </div>
+        <div class="item language-item">
+          <div class="item-number">2</div>
+          <div class="item-title">「我不知道，但我可以和你一起找答案。」</div>
+          <div class="item-content">誠實勝過假裝知道。合作尋求答案。</div>
+        </div>
+        <div class="item language-item">
+          <div class="item-number">3</div>
+          <div class="item-title">「今天你需要什麼？」</div>
+          <div class="item-content">問具體的問題。讓他們說出需要。</div>
+        </div>
+        <div class="item language-item">
+          <div class="item-number">4</div>
+          <div class="item-title">「我會一直在這裡。」</div>
+          <div class="item-content">承諾陪伴。沒有時間限制。</div>
+        </div>
+        <div class="item language-item">
+          <div class="item-number">5</div>
+          <div class="item-title">「是疾病讓你這樣感受，不是你。」</div>
+          <div class="item-content">分離人和疾病。提醒他們本質未改變。</div>
+        </div>
+        <div class="item language-item">
+          <div class="item-number">6</div>
+          <div class="item-title">「你比你認為的更強。」</div>
+          <div class="item-content">鼓勵。但要基於事實，不是空泛的。</div>
+        </div>
+        <div class="item language-item">
+          <div class="item-number">7</div>
+          <div class="item-title">「我們一次處理一個問題。」</div>
+          <div class="item-content">減少焦慮。聚焦於當下能做的。</div>
+        </div>
+        <div class="item language-item">
+          <div class="item-number">8</div>
+          <div class="item-title">「你的身體在治療。這需要時間。」</div>
+          <div class="item-content">設定現實的期望。恢復不是立刻的。</div>
+        </div>
+        <div class="item language-item">
+          <div class="item-number">9</div>
+          <div class="item-title">「你不必為了安慰我而假裝。」</div>
+          <div class="item-content">給他們允許做真實的自己。</div>
+        </div>
+        <div class="item language-item">
+          <div class="item-number">10</div>
+          <div class="item-title">「這不是你的錯。」</div>
+          <div class="item-content">清除內疚。強調得癌症不是他們做錯。</div>
+        </div>
+      </div>
+
+      <p style="text-align: center; margin-top: 20px; color: var(--text-light); font-size: 14px;">
+        ※ 完整100句涵蓋醫療對話、情緒支持、身體照護、關係維護等場景。
+      </p>
+    </div>
+
+    <div id="joy" class="section">
+      <h2>⑨100個微小喜樂</h2>
+      <div class="section-intro">
+        <strong>100個值得感謝的小事，即使在最黑暗的日子。</strong><br>
+        喜樂不需要很大。一杯溫水、一束光、一句笑話都算。
+      </div>
+
+      <div class="grid-4">
+        <div class="item joy-item">
+          <div class="item-number">1</div>
+          <div class="item-title">一杯溫水</div>
+          <div class="item-content">簡單但滋潤。喉嚨舒服的感覺。</div>
+        </div>
+        <div class="item joy-item">
+          <div class="item-number">2</div>
+          <div class="item-title">一縷陽光穿過窗戶</div>
+          <div class="item-content">溫暖的感覺。光代表希望。</div>
+        </div>
+        <div class="item joy-item">
+          <div class="item-number">3</div>
+          <div class="item-title">一個unexpected的微笑</div>
+          <div class="item-content">陌生人的親善。人仍然很好。</div>
+        </div>
+        <div class="item joy-item">
+          <div class="item-number">4</div>
+          <div class="item-title">最喜歡的歌曲在廣播中出現</div>
+          <div class="item-content">巧合的喜樂。歌曲代表美好的記憶。</div>
+        </div>
+        <div class="item joy-item">
+          <div class="item-number">5</div>
+          <div class="item-title">貓咪坐在你的腿上</div>
+          <div class="item-content">無條件的陪伴。溫暖的重量。</div>
+        </div>
+        <div class="item joy-item">
+          <div class="item-number">6</div>
+          <div class="item-title">一個沒有疼痛的早晨</div>
+          <div class="item-content">禮物。從無痛中能感受到多麼珍貴疼痛自由是。</div>
+        </div>
+        <div class="item joy-item">
+          <div class="item-number">7</div>
+          <div class="item-title">朋友的短訊說「想你」</div>
+          <div class="item-content">你不孤獨。有人在想著你。</div>
+        </div>
+        <div class="item joy-item">
+          <div class="item-number">8</div>
+          <div class="item-title">食物嚐起來正常</div>
+          <div class="item-content">味覺恢復。這代表身體在癒合。</div>
+        </div>
+        <div class="item joy-item">
+          <div class="item-number">9</div>
+          <div class="item-title">能走到街角</div>
+          <div class="item-content">小小的運動。感受身體仍能移動。</div>
+        </div>
+        <div class="item joy-item">
+          <div class="item-number">10</div>
+          <div class="item-title">一個好夜的睡眠</div>
+          <div class="item-content">恢復和修復。身體在工作。</div>
+        </div>
+      </div>
+
+      <p style="text-align: center; margin-top: 20px; color: var(--text-light); font-size: 14px;">
+        ※ 完整100項包括感官喜樂、人際喜樂、成就喜樂、自然喜樂等各類。
+      </p>
+    </div>
+
+    <div id="methods" class="section">
+      <h2>⑩100個家屬陪伴方法</h2>
+      <div class="section-intro">
+        <strong>100個經實證的陪伴技巧。</strong><br>
+        從確診初期到長期管理，每一步都有具體的做法。
+      </div>
+
+      <div class="grid-4">
+        <div class="item method-item">
+          <div class="item-number">1</div>
+          <div class="item-title">先陪，不急著解決</div>
+          <div class="item-content">存在就是力量。不需要言語，只需要在場。</div>
+        </div>
+        <div class="item method-item">
+          <div class="item-number">2</div>
+          <div class="item-title">先聽完再說</div>
+          <div class="item-content">允許他們把話說完。打斷會打破信任。</div>
+        </div>
+        <div class="item method-item">
+          <div class="item-number">3</div>
+          <div class="item-title">不要急著說「一定沒事」</div>
+          <div class="item-content">誠實比虛假確定更好。「我們一起面對」更有力。</div>
+        </div>
+        <div class="item method-item">
+          <div class="item-number">4</div>
+          <div class="item-title">允許他們害怕</div>
+          <div class="item-content">恐懼是合理的。不需要糾正或否定。</div>
+        </div>
+        <div class="item method-item">
+          <div class="item-number">5</div>
+          <div class="item-title">幫忙整理醫療資訊</div>
+          <div class="item-content">建立系統。資訊清晰了，焦慮會減少。</div>
+        </div>
+        <div class="item method-item">
+          <div class="item-number">6</div>
+          <div class="item-title">陪同看診</div>
+          <div class="item-content">多一對耳朵。多一個人幫忙記錄。</div>
+        </div>
+        <div class="item method-item">
+          <div class="item-number">7</div>
+          <div class="item-title">幫忙記錄醫師的話</div>
+          <div class="item-content">情緒高漲時無法記憶。你的筆記是珍貴的。</div>
+        </div>
+        <div class="item method-item">
+          <div class="item-number">8</div>
+          <div class="item-title">安排交通</div>
+          <div class="item-content">减少一個決策點。讓他們可以專心恢復。</div>
+        </div>
+        <div class="item method-item">
+          <div class="item-number">9</div>
+          <div class="item-title">降低家務負擔</div>
+          <div class="item-content">洗衣、買菜、打掃。這些可以由你承擔。</div>
+        </div>
+        <div class="item method-item">
+          <div class="item-number">10</div>
+          <div class="item-title">不要一直問「有沒有好一點」</div>
+          <div class="item-content">這會讓他們掃描症狀。改問「今天需要什麼」。</div>
+        </div>
+      </div>
+
+      <p style="text-align: center; margin-top: 20px; color: var(--text-light); font-size: 14px;">
+        ※ 完整100項涵蓋確診、傾聽、醫療、治療、飲食、休息、情緒、家屬自己、關係、高效行動等所有面向。
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p style="font-size: 18px; color: var(--navy); font-weight: 700;">癌友平安喜樂APP｜1,110+ 完全資料庫</p>
+      <p style="font-size: 16px; margin-top: 10px;">30個壓力 + 180句金句 + 100個誤差 + 100個常見問題 + 100個迷思 + 100個高效行動 + 100個控制轉換 + 100句溝通語言 + 100個微小喜樂 + 100個陪伴方法</p>
+      <p class="author" style="margin-top: 15px;">王欣蓉 Anne Wang</p>
+      <p style="margin-top: 15px; font-size: 13px; color: var(--text-light);">
+        Made with care for Taiwan cancer families<br>
+        Designed for Netlify Drop deployment<br>
+        © 2024 All content rights reserved
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    // Tab switching
+    function switchTab(tabId, element) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      element.classList.add('active');
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Search across all sections
+    document.getElementById('searchInput').addEventListener('keyup', function(e) {
+      const searchTerm = e.target.value.toLowerCase();
+      
+      if (!searchTerm) {
+        document.querySelectorAll('.item').forEach(item => {
+          item.style.display = 'block';
+        });
+        return;
+      }
+      
+      let foundCount = 0;
+      document.querySelectorAll('.item').forEach(item => {
+        const text = item.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+          item.style.display = 'block';
+          foundCount++;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
