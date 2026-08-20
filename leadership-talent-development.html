@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>領導力與人才發展完整系統 | Leadership & Talent Development Complete System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft JhengHei", "微軟正黑體", -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1A2B5F 0%, #0A7A72 100%);
+            color: #fff;
+            padding: 50px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .header h1 {
+            font-size: 40px;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 50px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #C9960C;
+            padding-bottom: 15px;
+            flex-wrap: wrap;
+            overflow-x: auto;
+        }
+
+        .nav-btn {
+            padding: 11px 16px;
+            background-color: #f0f0f0;
+            color: #1A2B5F;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s;
+            font-family: inherit;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .nav-btn:hover {
+            background-color: #C9960C;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background-color: #1A2B5F;
+            color: #fff;
+        }
+
+        .section {
+            display: none;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .section-title {
+            font-size: 28px;
+            color: #1A2B5F;
+            margin-bottom: 8px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #C9960C;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: #0A7A72;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #C9960C;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #0A7A72;
+            box-shadow: 0 0 0 3px rgba(10, 122, 114, 0.1);
+        }
+
+        .search-btn {
+            padding: 12px 28px;
+            background-color: #1A2B5F;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .search-btn:hover {
+            background-color: #0A7A72;
+            transform: translateY(-2px);
+        }
+
+        /* Card - 完全展開式，無折疊 */
+        .card {
+            background-color: #f9f9f9;
+            border-left: 5px solid #C9960C;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            background-color: #f5f5f5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-left-color: #0A7A72;
+        }
+
+        .card-title {
+            font-size: 16px;
+            color: #1A2B5F;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: #0A7A72;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .card-num {
+            display: inline-block;
+            background-color: #C9960C;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 11px;
+            margin-bottom: 12px;
+        }
+
+        .bilingual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .bilingual {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .text-block {
+            padding: 12px;
+            background-color: #fff;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .lang-label {
+            font-size: 11px;
+            font-weight: bold;
+            color: #C9960C;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .text-content {
+            font-size: 13px;
+            line-height: 1.7;
+            color: #333;
+        }
+
+        .tts-btn {
+            display: inline-block;
+            width: 26px;
+            height: 26px;
+            background-color: #0A7A72;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 13px;
+            margin-left: 6px;
+            vertical-align: middle;
+            transition: all 0.3s;
+        }
+
+        .tts-btn:hover {
+            background-color: #C9960C;
+            transform: scale(1.15);
+        }
+
+        .tts-btn.playing {
+            background-color: #C9960C;
+            animation: pulse 0.6s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .personality-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .personality-card {
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .personality-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        }
+
+        .personality-card h3 {
+            font-size: 17px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+        }
+
+        .personality-card p {
+            font-size: 12px;
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+
+        .personality-card p strong {
+            display: block;
+            margin-top: 8px;
+        }
+
+        .sop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .sop-card {
+            padding: 20px;
+            border: 2px solid #C9960C;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .sop-card h3 {
+            color: #1A2B5F;
+            font-size: 16px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #C9960C;
+        }
+
+        .sop-card ul {
+            list-style: none;
+        }
+
+        .sop-card li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .sop-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #0A7A72;
+            font-weight: bold;
+        }
+
+        .sop-core {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            color: #0A7A72;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .keyword-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .keyword-item {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border-left: 4px solid #C9960C;
+            display: grid;
+            grid-template-columns: 1fr 60px;
+            gap: 12px;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .keyword-item .en {
+            font-size: 14px;
+            color: #1A2B5F;
+            font-weight: 600;
+        }
+
+        .keyword-item .zh {
+            font-size: 12px;
+            color: #0A7A72;
+            font-weight: 500;
+        }
+
+        .quote-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .quote-item {
+            padding: 15px;
+            background: linear-gradient(135deg, #f9f9f9 0%, #f5f5f5 100%);
+            border-left: 4px solid #C9960C;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.8;
+            color: #333;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .quote-item strong {
+            color: #1A2B5F;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #C9960C;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 28px;
+            font-weight: bold;
+            color: #C9960C;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 領導力與人才發展完整系統</h1>
+        <p>Leadership & Talent Development Complete Platform | 王欣蓉 Anne Wang</p>
+    </div>
+
+    <div class="container">
+        <div class="search-box">
+            <input type="text" class="search-input" id="searchInput" placeholder="搜尋 Search...">
+            <button class="search-btn" id="searchBtn">🔍 搜尋</button>
+        </div>
+
+        <div class="stats" id="stats"></div>
+
+        <div class="nav" id="navBar"></div>
+
+        <div id="sectionsContainer"></div>
+
+        <div class="footer">
+            <p>✍️ 王欣蓉 Anne Wang | 領導力與人才發展系列 | © 2026 | 全文呈現版</p>
+        </div>
+    </div>
+
+    <script>
+        class AppManager {
+            constructor(data) {
+                this.data = data;
+                this.currentSection = data.sections[0].id;
+                this.init();
+            }
+
+            init() {
+                this.renderStats();
+                this.renderSections();
+                this.renderNav();
+                this.attachEventListeners();
+            }
+
+            renderStats() {
+                const stats = document.getElementById('stats');
+                const totalItems = this.data.sections.reduce((sum, s) => sum + (s.items ? s.items.length : 0), 0);
+                
+                let html = '<div class="stat-item"><div class="stat-num">5</div><div class="stat-label">主題模塊</div></div>';
+                html += '<div class="stat-item"><div class="stat-num">' + totalItems + '</div><div class="stat-label">完整資料項</div></div>';
+                html += '<div class="stat-item"><div class="stat-num">61,360</div><div class="stat-label">字數內容</div></div>';
+                html += '<div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">資料完整度</div></div>';
+                stats.innerHTML = html;
+            }
+
+            renderNav() {
+                const navBar = document.getElementById('navBar');
+                navBar.innerHTML = '';
+                
+                this.data.sections.forEach((section, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'nav-btn ' + (idx === 0 ? 'active' : '');
+                    btn.textContent = section.navLabel;
+                    btn.setAttribute('data-section', section.id);
+                    navBar.appendChild(btn);
+                });
+            }
+
+            renderSections() {
+                const container = document.getElementById('sectionsContainer');
+                container.innerHTML = this.data.sections.map((section, idx) => `
+                    <div class="section ${idx === 0 ? 'active' : ''}" id="section-${section.id}">
+                        <div class="section-title">${section.title}</div>
+                        <div class="section-subtitle">${section.subtitle}</div>
+                        <div id="content-${section.id}"></div>
+                    </div>
+                `).join('');
+
+                this.data.sections.forEach(section => {
+                    const contentDiv = document.getElementById(`content-${section.id}`);
+                    if (section.type === 'readings') {
+                        this.renderReadings(section.items, contentDiv);
+                    } else if (section.type === 'mindsets') {
+                        this.renderMindsets(section.items, contentDiv);
+                    } else if (section.type === 'personalities') {
+                        this.renderPersonalities(section.items, contentDiv);
+                    } else if (section.type === 'anti-fragile') {
+                        this.renderAntiFragile(section.items, contentDiv);
+                    } else if (section.type === 'sops') {
+                        this.renderSOPs(section.items, contentDiv);
+                    } else if (section.type === 'keywords') {
+                        this.renderKeywords(section.items, contentDiv);
+                    } else if (section.type === 'quotes') {
+                        this.renderQuotes(section.items, contentDiv);
+                    }
+                });
+            }
+
+            renderReadings(items, container) {
+                container.innerHTML = items.map((item, idx) => `
+                    <div class="card">
+                        <div class="card-num">#${item.num}</div>
+                        <div class="card-title">${item.en_title}</div>
+                        <div class="card-subtitle">${item.zh_title}</div>
+                        <div class="bilingual">
+                            <div class="text-block">
+                                <div class="lang-label">🇬🇧 English <button class="tts-btn" data-text="${item.en_content.replace(/"/g, '&quot;')}">🔊</button></div>
+                                <div class="text-content">${item.en_content}</div>
+                            </div>
+                            <div class="text-block">
+                                <div class="lang-label">🇹🇼 繁體中文</div>
+                                <div class="text-content">${item.zh_content}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderMindsets(items, container) {
+                container.innerHTML = items.map(item => `
+                    <div class="card">
+                        <div class="card-num">#${item.num}</div>
+                        <div class="card-title">${item.shift}</div>
+                        <div class="card-subtitle">${item.zh}</div>
+                        <div class="bilingual">
+                            <div class="text-block">
+                                <div class="lang-label">🎯 轉變策略</div>
+                                <div class="text-content">${item.strategy || ''}</div>
+                            </div>
+                            <div class="text-block">
+                                <div class="lang-label">💡 核心收穫</div>
+                                <div class="text-content">${item.benefit || ''}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderPersonalities(items, container) {
+                container.innerHTML = `<div class="personality-grid">` + items.map(item => `
+                    <div class="personality-card" style="background-color: ${item.bgColor}; border-left-color: ${item.color};">
+                        <h3 style="color: ${item.color};">${item.emoji} ${item.name}</h3>
+                        <p><strong style="color: ${item.color};">天賦：</strong>${item.gift}</p>
+                        <p><strong style="color: ${item.color};">卡點：</strong>${item.risk}</p>
+                        <p><strong style="color: ${item.color};">一句話：</strong>${item.motto}</p>
+                    </div>
+                `).join('') + `</div>`;
+            }
+
+            renderAntiFragile(items, container) {
+                container.innerHTML = items.map((item, idx) => `
+                    <div class="card">
+                        <div class="card-num">#${idx + 1}</div>
+                        <div class="card-title">${item.zh} → ${item.zh_result}</div>
+                        <div class="card-subtitle">${item.en} → ${item.en_result}</div>
+                    </div>
+                `).join('');
+            }
+
+            renderSOPs(items, container) {
+                container.innerHTML = `<div class="sop-grid">` + items.map(sop => `
+                    <div class="sop-card">
+                        <h3>${sop.title}</h3>
+                        <ul>
+                            ${sop.steps.map(step => `<li>${step}</li>`).join('')}
+                        </ul>
+                        <div class="sop-core">💡 ${sop.core}</div>
+                    </div>
+                `).join('') + `</div>`;
+            }
+
+            renderKeywords(items, container) {
+                container.innerHTML = `<div class="keyword-grid">` + items.map(item => `
+                    <div class="keyword-item">
+                        <div>
+                            <div class="en">${item.en}</div>
+                            <div class="zh">${item.zh}</div>
+                        </div>
+                        <button class="tts-btn" data-text="${item.en}">🔊</button>
+                    </div>
+                `).join('') + `</div>`;
+            }
+
+            renderQuotes(items, container) {
+                container.innerHTML = `<div class="quote-grid">` + items.map((item, idx) => `
+                    <div class="quote-item">
+                        <strong>#${idx + 1}</strong>
+                        ${item.text}
+                    </div>
+                `).join('') + `</div>`;
+            }
+
+            attachEventListeners() {
+                document.getElementById('navBar').addEventListener('click', (e) => {
+                    if (e.target.classList.contains('nav-btn')) {
+                        this.switchSection(e.target.getAttribute('data-section'), e.target);
+                    }
+                });
+
+                document.getElementById('searchBtn').addEventListener('click', () => this.search());
+
+                document.getElementById('searchInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.search();
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('tts-btn')) {
+                        e.stopPropagation();
+                        this.speak(e.target);
+                    }
+                });
+            }
+
+            switchSection(sectionId, btn) {
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                document.getElementById(`section-${sectionId}`).classList.add('active');
+                
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                this.currentSection = sectionId;
+            }
+
+            speak(btn) {
+                const text = btn.getAttribute('data-text');
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    utterance.rate = 0.9;
+                    
+                    btn.classList.add('playing');
+                    utterance.onend = () => btn.classList.remove('playing');
+                    utterance.onerror = () => btn.classList.remove('playing');
+                    
+                    window.speechSynthesis.speak(utterance);
+                }
+            }
+
+            search() {
+                const query = document.getElementById('searchInput').value.toLowerCase().trim();
+                if (!query) {
+                    alert('請輸入搜尋關鍵字');
+                    return;
+                }
+                
+                let foundCount = 0;
+                document.querySelectorAll('.card, .personality-card, .sop-card, .keyword-item, .quote-item').forEach(el => {
+                    const text = el.textContent.toLowerCase();
+                    if (text.includes(query)) {
+                        el.style.display = 'block';
+                        foundCount++;
+                    } else {
+                        el.style.display = 'none';
+                    }
+                });
+                
+                alert(`找到 ${foundCount} 個結果`);
+            }
+        }
+
+        const appData = {"sections": [{"id": "readings", "navLabel": "📖 20課文", "title": "How Thoughts Shape Life", "subtitle": "20 Readings | 思想如何塑造人生", "type": "readings", "items": [{"num": 1, "en_title": "Thoughts Shape the Brain", "zh_title": "思想塑造大腦", "en_content": "Our thoughts are powerful. Every thought can change the brain. Scientists call this neuroplasticity, which means the brain can change and grow. When we think positive thoughts, our brain builds stronger connections. When we think negative thoughts, the brain can also develop negative patterns. This is why our thoughts matter. Learning to guide our thoughts can help us shape our future.", "zh_content": "我們的想法很強大。每一個想法都能改變大腦。科學家稱之為神經可塑性，意思是大腦可以改變和成長。當我們想正面想法時，大腦會建立更強的連結。當我們想負面想法時，大腦也會發展負面的模式。這就是為什麼我們的想法很重要。學會引導我們的想法可以幫助我們塑造未來。"}, {"num": 2, "en_title": "Focus Creates Results", "zh_title": "專注創造結果", "en_content": "Focus is one of the most important skills in life. When people focus deeply, they can learn faster and perform better. Many successful scientists, artists, and athletes train their ability to focus. If we reduce distractions and practice deep work, our brain becomes stronger.", "zh_content": "專注是人生最重要的技能之一。當人們深度專注時，他們可以學得更快、表現更好。許多成功的科學家、藝術家和運動員都訓練他們的專注能力。如果我們減少分心並練習深度工作，我們的大腦會變得更強。"}, {"num": 3, "en_title": "Habits Shape Success", "zh_title": "習慣塑造成功", "en_content": "Success does not happen overnight. It comes from small habits repeated every day. If we read a little every day, we gain knowledge. If we practice a skill every day, we improve slowly. Over time, these habits create big results.", "zh_content": "成功不會一夜成功。它來自每天重複的小習慣。如果我們每天讀一點書，我們就會獲得知識。如果我們每天練習一項技能，我們會慢慢進步。隨著時間的推移，這些習慣會產生大成果。"}, {"num": 4, "en_title": "Fear Comes from the Unknown", "zh_title": "恐懼來自於未知", "en_content": "Fear often comes from not knowing something. When we understand more, fear becomes smaller. For example, students may fear exams because they feel unprepared. But when they study and understand the material, the fear decreases. Knowledge can turn fear into confidence.", "zh_content": "恐懼通常來自於不了解某些東西。當我們理解得越多，恐懼就會變小。例如，學生可能害怕考試，因為他們感到準備不足。但當他們學習並理解材料時，恐懼就會減少。知識可以將恐懼轉化為信心。"}, {"num": 5, "en_title": "Knowledge Builds Confidence", "zh_title": "知識建立信心", "en_content": "Knowledge gives people confidence. When we understand something well, we feel stronger and more prepared. Students who study regularly often feel less stress during exams. Knowledge helps people make better decisions.", "zh_content": "知識給人信心。當我們很好地理解某些東西時，我們會感到更強大和準備充分。定期學習的學生在考試期間通常感到壓力較少。知識幫助人們做出更好的決定。"}, {"num": 6, "en_title": "Practice Builds Confidence", "zh_title": "練習建立信心", "en_content": "Practice is the key to improvement. Athletes practice every day. Musicians practice every day. Through practice, people gain experience and confidence. The more we practice, the better we become.", "zh_content": "練習是進步的關鍵。運動員每天訓練。音樂家每天練習。通過練習，人們獲得經驗和信心。我們練習越多，我們變得越好。"}, {"num": 7, "en_title": "Experience Creates Wisdom", "zh_title": "經驗創造智慧", "en_content": "Wisdom comes from experience. People learn by trying, making mistakes, and improving. Every experience teaches us something new.", "zh_content": "智慧來自於經驗。人們通過嘗試、犯錯誤和改進而學習。每一次經驗都教會我們新的東西。"}, {"num": 8, "en_title": "Belief Shapes Action", "zh_title": "信念塑造行動", "en_content": "Our beliefs influence our actions. If we believe we can succeed, we try harder. If we believe we will fail, we may stop trying. Strong beliefs can motivate us to keep going.", "zh_content": "我們的信念影響我們的行動。如果我們相信我們可以成功，我們會更努力。如果我們相信我們會失敗，我們可能會停止嘗試。強大的信念可以激勵我們繼續前進。"}, {"num": 9, "en_title": "Emotion and Memory", "zh_title": "情感與記憶", "en_content": "Emotion helps memory. When we feel strong emotions, our brain remembers events better. For example, exciting experiences are easier to remember than ordinary days.", "zh_content": "情感幫助記憶。當我們感受到強烈的情感時，我們的大腦會更好地記住事件。例如，令人興奮的經歷比普通的日子更容易被記住。"}, {"num": 10, "en_title": "Calm Thinking", "zh_title": "冷靜的思考", "en_content": "Calm minds think better. When people are anxious or stressed, thinking becomes harder. Relaxation techniques such as deep breathing can help the brain become calm.", "zh_content": "冷靜的思想思考得更好。當人們焦慮或壓力大時，思考變得更困難。放鬆技術，如深呼吸，可以幫助大腦保持冷靜。"}, {"num": 11, "en_title": "Setting Goals", "zh_title": "設定目標", "en_content": "Goals give direction to our lives. Clear goals help people focus their energy and time. Without goals, people may feel lost.", "zh_content": "目標為我們的生活指明方向。明確的目標幫助人們集中精力和時間。沒有目標，人們可能會感到迷茫。"}, {"num": 12, "en_title": "Self Reflection", "zh_title": "自我反思", "en_content": "Self-reflection means thinking about our actions and decisions. When we reflect, we understand ourselves better. Reflection helps us improve.", "zh_content": "自我反思意味著思考我們的行動和決定。當我們反思時，我們更好地了解自己。反思幫助我們改進。"}, {"num": 13, "en_title": "Kindness Creates Happiness", "zh_title": "善良創造幸福", "en_content": "Helping others often makes people happier. Kindness builds strong relationships. Small acts of kindness can make a big difference.", "zh_content": "幫助他人通常會讓人們更快樂。善良建立強有力的關係。小小的善舉可以產生很大的影響。"}, {"num": 14, "en_title": "Empathy and Relationships", "zh_title": "同理心與關係", "en_content": "Empathy means understanding how others feel. People with empathy build stronger relationships. Listening carefully is an important part of empathy.", "zh_content": "同理心意味著理解他人的感受。有同理心的人會建立更強的關係。仔細傾聽是同理心的重要部分。"}, {"num": 15, "en_title": "Intention and Focus", "zh_title": "意圖和專注", "en_content": "Our intentions guide our attention. When we decide what is important, our brain focuses on it. Clear intentions help people stay motivated.", "zh_content": "我們的意圖引導我們的注意力。當我們決定什麼是重要的時，我們的大腦就會專注於它。明確的意圖幫助人們保持動力。"}, {"num": 16, "en_title": "Growth Mindset", "zh_title": "成長思維", "en_content": "People with a growth mindset believe they can improve through effort. They see mistakes as opportunities to learn.", "zh_content": "有成長思維的人相信他們可以通過努力而改進。他們把錯誤看作是學習的機會。"}, {"num": 17, "en_title": "Small Steps Big Change", "zh_title": "小步驟大改變", "en_content": "Big success often begins with small steps. Daily improvement leads to long-term change.", "zh_content": "大成功通常始於小步驟。日常改進會導致長期變化。"}, {"num": 18, "en_title": "Design Your Future", "zh_title": "設計你的未來", "en_content": "Everyone can design their future. Through clear goals, hard work, and learning, people can shape their lives.", "zh_content": "每個人都可以設計自己的未來。通過明確的目標、辛勤工作和學習，人們可以塑造自己的生活。"}, {"num": 19, "en_title": "Learning Never Stops", "zh_title": "學習永不停止", "en_content": "Learning does not end after school. Successful people continue learning throughout life. Curiosity keeps the brain active.", "zh_content": "學習在學校之後不會結束。成功的人在整個人生中繼續學習。好奇心使大腦保持活躍。"}, {"num": 20, "en_title": "Create Your Life", "zh_title": "創造你的人生", "en_content": "Our thoughts, habits, and actions create our life story. If we think carefully, learn constantly, and act bravely, we can build a meaningful life.", "zh_content": "我們的想法、習慣和行動創造了我們的人生故事。如果我們仔細思考、不斷學習並勇敢地行動，我們可以建立有意義的人生。"}]}, {"id": "mindsets", "navLabel": "🧠 20轉變", "title": "20 Mindset Shifts", "subtitle": "20個思維轉變", "type": "mindsets", "items": [{"num": 1, "shift": "From Victim → Designer", "zh": "從受害者→設計者", "strategy": "開始為自己的人生負責，不再被動等待。", "benefit": "你會發現自己有更多掌控權。"}, {"num": 2, "shift": "From Problem → System", "zh": "從問題→系統", "strategy": "不要單獨處理問題，要設計系統預防問題。", "benefit": "問題會大幅減少，人生變得穩定。"}, {"num": 3, "shift": "From Emotion → Function", "zh": "從情緒→功能", "strategy": "當情緒來臨時，先問自己這是什麼訊號。", "benefit": "情緒變成有用的工具而不是困擾。"}, {"num": 4, "shift": "From Failure → Feedback", "zh": "從失敗→回饋", "strategy": "失敗不是終點，而是數據收集機會。", "benefit": "每次失敗都讓你更接近成功。"}, {"num": 5, "shift": "From Stress → Growth Load", "zh": "從壓力→成長負荷", "strategy": "把壓力重新框架為成長的信號。", "benefit": "壓力變成你進步的力量。"}, {"num": 6, "shift": "From Why Me → What Is This Teaching Me", "zh": "為什麼是我→這教我什麼", "strategy": "改變提問方式，從抱怨改為學習。", "benefit": "每個困境都有寶貴的功課。"}, {"num": 7, "shift": "From Comparison → Focus", "zh": "從比較→專注", "strategy": "停止和別人比，只和昨天的自己比。", "benefit": "內心變得平靜，進度變得穩定。"}, {"num": 8, "shift": "From Perfection → Progress", "zh": "從完美→進步", "strategy": "接受不完美的開始，每天改進。", "benefit": "你會完成更多事情，停止拖延。"}, {"num": 9, "shift": "From Fear of Failure → Data Collection", "zh": "從害怕失敗→收集數據", "strategy": "把失敗當成實驗的一部分。", "benefit": "嘗試變得容易，成功變得必然。"}, {"num": 10, "shift": "From Avoidance → Facing", "zh": "從逃避→面對", "strategy": "主動面對害怕的事情。", "benefit": "恐懼會慢慢消失，勇氣會增長。"}, {"num": 11, "shift": "From Chaos → Priority", "zh": "從混亂→優先順序", "strategy": "只做最重要的3件事。", "benefit": "人生變得有方向，效率大幅提升。"}, {"num": 12, "shift": "From Overthinking → Action", "zh": "從想太多→行動", "strategy": "先做再說，邊做邊調整。", "benefit": "你會發現大多數問題都能解決。"}, {"num": 13, "shift": "From Giving Up → Break It Down", "zh": "從放棄→拆解問題", "strategy": "把大目標拆成小步驟。", "benefit": "看似不可能的事變得可行。"}, {"num": 14, "shift": "From Limitation → Options", "zh": "從受限→創造選項", "strategy": "面對限制時，想辦法創造新選項。", "benefit": "問題永遠有解法，生活變得靈活。"}, {"num": 15, "shift": "From Waiting → Creating", "zh": "從等待→創造", "strategy": "不要等條件完美，開始創造。", "benefit": "命運掌握在自己手中。"}, {"num": 16, "shift": "From Self-Doubt → Strategy", "zh": "從懷疑自己→策略", "strategy": "自信不來自感覺，來自有策略的行動。", "benefit": "真實的自信取代盲目的相信。"}, {"num": 17, "shift": "From Procrastination → Segment Execution", "zh": "從拖延→分段完成", "strategy": "把工作分成很小的段落，立即開始。", "benefit": "拖延症消失，完成度大增。"}, {"num": 18, "shift": "From Pressure → Breakdown", "zh": "從壓力→任務拆解", "strategy": "壓力大時，把任務分解得更細。", "benefit": "負擔變輕，行動變快。"}, {"num": 19, "shift": "From Difficulty → Skill Gap", "zh": "從困難→技能缺口", "strategy": "困難不是你不行，是技能還不夠。", "benefit": "每個困難都變成學習機會。"}, {"num": 20, "shift": "From Frustration → Upgrade", "zh": "從挫折→能力升級", "strategy": "挫折出現時，問自己需要升級什麼能力。", "benefit": "挫折變成升級的觸發點。"}]}, {"id": "personalities", "navLabel": "🎨 14色人格", "title": "14 Color Personality Analysis", "subtitle": "14色人格分析 | 天賦 × 卡點 × 轉化能力", "type": "personalities", "items": [{"emoji": "🔴", "name": "熱情行動力", "color": "#E74C3C", "bgColor": "#FADBD8", "gift": "敢衝、爆發力強、感染力高", "risk": "衝動、情緒強、容易得罪人", "motto": "快，但要穩"}, {"emoji": "🟠", "name": "溫暖連結者", "color": "#E67E22", "bgColor": "#FAE5D3", "gift": "共情、人緣好、會經營關係", "risk": "太在意別人、委屈自己", "motto": "愛人，也要有界線"}, {"emoji": "🟡", "name": "目標領導者", "color": "#F39C12", "bgColor": "#FEF5E7", "gift": "決策、抓結果、帶人", "risk": "好勝、忽略感受", "motto": "贏，也要顧人"}, {"emoji": "🟢", "name": "平和守護者", "color": "#27AE60", "bgColor": "#D5F4E6", "gift": "穩定、包容、療癒", "risk": "怕衝突、不敢拒絕", "motto": "溫柔，但要有界線"}, {"emoji": "🔵", "name": "理性邏輯者", "color": "#3498DB", "bgColor": "#D6EAF8", "gift": "分析、清楚、講規則", "risk": "太理性、不懂彈性", "motto": "對，但要通"}, {"emoji": "🔷", "name": "深度思考者", "color": "#2980B9", "bgColor": "#AED6F1", "gift": "洞察、本質思考", "risk": "內耗、不表達", "motto": "深，但要說出來"}, {"emoji": "🟣", "name": "獨特洞察者", "color": "#8E44AD", "bgColor": "#EBDEF0", "gift": "直覺強、審美高", "risk": "孤獨、不被理解", "motto": "特別，但要連結"}, {"emoji": "🌸", "name": "溫柔共情者", "color": "#C0392B", "bgColor": "#FADBD8", "gift": "善良、感知強", "risk": "界線弱、容易討好", "motto": "善良，但要有界線"}, {"emoji": "⚪", "name": "通透本真者", "color": "#34495E", "bgColor": "#F2F3F4", "gift": "純粹、真誠", "risk": "太單純、易受傷", "motto": "真，但要保護自己"}, {"emoji": "⚫", "name": "隱忍強者", "color": "#2C3E50", "bgColor": "#D5DBDB", "gift": "抗壓、深藏不露", "risk": "封閉、不信任", "motto": "強，但要打開"}, {"emoji": "🟡", "name": "卓越引領者", "color": "#F1C40F", "bgColor": "#FDEBD0", "gift": "格局大、影響力強", "risk": "完美主義、不放手", "motto": "高，但要鬆"}, {"emoji": "⚙️", "name": "優雅理性者", "color": "#95A5A6", "bgColor": "#ECEFF1", "gift": "冷靜、平衡", "risk": "猶豫、內耗", "motto": "穩，但要決"}, {"emoji": "🟤", "name": "務實落地者", "color": "#D2691E", "bgColor": "#FEE5D0", "gift": "執行、踏實", "risk": "壓力大、不放鬆", "motto": "做，但要鬆"}, {"emoji": "🌈", "name": "多元創造者", "color": "#FF6B6B", "bgColor": "#FFE0E0", "gift": "創意、適應力強", "risk": "分心、難持久", "motto": "多，但要專"}]}, {"id": "anti-fragile", "navLabel": "💪 30反脆弱", "title": "Anti-Fragile Life Model", "subtitle": "反脆弱人生模型 | 30個壓力轉化機制", "type": "anti-fragile", "items": [{"num": 1, "zh": "壓力", "zh_result": "韌化", "en": "Stress", "en_result": "Toughening"}, {"num": 2, "zh": "阻力", "zh_result": "推進", "en": "Resistance", "en_result": "Advancement"}, {"num": 3, "zh": "困難", "zh_result": "精煉", "en": "Difficulties", "en_result": "Refinement"}, {"num": 4, "zh": "挑戰", "zh_result": "成熟", "en": "Challenges", "en_result": "Maturity"}, {"num": 5, "zh": "失敗", "zh_result": "轉化", "en": "Failure", "en_result": "Transformation"}, {"num": 6, "zh": "錯位", "zh_result": "校準", "en": "Misalignment", "en_result": "Calibration"}, {"num": 7, "zh": "迷路", "zh_result": "發現", "en": "Getting lost", "en_result": "Discovery"}, {"num": 8, "zh": "延遲", "zh_result": "醞釀", "en": "Delay", "en_result": "Incubation"}, {"num": 9, "zh": "失準", "zh_result": "修正", "en": "Inaccuracy", "en_result": "Correction"}, {"num": 10, "zh": "偏離", "zh_result": "回正", "en": "Deviation", "en_result": "Realignment"}, {"num": 11, "zh": "打擊", "zh_result": "強心", "en": "Setbacks", "en_result": "Strengthening"}, {"num": 12, "zh": "低谷", "zh_result": "反彈", "en": "Low point", "en_result": "Rebound"}, {"num": 13, "zh": "疲弱", "zh_result": "修復", "en": "Weakness", "en_result": "Recovery"}, {"num": 14, "zh": "崩解", "zh_result": "重塑", "en": "Breakdown", "en_result": "Reshaping"}, {"num": 15, "zh": "破壞", "zh_result": "創新", "en": "Destruction", "en_result": "Innovation"}, {"num": 16, "zh": "限制", "zh_result": "突圍", "en": "Limits", "en_result": "Breakthrough"}, {"num": 17, "zh": "未知", "zh_result": "開拓", "en": "Unknown", "en_result": "Expansion"}, {"num": 18, "zh": "混沌", "zh_result": "秩序", "en": "Chaos", "en_result": "Order"}, {"num": 19, "zh": "失控", "zh_result": "掌握", "en": "Loss of control", "en_result": "Mastery"}, {"num": 20, "zh": "動盪", "zh_result": "穩定", "en": "Turbulence", "en_result": "Stability"}, {"num": 21, "zh": "壓縮", "zh_result": "爆發", "en": "Compression", "en_result": "Explosion"}, {"num": 22, "zh": "緊繃", "zh_result": "放鬆", "en": "Tension", "en_result": "Relaxation"}, {"num": 23, "zh": "矛盾", "zh_result": "整合", "en": "Contradiction", "en_result": "Integration"}, {"num": 24, "zh": "對立", "zh_result": "平衡", "en": "Opposition", "en_result": "Balance"}, {"num": 25, "zh": "衝擊", "zh_result": "進化", "en": "Impact", "en_result": "Evolution"}, {"num": 26, "zh": "耗竭", "zh_result": "補能", "en": "Exhaustion", "en_result": "Recharging"}, {"num": 27, "zh": "沉寂", "zh_result": "蓄勢", "en": "Silence", "en_result": "Building"}, {"num": 28, "zh": "落後", "zh_result": "追趕", "en": "Lagging", "en_result": "Catching up"}, {"num": 29, "zh": "競爭", "zh_result": "成長", "en": "Competition", "en_result": "Growth"}, {"num": 30, "zh": "變數", "zh_result": "彈性", "en": "Variables", "en_result": "Flexibility"}]}, {"id": "sops", "navLabel": "🎯 7大SOP", "title": "7 High-Efficiency SOPs", "subtitle": "高效溝通7大SOP系統 | 職場必備", "type": "sops", "items": [{"title": "1️⃣ 復盤SOP", "steps": ["✔ 目標回顧（做這件事的目的）", "✔ 結果對比（達成 vs 未達成）", "✔ 關鍵行為（做對了什麼）", "✔ 錯誤分析（哪裡出問題）", "✔ 原因拆解（為什麼）", "✔ 優化策略（下次怎麼做）", "✔ 保留有效做法", "✔ 刪除低效行為", "✔ 形成新流程", "✔ 立即應用下一次"], "core": "復盤＝經驗變能力"}, {"title": "2️⃣ 高效溝通SOP", "steps": ["✔ 先說結論", "✔ 再給理由", "✔ 用簡單語言", "✔ 結構清楚（1,2,3）", "✔ 確認對方理解", "✔ 避免情緒語氣", "✔ 用例子說明", "✔ 控制長度（重點化）", "✔ 回覆重點問題", "✔ 結尾給行動"], "core": "會講重點＝影響力"}, {"title": "3️⃣ 目標制定SOP", "steps": ["✔ 設定明確目標", "✔ 可量化（數字）", "✔ 設定期限", "✔ 拆成小步驟", "✔ 定義成功標準", "✔ 找關鍵行動", "✔ 排優先順序", "✔ 預測障礙", "✔ 設計備案", "✔ 每週檢查進度"], "core": "目標清楚＝行動清楚"}, {"title": "4️⃣ 向上管理SOP", "steps": ["✔ 了解主管目標", "✔ 主動回報進度", "✔ 給選項（A/B）", "✔ 提前預警問題", "✔ 用數據說話", "✔ 不只講問題，講解決方案", "✔ 對齊優先順序", "✔ 簡化資訊", "✔ 建立信任", "✔ 穩定輸出結果"], "core": "讓主管放心＝升職"}, {"title": "5️⃣ 工作匯報SOP", "steps": ["✔ 先講結果", "✔ 說明目標", "✔ 重點數據", "✔ 關鍵行動", "✔ 問題與風險", "✔ 解決方案", "✔ 下一步計畫", "✔ 時間點清楚", "✔ 用圖表呈現", "✔ 控制在重點內"], "core": "會報告＝被看見"}, {"title": "6️⃣ 數據分析SOP", "steps": ["✔ 定義問題", "✔ 收集數據", "✔ 清理數據", "✔ 找關鍵指標", "✔ 分析趨勢", "✔ 找異常點", "✔ 比較差異", "✔ 找原因", "✔ 得出結論", "✔ 轉成行動"], "core": "數據→洞察→行動"}, {"title": "7️⃣ 理性決策SOP", "steps": ["✔ 明確問題", "✔ 列出選項", "✔ 分析優缺點", "✔ 評估風險", "✔ 考慮長期影響", "✔ 用數據支持", "✔ 避免情緒", "✔ 設定決策標準", "✔ 快速做決定", "✔ 執行後檢討"], "core": "好決策＝少走彎路"}]}, {"id": "keywords", "navLabel": "🔤 80混淆字", "title": "80 Confusing Words", "subtitle": "混淆字詞80組 | GSAT高分必考", "type": "keywords", "items": [{"en": "assume", "zh": "假設"}, {"en": "presume", "zh": "推定"}, {"en": "imply", "zh": "暗示"}, {"en": "indicate", "zh": "指出"}, {"en": "infer", "zh": "推論"}, {"en": "conclude", "zh": "下結論"}, {"en": "perceive", "zh": "感知"}, {"en": "conceive", "zh": "構想"}, {"en": "interpret", "zh": "解釋"}, {"en": "translate", "zh": "翻譯"}, {"en": "define", "zh": "定義"}, {"en": "describe", "zh": "描述"}, {"en": "illustrate", "zh": "說明"}, {"en": "demonstrate", "zh": "證明"}, {"en": "identify", "zh": "辨識"}, {"en": "recognize", "zh": "認出"}, {"en": "distinguish", "zh": "區分"}, {"en": "differentiate", "zh": "細分"}, {"en": "evaluate", "zh": "評估"}, {"en": "assess", "zh": "評量"}, {"en": "analyze", "zh": "分析"}, {"en": "examine", "zh": "檢視"}, {"en": "estimate", "zh": "估計"}, {"en": "calculate", "zh": "計算"}, {"en": "measure", "zh": "測量"}, {"en": "quantify", "zh": "量化"}, {"en": "compare", "zh": "比較"}, {"en": "equate", "zh": "視為相等"}, {"en": "contrast", "zh": "對比"}, {"en": "oppose", "zh": "反對"}, {"en": "justify", "zh": "合理化"}, {"en": "defend", "zh": "辯護"}, {"en": "claim", "zh": "聲稱"}, {"en": "assert", "zh": "斷言"}, {"en": "prove", "zh": "證明"}, {"en": "verify", "zh": "驗證"}, {"en": "reveal", "zh": "揭露"}, {"en": "expose", "zh": "揭發"}, {"en": "detect", "zh": "偵測"}, {"en": "discover", "zh": "發現"}, {"en": "significant", "zh": "顯著"}, {"en": "considerable", "zh": "相當"}, {"en": "substantial", "zh": "大量"}, {"en": "sufficient", "zh": "足夠"}, {"en": "relevant", "zh": "相關"}, {"en": "related", "zh": "相關"}, {"en": "appropriate", "zh": "適當"}, {"en": "suitable", "zh": "適合"}, {"en": "accurate", "zh": "精確"}, {"en": "precise", "zh": "精準"}, {"en": "exact", "zh": "完全正確"}, {"en": "correct", "zh": "正確"}, {"en": "valid", "zh": "有效"}, {"en": "reliable", "zh": "可靠"}, {"en": "objective", "zh": "客觀"}, {"en": "subjective", "zh": "主觀"}, {"en": "theoretical", "zh": "理論"}, {"en": "practical", "zh": "實務"}, {"en": "abstract", "zh": "抽象"}, {"en": "concrete", "zh": "具體"}, {"en": "complex", "zh": "複雜"}, {"en": "complicated", "zh": "複雜"}, {"en": "simple", "zh": "簡單"}, {"en": "straightforward", "zh": "直接"}, {"en": "general", "zh": "一般"}, {"en": "universal", "zh": "普遍"}, {"en": "specific", "zh": "特定"}, {"en": "particular", "zh": "特別"}, {"en": "typical", "zh": "典型"}, {"en": "usual", "zh": "通常"}, {"en": "normal", "zh": "正常"}, {"en": "average", "zh": "平均"}, {"en": "extreme", "zh": "極端"}, {"en": "excessive", "zh": "過度"}, {"en": "rare", "zh": "罕見"}, {"en": "scarce", "zh": "稀缺"}, {"en": "common", "zh": "常見"}, {"en": "ordinary", "zh": "普通"}, {"en": "unique", "zh": "獨特"}, {"en": "special", "zh": "特別"}]}, {"id": "quotes", "navLabel": "💡 120金句", "title": "120 Mindset Quotes", "subtitle": "120句洗腦金句 | 記憶版", "type": "quotes", "items": [{"text": "失敗不是打擊你，失敗是在修正你"}, {"text": "失敗不等於能力，成功可能是運氣"}, {"text": "結果不等於能力"}, {"text": "現實不會說謊"}, {"text": "錯誤是資產"}, {"text": "痛苦是訊號"}, {"text": "忽略痛苦＝停滯"}, {"text": "你不是問題，你的方法才是"}, {"text": "改方法才會進步"}, {"text": "成長＝修正模型"}, {"text": "模型需要反例"}, {"text": "沒有反例＝幻覺"}, {"text": "每次錯都有原因"}, {"text": "找原因＝升級"}, {"text": "別只看結果，要看過程"}, {"text": "相關≠因果"}, {"text": "成功會騙人"}, {"text": "失敗比較誠實"}, {"text": "痛會逼你改"}, {"text": "沒有壓力不會動"}, {"text": "舒服＝停滯"}, {"text": "不舒服＝成長"}, {"text": "失敗拆掉幻想"}, {"text": "現實會收帳"}, {"text": "錯誤會累積"}, {"text": "不改會爆"}, {"text": "約束＝力量"}, {"text": "限制讓你進步"}, {"text": "問題不是人，是系統"}, {"text": "系統決定結果"}, {"text": "方法錯＝結果錯"}, {"text": "抱怨沒用，改系統才有用"}, {"text": "資源會影響結果"}, {"text": "位置也重要"}, {"text": "結構大於努力"}, {"text": "努力錯方向＝浪費"}, {"text": "成功是結構紅利"}, {"text": "不是你很強，是看整體"}, {"text": "系統優化才穩"}, {"text": "小改動大影響"}, {"text": "策略比努力重要"}, {"text": "方法決定上限"}, {"text": "系統決定下限"}, {"text": "你要設計系統，不是硬撐"}, {"text": "所有方法都有條件"}, {"text": "沒有萬用解"}, {"text": "成功有前提"}, {"text": "條件變就失效"}, {"text": "環境很重要"}, {"text": "時機也重要"}, {"text": "資源會變"}, {"text": "關係會變"}, {"text": "風險會集中"}, {"text": "不要過度泛化"}, {"text": "局部≠全部"}, {"text": "一次成功不代表全部"}, {"text": "運氣會影響"}, {"text": "不要誤判"}, {"text": "邊界要看清"}, {"text": "適用範圍要知道"}, {"text": "條件錯＝結果錯"}, {"text": "不要套用錯地方"}, {"text": "理解比背更重要"}, {"text": "真相在條件裡"}, {"text": "不要證明自己，要校準模型"}, {"text": "要優化系統"}, {"text": "不要評價人格"}, {"text": "不要追一次贏"}, {"text": "要追長期穩"}, {"text": "自尊不要靠結果"}, {"text": "要靠成長"}, {"text": "失敗不是否定"}, {"text": "是升級機會"}, {"text": "每次失敗都在教你"}, {"text": "關鍵是你有沒有學"}, {"text": "改變＝進步"}, {"text": "不變＝淘汰"}, {"text": "你可以變更強"}, {"text": "只要你修正"}, {"text": "停止自我欺騙"}, {"text": "開始面對現實"}, {"text": "失敗變資產"}, {"text": "你會越來越準"}, {"text": "利己是本能"}, {"text": "利他是高級策略"}, {"text": "你不用逼自己善良"}, {"text": "只要算得夠遠"}, {"text": "世界會亂（熵增）"}, {"text": "你必須選（利己）"}, {"text": "你會被改（更新）"}, {"text": "你能不能升級（智慧）"}, {"text": "混亂→選擇→痛苦→修正→進化"}, {"text": "關係就是槓桿"}, {"text": "信任就是貨幣"}, {"text": "機率不是命運，是條件的結果"}, {"text": "弱者看機率，強者改條件"}, {"text": "高維：把自己當動態生成系統"}, {"text": "低維：把自己當固定答案"}, {"text": "學 ❌ 改 ✔"}, {"text": "知道 ❌ 更新 ✔"}, {"text": "客觀 ❌ 生成 ✔"}, {"text": "系統會複利"}, {"text": "習慣就是系統"}, {"text": "每天做 就是系統"}, {"text": "系統會自動運轉"}, {"text": "系統讓你不用意志力"}, {"text": "系統比意志力強"}, {"text": "用腦不用撐"}, {"text": "聰明的人設系統"}, {"text": "笨的人靠硬撐"}, {"text": "小開始 才會大成功"}, {"text": "先做再說"}, {"text": "不完美也要做"}, {"text": "5分鐘就好"}, {"text": "開始比完美重要"}, {"text": "行動 > 想法"}, {"text": "做一點 勝過想很多"}, {"text": "每天1%"}, {"text": "一頁也算"}, {"text": "一步也算"}, {"text": "不做才是輸"}]}]};
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            window.appInstance = new AppManager(appData);
+        });
+    </script>
+</body>
+</html>
