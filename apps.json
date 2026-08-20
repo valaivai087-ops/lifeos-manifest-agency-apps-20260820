@@ -1,0 +1,163 @@
+[
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\挖空填充 顯化APP",
+    "slug": "manifest-cloze-fill-app.html",
+    "title": "挖空填充顯化 APP",
+    "category": "顯化",
+    "intro": "以挖空填充方式練習顯化語句，幫助使用者反覆輸入願景、信念與行動語言，建立更穩定的內在方向。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\顯化LINEAPP",
+    "slug": "manifest-line-app.html",
+    "title": "顯化 LINE APP",
+    "category": "顯化",
+    "intro": "專為 LINE 分享設計的顯化工具，整理願望、信念、行動與提醒語句，適合日常推播與社群互動。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\LifeOS_Final.html",
+    "slug": "lifeos-final.html",
+    "title": "LifeOS 能力生成系統",
+    "category": "LifeOS",
+    "intro": "整合 LifeOS 核心架構，涵蓋能力、情緒、關係、健康與決策，幫助使用者建立完整生命作業系統。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\cancer_complete_database.html",
+    "slug": "cancer-complete-database.html",
+    "title": "癌友平安喜樂完整資料庫",
+    "category": "醫療",
+    "intro": "整理癌症知識、機制、照護與理解框架，適合作為醫學學習、健康教育與癌症主題資料庫。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\Language_Systems_Bilingual_App.html",
+    "slug": "language-systems-bilingual-app.html",
+    "title": "語言系統差異雙語 APP",
+    "category": "英文學習",
+    "intro": "以雙語方式整理語言系統、句型、詞彙與表達模型，幫助學習者提升理解、輸出與跨語轉換能力。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\GSAT_Essay_Intelligence_System.html",
+    "slug": "gsat-essay-intelligence-system.html",
+    "title": "學測英文作文智慧生成系統",
+    "category": "英文學習",
+    "intro": "針對學測英文作文設計，整理審題、段落、例句與高分策略，幫助學生建立穩定寫作流程。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\Phone_Autonomy_OS.html",
+    "slug": "phone-autonomy-os.html",
+    "title": "高 Agency 手機自律系統",
+    "category": "自律",
+    "intro": "協助使用者重新管理手機使用、注意力與自主權，建立更健康的數位習慣與行動節奏。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\student_high_agency_app.html",
+    "slug": "student-high-agency-app.html",
+    "title": "高 Agency 學生自更新系統",
+    "category": "教育",
+    "intro": "訓練學生主動負責、規劃行動與解決問題，幫助班級與個人建立更強的自我管理能力。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\Prediction_Error_App.html",
+    "slug": "prediction-error-app.html",
+    "title": "Prediction Error 對應全系統",
+    "category": "思維",
+    "intro": "用預測誤差理解學習、情緒與行為調整，幫助使用者看懂期待落差並更新判斷。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\心靈顯化互動應用.html",
+    "slug": "spiritual-manifest-interactive-app.html",
+    "title": "心靈顯化與能量法則",
+    "category": "心靈",
+    "intro": "結合心靈整理、願景設定與互動練習，協助使用者把信念、感受與行動重新對齊。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\christian_spirituality_bilingual_app.html",
+    "slug": "christian-spirituality-bilingual-app.html",
+    "title": "基督信仰與靈性雙語 APP",
+    "category": "基督信仰",
+    "intro": "以中英雙語整理基督信仰、靈性反思與生命智慧，適合靈修、教學與信仰分享。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\GSAT_English_App_Complete.html",
+    "slug": "gsat-english-complete-app.html",
+    "title": "GSAT 英文教學資源完整 APP",
+    "category": "英文學習",
+    "intro": "整合學測英文閱讀、寫作、字彙與題型訓練，幫助學生建立完整備考地圖與複習節奏。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\leadership_talent_dev.html",
+    "slug": "leadership-talent-development.html",
+    "title": "領導力與人才發展完整系統",
+    "category": "商業",
+    "intro": "聚焦領導力、人才培育與團隊發展，幫助使用者建立識才、育才與帶人的系統方法。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\class_management_full_database.html",
+    "slug": "class-management-full-database.html",
+    "title": "班級管理與學生自律資料庫",
+    "category": "教育",
+    "intro": "整理班級管理、學生互動、規範建立與教學現場策略，適合教師建立班級經營工具庫。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\focus_os_complete.html",
+    "slug": "focus-os-complete.html",
+    "title": "Focus OS 注意力自主管理",
+    "category": "自律",
+    "intro": "協助使用者整理注意力、任務節奏與干擾管理，建立更穩定的專注系統與高效率工作習慣。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\Prediction_Error_Complete_Max.html",
+    "slug": "prediction-error-complete-max.html",
+    "title": "Prediction Error 完整系統",
+    "category": "思維",
+    "intro": "完整拆解預測誤差、期待落差與認知更新，幫助使用者用模型理解情緒、學習與決策。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\LifeOS_30_Capabilities_Complete_Full.html",
+    "slug": "lifeos-30-capabilities-complete.html",
+    "title": "LifeOS 30 大人生能力完整版",
+    "category": "LifeOS",
+    "intro": "整理 LifeOS 三十項核心能力，幫助使用者檢視自我成長、行動力、判斷力與長期發展。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\Life_Update_OS_Complete.html",
+    "slug": "life-update-os-complete.html",
+    "title": "Life Update OS 人生可更新系統",
+    "category": "LifeOS",
+    "intro": "聚焦生命更新、行為調整與自我重建，協助使用者從舊模式中走出並建立新行動。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\LifeOS_Wisdom_Capability_Generator.html",
+    "slug": "lifeos-wisdom-capability-generator.html",
+    "title": "LifeOS 智慧能力生成器",
+    "category": "LifeOS",
+    "intro": "結合智慧句、能力模型與生成式思考，幫助使用者把抽象洞察轉成可執行能力。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\five_generation_systems_bilingual.html",
+    "slug": "five-generation-systems-bilingual.html",
+    "title": "五大生成系統雙語 APP",
+    "category": "LifeOS",
+    "intro": "以五大生成系統整理生命、語言與行動的形成邏輯，幫助使用者看懂自己如何被塑造。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\high_agency_interactive_complete.html",
+    "slug": "high-agency-interactive-complete.html",
+    "title": "High Agency 班級自治互動版",
+    "category": "教育",
+    "intro": "用互動方式訓練高主動性、班級自治與責任分工，適合教師帶學生練習自我管理。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\high_agency_ultimate_max.html",
+    "slug": "high-agency-ultimate-max.html",
+    "title": "High Agency 班級自治終極版",
+    "category": "教育",
+    "intro": "完整整理高主動性班級自治架構，協助學生建立目標感、責任感與自主解決問題能力。"
+  },
+  {
+    "src": "C:\\Users\\anne\\OneDrive\\Desktop\\LifeOS\\english_writing_complete_final.html",
+    "slug": "english-writing-complete-final.html",
+    "title": "英文寫作完整訓練系統",
+    "category": "英文學習",
+    "intro": "從句型、段落、例句到寫作策略全面訓練，幫助英文作文從空白變成可操作流程。"
+  }
+]
